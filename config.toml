@@ -1,49 +1,49 @@
-baseurl = "http://vjeantet.fr/"
-copyright = "All rights reserved - 2016"
-disqusshortname = "vjeantet"
-languagecode = "fr-FR"
+baseurl = "http://cmc-demo.com.s3-website-us-east-1.amazonaws.com/"
+copyright = "&copy; 2004-2016"
+disqusshortname = ""
+languagecode = "en-us"
 paginate = 5
 pluralizelisttitles = false
 theme = "casper"
-title = "Valère JEANTET"
+title = "Chris Meserole"
+
 [[menu.main]]
 identifier = "blog"
 name = "Blog"
-url = "/"
+url = "/blog/"
 weight = -120
+
 [[menu.main]]
-name = "Github repos"
-pre = "<h3>Follow me</h3>"
-url = "https://github.com/vjeantet"
-weight = 100
+name = "Twitter"
+url = "https://twitter.com/chrismeserole"
+weight = 120
+
 [[menu.main]]
-name = "Twitter timeline"
-url = "https://twitter.com/vjeantet"
-weight = 101
-[[menu.main]]
-name = "Flipboard magazines"
-url = "https://flipboard.com/@vjeantet"
-weight = 102
-[[menu.main]]
-name = "Keybase (secure msg)"
-pre = "<h3>Contact me</h3>"
-url = "https://Keybase.io/vjeantet"
-weight = 109
+name = "Github"
+url = "https://github.com/chrismeserole"
+weight = 130
+
 [params]
-author = "Valère JEANTET"
-authorlocation = "Paris, France"
-authorwebsite = "http://vjeantet.fr"
-bio = "IT software and Security Engineer, Open source enthusiast."
-cover = "images/cover_polenord.jpg"
-description = "Whatever the mind of man can conceive and believe, it can achieve."
-githubName = "vjeantet"
+author = "Chris Meserole"
+authorlocation = "Washington, D.C."
+authorwebsite = "http://chrismeserole.com"
+bio = "Religion, Peace, Conflict, and Data Science."
+#cover = "images/amman.jpg"
+
+#description = "writer and researcher"
+twitterDescription = "Personal website of Chris Meserole"
+githubName = "chrismeserole"
 googleAnalyticsUserID = "UA-79101-12"
 hideHUGOSupport = false
-logo = "images/logo.png"
-twitterName = "vjeantet"
+logo = "images/cm-logo-300dpi.png"
+twitterName = "chrismeserole"
+
 [permalinks]
-post = "/:slug/"
+	blog = "blog/:slug/:year/"
+	signals = "signals/:slug/"
+	coding = "coding/:slug/"
+
 [sitemap]
-ChangeFreq = ""
-Filename = "sitemap.xml"
-Priority = "-1"
+	ChangeFreq = ""
+	Filename = "sitemap.xml"
+	Priority = "-1"
