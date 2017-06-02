@@ -1,6 +1,7 @@
 +++
 date = 2013-12-18
 title = "Part IV: Parsing GDELT with Spark/Shark on EC2"
+url = "signals/part-iv-parsing-gdelt-with-spark-shark-on-ec2"
 +++
 
 This tutorial walks through how to query the GDELT dataset using Spark/Shark.

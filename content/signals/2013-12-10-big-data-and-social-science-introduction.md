@@ -1,6 +1,7 @@
 +++
 date = 2013-12-10
 title = "Big Data and Social Science: Introduction"
+slug = "big-data-and-social-science-introduction"
 +++
 
 Big datasets are increasingly common in social science today, and understandably generating a lot of excitement.

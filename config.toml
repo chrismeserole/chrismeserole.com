@@ -1,10 +1,10 @@
 baseurl="http://chrismeserole.com/"
-copyright = "&copy; 2004-2016"
+copyright = "&copy; 2004-2017"
 disqusshortname = ""
 languagecode = "en-us"
 paginate = 5
 pluralizelisttitles = false
-theme = "casper"
+theme = "sustain"
 title = "Chris Meserole"
 
 [[menu.main]]
@@ -33,7 +33,7 @@ bio = "Religion, Peace, Conflict, and Data Science."
 #description = "writer and researcher"
 twitterDescription = "Personal website of Chris Meserole"
 githubName = "chrismeserole"
-googleAnalyticsUserID = "UA-79101-12"
+googleAnalyticsUserID = "UA-61270828-2"
 hideHUGOSupport = false
 logo = "images/cm-logo-300dpi.png"
 twitterName = "chrismeserole"

@@ -1,6 +1,7 @@
 +++
 date = 2013-12-12
 title = "Part III: Big Data in the Cloud"
+slug = "part-iii-big-data-in-the-cloud"
 +++
 
 As I mention [in the previous post](http://chrismeserole.com/signals/big-data-on-the-desktop/), there are a few ways you can speed up analysis of big data on your desktop or laptop.

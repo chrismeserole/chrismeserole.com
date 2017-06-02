@@ -2,6 +2,7 @@
 title = "The Morning Light"
 date = 2013-12-14
 type = "page"
+slug = "the-morning-light"
 +++
 
 The first year we were married, my wife served as a part-time youth pastor in a sleepy exurb. The town was typical New England: lush grass and immaculate homes in the town square; then down the hill nearer water's edge, the echo of a working class neighborhood. More modest houses, quaint in their faded shingling, clustered along the riverbank.

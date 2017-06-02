@@ -1,0 +1,376 @@
+<!DOCTYPE HTML>
+
+<html lang="en-US">
+  <head>
+	<!--[if IE]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<meta charset="UTF-8"/>
+
+	<meta name="viewport" content="initial-scale=1.0">
+	<link href="//cdn-images.mailchimp.com/embedcode/classic-081711.css" rel="stylesheet" type="text/css">
+	<link href='http://fonts.googleapis.com/css?family=Open+Sans:400italic,400,700' rel='stylesheet' type='text/css'>
+	<link href='http://fonts.googleapis.com/css?family=Crimson+Text:400' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/css/style.css"/><style type="text/css">#content, #footer-info {max-width: 900px;}</style>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+	<meta name="author" content="Chris Meserole" />
+	<link rel="shortcut icon" href="/img/cmc_favicon_32.jpg">
+
+
+	<title> about obsval() > obsval > Chris Meserole</title>
+
+</head>
+<body>
+  	<div class="wrapper">
+
+		<header id="header">
+			<div id="banner">
+				<h1><a href="/obsval/">OBSVAL PACKAGE</a></h1>
+			</div>
+			<nav id="nav">
+				<ul>
+	<li><a href="/">Home</a></li>
+	<li>&middot;</li>
+	<li><a href="/obsval/">obsval</a></li>		
+	<li>&middot;</li>
+	<li><a href="/software/">software</a></li>		
+	<li>&middot;</li>
+	<li><a href="/coding/">coding</a></li>
+	<li>&middot;</li>		
+	<li><a href="https://twitter.com/intent/follow?original_referer=http%3A%2F%2Fchrismeserole.com&screen_name=chrismeserole&tw_p=followbutton" class="popup">Twitter</a></li>
+</ul>
+		    </nav>
+		</header>
+
+		<div id="content">
+	    	<section>
+	    		<article>
+
+	    			
+
+					<div class="cell"><div class="txtr">&nbsp;</div><div class="outputr"><h2 class="entry-title"><a rel="archive" href="/obsval/about/"> about obsval()</a></h2></div></div><!-- ends cell -->
+				    
+				    <div class="entry-content"><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+				    		<p><strong>obsval()</strong> is an R package that aims to make it much easier to calculate predicted effects for generalized linear models, particularly when using observed covariate values. It's based on <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2012.00602.x/abstract;jsessionid=AAADB9AE61EA032F8AA008550E5BB52E.f04t0">Hanmer and Kalkan (2013)</a> and is under active development.</p>
+
+<p>To get up and running, see the sections below: </p>
+
+<ul>
+<li><a href="#how-install">Installing obsval()</a></li>
+<li><a href="#how-use">Using obsval()</a></li>
+<li><a href="#why-use">Why Use Observed Values?</a></li>
+</ul>
+
+<p>You can also consult the following tutorials:</p>
+
+<ul>
+<li>Logit (Coming soon)</li>
+<li>Probit (Coming soon)</li>
+<li>Ordinal Logit (Coming soon)</li>
+<li>Ordinal Probit (Coming soon)</li>
+<li>Conditional Logit (Coming soon)</li>
+<li>Multinomial Logit (Coming soon)</li>
+<li>Poisson (Coming soon)</li>
+<li>Negative Binomial (Coming soon)</li>
+</ul>
+
+<hr />
+
+<h5><a name="how-install"/></a>How To Install obsval()</h5>
+
+<p>At present the package is only available <a href="https://github.com/chrismeserole.com/obsval">via Github</a>. </p>
+
+<p>To install it, run the following: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [1]:</p></div><div class="outputr"><div class="highlight"><pre>install.packages<span class="p">(</span><span class="s">&quot;devtools&quot;</span><span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>devtools<span class="p">)</span>
+devtools<span class="o">::</span>install_github<span class="p">(</span><span class="s">&quot;chrismeserole/obsval&quot;</span><span class="p">)</span>
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>If you're seeing any error messages with this, please contact me. </p>
+
+<p>In the future, the package should also be available via CRAN.</p>
+
+<hr />
+
+<h5><a name="how-use"/></a>How to Use obsval()</h5>
+
+<p>Once obsval() is installed, you can begin to use it by loading the following libraries: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [2]:</p></div><div class="outputr"><div class="highlight"><pre><span class="kn">library</span><span class="p">(</span>obsval<span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>mvtnorm<span class="p">)</span>
+<span class="kn">library</span><span class="p">(</span>MASS<span class="p">)</span>
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>(If you get any errors while running this, make sure all the packages are installed by running <code>install.packages(package_name)</code>.)</p>
+
+<p>The data we'll use here is <strong>quine</strong>, which is one of R's pre-loaded datasets. Quine contains information about a set of students in Australia, including the number of school days each student missed (<strong>Days</strong>), as well as his or her gender (<strong>Sex</strong>), ethnicity (<strong>Eth</strong>), and age group (<strong>Age</strong>). </p>
+
+<p>In this case, we're interested in the effect of age on the number of days missed. Since that number is probably overdispersed, we'll use a negative binomial model. </p>
+
+<p>Let's suppose we're interested in the effect of moving from late childhood to late adolescence (<strong>F1</strong> to <strong>F3</strong>). Our theory is that as kids get older, both the need and opportunity to work increases, and so they should begin to miss more days of school. </p>
+
+<p>To test our theory, we would run the model as follows:</p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [3]:</p></div><div class="outputr"><div class="highlight"><pre>data 		<span class="o">&lt;-</span> quine
+specification 	<span class="o">&lt;-</span> <span class="s">&#39;Days~Eth+Sex+Age&#39;</span>
+reg_model	<span class="o">&lt;-</span> <span class="s">&quot;negbin&quot;</span>
+n_draws 	<span class="o">&lt;-</span> <span class="m">1000</span>
+effect_var 	<span class="o">&lt;-</span> <span class="s">&quot;Age&quot;</span>
+effect_var_low 	<span class="o">&lt;-</span> <span class="s">&quot;F1&quot;</span>
+effect_var_high <span class="o">&lt;-</span> <span class="s">&quot;F3&quot;</span> 
+
+mod <span class="o">&lt;-</span> obsval<span class="p">(</span> data<span class="p">,</span> specification<span class="p">,</span> reg_model<span class="p">,</span> n_draws<span class="p">,</span>
+	effect_var<span class="p">,</span> effect_var_low<span class="p">,</span> effect_var_high <span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [3]:</p></div><div class="outputr2"><div class="highlight"><pre>The <span class="m">1</span>st argument passed to obsval<span class="p">()</span> must be a formula or string.
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<div class="codeblock"><pre>
+## Error in obsval(data, specification, reg_model, n_draws, effect_var, effect_var_low, :
+</pre></div>
+
+<p>Now that we've run the model, we can access the model results as follows: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [4]:</p></div><div class="outputr"><div class="highlight"><pre>mod<span class="o">$</span>model
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [4]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> <span class="kp">eval</span><span class="p">(</span>expr<span class="p">,</span> envir<span class="p">,</span> enclos<span class="p">)</span><span class="o">:</span> object <span class="s">&#39;mod&#39;</span> not found
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>So far so good. An increase in age would seem to increase the number of school days missed.</p>
+
+<p>But how confident are we of that effect? For that, we run: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [5]:</p></div><div class="outputr"><div class="highlight"><pre>mod<span class="o">$</span>effect_sum
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [5]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> <span class="kp">eval</span><span class="p">(</span>expr<span class="p">,</span> envir<span class="p">,</span> enclos<span class="p">)</span><span class="o">:</span> object <span class="s">&#39;mod&#39;</span> not found
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>Alas, in this case the theory isn't quite borne out by the data. Of the 1000 simulations we ran, in at least 25 moving from early to late adolescence led to at least one <em>less</em> day missed. (There's a chance that the effect itself is negative. </p>
+
+<p>However, what if the effect of age is more pronounced by gender? Perhaps both boys and girls attend primary school at the same rates, but then boys become more likely to leave as they age, perhaps because they have more opportunities for work. </p>
+
+<p>Setting aside whether or not to use an interaction, in this case we could calculate the effects of age sampled for gender as follows. For boys, it would be: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [6]:</p></div><div class="outputr"><div class="highlight"><pre>options <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span> 
+	sub_sample_var <span class="o">=</span> <span class="s">&quot;Sex&quot;</span><span class="p">,</span>
+	sub_sample_var_val <span class="o">=</span> <span class="s">&quot;M&quot;</span> <span class="p">)</span>
+
+mod_male <span class="o">&lt;-</span> obsval<span class="p">(</span> data<span class="p">,</span> specification<span class="p">,</span> reg_model<span class="p">,</span> n_draws<span class="p">,</span>
+	effect_var<span class="p">,</span> effect_var_low<span class="p">,</span> effect_var_high<span class="p">,</span>
+	options <span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [6]:</p></div><div class="outputr2"><div class="highlight"><pre>The <span class="m">1</span>st argument passed to obsval<span class="p">()</span> must be a formula or string.
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<div class="codeblock"><pre>
+## Error in obsval(data, specification, reg_model, n_draws, effect_var, effect_var_low, :
+</pre></div>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [7]:</p></div><div class="outputr"><div class="highlight"><pre>mod_male<span class="o">$</span>effect_sum
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [7]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> <span class="kp">eval</span><span class="p">(</span>expr<span class="p">,</span> envir<span class="p">,</span> enclos<span class="p">)</span><span class="o">:</span> object <span class="s">&#39;mod_male&#39;</span> not found
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>For girls, it would be: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [8]:</p></div><div class="outputr"><div class="highlight"><pre>options <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span> 
+	sub_sample_var <span class="o">=</span> <span class="s">&quot;Sex&quot;</span><span class="p">,</span>
+	sub_sample_var_val <span class="o">=</span> <span class="s">&quot;F&quot;</span> <span class="p">)</span>
+
+mod_female <span class="o">&lt;-</span> obsval<span class="p">(</span> data<span class="p">,</span> specification<span class="p">,</span> reg_model<span class="p">,</span> n_draws<span class="p">,</span>
+	effect_var<span class="p">,</span> effect_var_low<span class="p">,</span> effect_var_high<span class="p">,</span>
+	options <span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [8]:</p></div><div class="outputr2"><div class="highlight"><pre>The <span class="m">1</span>st argument passed to obsval<span class="p">()</span> must be a formula or string.
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<div class="codeblock"><pre>
+## Error in obsval(data, specification, reg_model, n_draws, effect_var, effect_var_low, :
+</pre></div>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [9]:</p></div><div class="outputr"><div class="highlight"><pre>mod_female<span class="o">$</span>effect_sum
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [9]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> <span class="kp">eval</span><span class="p">(</span>expr<span class="p">,</span> envir<span class="p">,</span> enclos<span class="p">)</span><span class="o">:</span> object <span class="s">&#39;mod_female&#39;</span> not found
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>In contrast to our theory, it looks like the effect of age is slightly more pronounced in girls, but there's also a lot more variance; there's a good chance any difference is just the result of there being fewer females in the dataset. </p>
+
+<p>However, it may be worth visualizing the results to see how the estimates of days missed move by age, for both girls and boys. </p>
+
+<p>First, let's set up the models for each gender: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [10]:</p></div><div class="outputr"><div class="highlight"><pre>options_male <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span> 
+	sub_sample_var <span class="o">=</span> <span class="s">&quot;Sex&quot;</span><span class="p">,</span>
+	sub_sample_var_val <span class="o">=</span> <span class="s">&quot;M&quot;</span><span class="p">,</span>
+	effect_range <span class="o">=</span> <span class="s">&quot;full&quot;</span> <span class="p">)</span>
+
+mod_male <span class="o">&lt;-</span> obsval<span class="p">(</span> data<span class="p">,</span> specification<span class="p">,</span> reg_model<span class="p">,</span> n_draws<span class="p">,</span>
+	effect_var<span class="p">,</span> effect_var_low<span class="p">,</span> effect_var_high<span class="p">,</span>
+	options<span class="o">=</span>options_male <span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [10]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> obsval<span class="p">(</span>data<span class="p">,</span> specification<span class="p">,</span> reg_model<span class="p">,</span> n_draws<span class="p">,</span> effect_var<span class="p">,</span> effect_var_low<span class="p">,</span> <span class="o">:</span> unused argument <span class="p">(</span>options <span class="o">=</span> options_male<span class="p">)</span>
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [11]:</p></div><div class="outputr"><div class="highlight"><pre>options_female <span class="o">&lt;-</span> <span class="kt">list</span><span class="p">(</span> 
+	sub_sample_var <span class="o">=</span> <span class="s">&quot;Sex&quot;</span><span class="p">,</span>
+	sub_sample_var_val <span class="o">=</span> <span class="s">&quot;F&quot;</span><span class="p">,</span>
+	effect_range <span class="o">=</span> <span class="s">&quot;full&quot;</span> <span class="p">)</span>
+
+mod_female <span class="o">&lt;-</span> obsval<span class="p">(</span> data<span class="p">,</span> specification<span class="p">,</span> reg_model<span class="p">,</span> n_draws<span class="p">,</span>
+	effect_var<span class="p">,</span> effect_var_low<span class="p">,</span> effect_var_high<span class="p">,</span>
+	options<span class="o">=</span>options_female <span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [11]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> obsval<span class="p">(</span>data<span class="p">,</span> specification<span class="p">,</span> reg_model<span class="p">,</span> n_draws<span class="p">,</span> effect_var<span class="p">,</span> effect_var_low<span class="p">,</span> <span class="o">:</span> unused argument <span class="p">(</span>options <span class="o">=</span> options_female<span class="p">)</span>
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>Now let's graph each:</p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [12]:</p></div><div class="outputr"><div class="highlight"><pre><span class="kn">library</span><span class="p">(</span>ggplot2<span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [12]:</p></div><div class="outputr2"><div class="highlight"><pre>Loading required package<span class="o">:</span> methods
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [13]:</p></div><div class="outputr"><div class="highlight"><pre>graph_range<span class="p">(</span> mod_male <span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [13]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> graph_range<span class="p">(</span>mod_male<span class="p">)</span><span class="o">:</span> object <span class="s">&#39;mod_male&#39;</span> not found
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [14]:</p></div><div class="outputr"><div class="highlight"><pre>graph_range<span class="p">(</span> mod_female<span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [14]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> graph_range<span class="p">(</span>mod_female<span class="p">)</span><span class="o">:</span> object <span class="s">&#39;mod_female&#39;</span> not found
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>As you can see, the movement in each graph is broadly similar. Girls generally miss more days of school than boys, but to the extent that we can say age has an effect on truancy, there's no evidence that that effect is signficantly different for girls than boys. </p>
+
+<p>So in this case neither of our theories were as well supported as we might have hoped. Try sampling on Ethnicity, however, and you should see more movement. </p>
+
+<p>Finally, try the following: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [15]:</p></div><div class="outputr"><div class="highlight"><pre><span class="kp">names</span><span class="p">(</span>mod<span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [15]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> <span class="kp">eval</span><span class="p">(</span>expr<span class="p">,</span> envir<span class="p">,</span> enclos<span class="p">)</span><span class="o">:</span> object <span class="s">&#39;mod&#39;</span> not found
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>Note that you can access each of these items by prepending <code>mod$</code> to it. For example, try: </p>
+
+</div></div><div class="rwrap"><div class="txtr"><p>In [16]:</p></div><div class="outputr"><div class="highlight"><pre><span class="kp">mean</span><span class="p">(</span>mod<span class="o">$</span>effect_preds<span class="p">)</span>
+</pre></div>
+</div><!-- end outputr ></div><div class="rightcol"></div><!-- end rwrap --><div class="rwrap"><div class="txtr2"><p>Out [16]:</p></div><div class="outputr2"><div class="highlight"><pre>Error <span class="kr">in</span> <span class="kp">mean</span><span class="p">(</span>mod<span class="o">$</span>effect_preds<span class="p">)</span><span class="o">:</span> object <span class="s">&#39;mod&#39;</span> not found
+</pre></div>
+</div></div><div class="rightcol"></div><!-- end rwrap --><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+
+<p>If you scroll back up, you'll recognize this as the same value that appears in <code>mod$effect_sum</code>. </p>
+
+<p>In the future I plan to write more tutorials to illustrate what each object does, but for now I'd recommend just playing around with each.</p>
+
+<hr />
+
+<h5><a name="why-use"/></a> Why Use Observed Values?</h5>
+
+<p>Social scientists rely on statistics in order to tease out the effect of one variable on another, even when other variables ("covariates") might be intervening. </p>
+
+<p>At present, most software packages calculate effects using the average values of those covariates. However, unless we have a specific theoretical interest in the average case, using average rather observed covariate values will often bias our results. If what we're interested in is the effect of a variable on a given population, then to calculate it we should be using all the information that we have about that population. </p>
+
+<p>Put differently, for our theory to match our empirics, what we often want is the average effect overall, not the effect on the average case.</p>
+
+<p>For a more in-depth explanation, see the excellent <a href="http://onlinelibrary.wiley.com/doi/10.1111/j.1540-5907.2012.00602.x/abstract;jsessionid=AAADB9AE61EA032F8AA008550E5BB52E.f04t0">AJPS paper by Hanmer and Kalkan</a></p>
+
+<hr />
+
+				    </div></div><!-- ends cell --><!-- ends .entry-content -->
+
+				    <div class="entry-footer"><div class="cell"><div class="txtr">&nbsp;</div><div class="outputr">
+
+				    
+
+					</div><!-- ends .entry-footer -->
+
+				    
+
+				</article>
+			</section>
+		</div>
+
+
+	</div><!-- ends .wrapper -->
+
+
+	<footer id="footer">            
+		<div id="footer-info">
+				<ul>
+		      		<li><a href="/about">About</a></li>		
+		      		<li><a href="https://twitter.com/intent/follow?original_referer=http%3A%2F%2Fchrismeserole.com&screen_name=chrismeserole&tw_p=followbutton" class="popup">Twitter</a></li>							<li class="copyright">&copy; Chris Meserole 2004-2015</li>
+
+		       </ul>
+		</div>
+	</footer>
+
+
+	<script>
+		var x = document.getElementsByTagName('a');
+		for (var i=0;i<x.length;i++) {
+			if (x[i].getAttribute('type') == 'popup') {
+				x[i].onclick = function () {
+					return pop(this.href)
+				}
+				x[i].title += ' (Popup)';
+			}
+		}
+	</script>
+
+	<script>
+	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');
+</script>
+	<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=113432408683533&version=v2.3";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+	<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-61270828-2', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+  </body>
+</html>

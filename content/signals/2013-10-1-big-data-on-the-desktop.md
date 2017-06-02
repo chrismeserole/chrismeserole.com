@@ -1,7 +1,7 @@
 +++
 date = 2013-10-01
 title = "Part II: Big Data on the Desktop"
-slug = "big-data-desktop"
+slug = "part-ii-big-data-on-the-desktop"
 draft = false
 +++
 

@@ -1,6 +1,7 @@
 +++
 date = 2013-12-10
 title = "Part I: The I/O Problem, Or Why Big Data Takes Forever to Process"
+slug = "part-i-the-i-o-problem-or-why-big-data-takes-forever-to-process"
 +++
 
 As I mentioned in the [introduction to this series](http://chrismeserole.com/signals/big-data-and-social-science-introduction/), large datasets are increasingly common in social science, but they're also difficult to deal with efficiently. 
