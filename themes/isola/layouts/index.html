@@ -4,8 +4,9 @@
 	<div id="primary" class="content-area">
 		<main id="main" class="site-main" role="main">
 
-		{{- range first 10 .Data.Pages -}}
-    	{{- if eq .Type "blog"}}
+	
+    	{{ range where .Data.Pages "Title" "About" }}
+
 
 		<article class="post type-post status-publish format-standard hentry category-uncategorized">
 
@@ -30,7 +31,6 @@
 		</article>
 
 		{{- end -}}
-  		{{- end }}
 
 		</main>
 	</div>
