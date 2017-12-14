@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Homework 3 Notes : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Homework 3 Notes</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Homework 3 Notes</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>In general the homeworks were good again.</p>
+
+<p>Just one note: from here on out, always write a brief description for each question.</p>
+
+<p>Even if you&rsquo;re just writing a function &ndash; as in question 1 &ndash; be sure to write out at least one or two sentences about what the function is doing. Likewise, if the HW asks for a graph or table, assume that you&rsquo;re also implicitly being asked to discuss it for a bit. The goal isn&rsquo;t to trip you up, but to make sure you&rsquo;ve got some kind of intuition about what you&rsquo;ve just done.</p>
+
+<p>A couple other notes about the homework follow below &hellip; they&rsquo;re kind of long-ish, so see the sidebar if you want to skip around.</p>
+
+<h3 id="logit-probit">LOGIT vs Probit</h3>
+
+<p>A few people read too much into the different sizes of the logit vs. probit coefficients.</p>
+
+<p>Remember, for logit the <a href="http://en.wikipedia.org/wiki/Odds_ratio#Role_in_logistic_regression">coefficients are log-odds ratios</a>, while for probit, the coefficients are <a href="http://en.wikipedia.org/wiki/Standard_score">z-scores</a>. In themselves, they&rsquo;re not going to tell you much. All you should pay attention to are the direction (ie, positive or negative) and, in some cases, the statistical significance.</p>
+
+<p>The coefficients only become meaningful when we move into the probability space, at which point we can in fact start to talk about the size of a parameter&rsquo;s effect and whether or not it is substantively significant.</p>
+
+<p>(Note: for more on the different between logit and probit, <a href="http://stats.stackexchange.com/a/30909">I highly recommend reading this answer on CrossValidated</a>.)</p>
+
+<h3 id="gradients">GRADIENTS</h3>
+
+<p>Thankfully pretty much everyone recognized that the gradients were getting smaller as the log-likelihood converged on its maximum.</p>
+
+<p>After digging into gradients a lot more, I think the best way to explain them is to imagine you&rsquo;re hiking in the Appalachians but you&rsquo;re not allowed to use a footpath. What&rsquo;s the best way to reach the nearest peak?</p>
+
+<p>One way would be to take the gradient with respect to height at your starting point &ndash; ie, the exact direction in the north-south/east-west plane that the mountain rises the fastest &ndash; and begin climbing in that direction.</p>
+
+<p>Pretty soon you&rsquo;ll face a problem though: how far do you keep travelling in that direction? Unless by some miracle the mountain is symmetrical, the first gradient you measure will not point you in the exact direction of the summit. (And even if it is symmetrical, the gradient still won&rsquo;t tell you how far to travel to get to the top.)</p>
+
+<p>To reach the peak, then, you need to stop and calculate the gradient every so often. Unfortunately, there&rsquo;s no perfect way to know how often to do this: depending on the contour of the mountain, it might be better to find the gradient every 100 feet, or it might be better to find it every 1000. Or it might be best to do it every thousand feet at first, and then every few feet at the top. Or it might be some other combination.</p>
+
+<p>You probably already realized where this is heading. Instead of a mountain in a three-dimensional space of length, width and height, imagine plotting a dataset in the three-dimensional space of age, income and education.</p>
+
+<p>The way you know you&rsquo;ve reached a peak in that space (or a valley; see below) is when the rate of change in each dimension approaches zero at the same time.</p>
+
+<p>The question is how to get to such a peak from any given starting point. As with our mountain, the best way to get there will depend on the specific contour of the surface connecting our data. Sometimes you&rsquo;ll want to calculate a gradient vector early and often, other times you&rsquo;ll want to do it less.</p>
+
+<p>Since it&rsquo;s not always clear what the most efficient way is to arrive at the peak, you want multiple ways of trying to get there &ndash; which is why multiple algorithms have been developed, such as the <a href="https://en.wikipedia.org/wiki/Newton's_method">Newton-Raphson</a>, <a href="http://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm">BFGS</a>, etc.</p>
+
+<h3 id="hessian-matrix">HESSIAN</h3>
+
+<p>So where does the Hessian come in?</p>
+
+<p>As I hinted at above, a three-dimensional space of age, income and education is the same, mathematically, as a three-dimensional space of length, width and height. The difference is that when we deal with length, width and height, we&rsquo;ve got a very clear sense &ndash; thanks to both our eyes and the wonders of gravity &ndash; of what a peak is and what a valley is.</p>
+
+<p>In any other space though we can&rsquo;t rely on those senses. Instead we need a way of distinguishing peaks from valleys mathematically.</p>
+
+<p>And the way we do that is with the <a href="http://en.wikipedia.org/wiki/Hessian_matrix">Hessian matrix</a>. Along its diagonal are the second partial derivatives for each variable, which tell us the rate of change of the rate of change for each dimension.</p>
+
+<p>If the rate of change of our function is zero in all dimensions and the diagonals along the Hessian are all positive, then we know we&rsquo;ve hit a valley. If they&rsquo;re all negative, then we know we&rsquo;ve hit a peak.</p>
+
+<h3 id="hessian-and-variance">HESSIAN AND VARIANCE</h3>
+
+<p>Finally, the other thing the Hessian does is provide cross-partial second derivatives. These are the points off the diagonal, and they tell us about our function with respect to the rate of change in one dimension times the rate of change in another.</p>
+
+<p>If you think of what covariance is &ndash; ie, how two variables move together in your space &ndash; you can see how such cross-partials would be useful. The information they provide about simultaneous rates of change is what makes it possible to then use the Hessian to calculate the variance-covariance matrix for our parameters.</p>
+
+<p>The ability to use the Hessian in this way is why you can think of the Hessian as the &ldquo;variance&rdquo;.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">September 28, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

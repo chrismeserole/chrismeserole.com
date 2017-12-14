@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Part III: Big Data in the Cloud : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Part III: Big Data in the Cloud</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Part III: Big Data in the Cloud</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>As I mention <a href="http://chrismeserole.com/signals/big-data-on-the-desktop/">in the previous post</a>, there are a few ways you can speed up analysis of big data on your desktop or laptop.</p>
+
+<p>However, the fastest/most efficient solution is often to just shift data storage and processing to a networked computer cluster. Generally speaking, this solves the <a href="http://chrismeserole.com/signals/the-i-o-problem-or-why-big-data-takes-forever-to-process/">I/O problem</a> by splitting the processing across multiple computers rather than one.</p>
+
+<p>Fortunately there are now several options available for large-scale data storage and analysis, with varying degrees of cost-effectiveness. Most solutions use Hadoop for data storage and then one of the following open-source solutions for analysis:</p>
+
+<ul>
+<li><a href="http://hive.apache.org/">Hive</a></li>
+<li><a href="http://pig.apache.org/">Pig</a></li>
+<li><a href="https://github.com/cloudera/impala">Impala</a></li>
+<li><a href="http://spark.incubator.apache.org/">Spark</a> / <a href="https://github.com/amplab/shark">Shark</a></li>
+<li><a href="https://www.facebook.com/notes/facebook-engineering/presto-interacting-with-petabytes-of-data-at-facebook/10151786197628920">Presto</a></li>
+</ul>
+
+<p>With the exception of Presto, which was recently released by Facebook and is designed more for petabyte-scale analysis, I profile each of those options below.</p>
+
+<h3 id="hadoop-hive">Hadoop + Hive</h3>
+
+<p>At this point, probably the most straightforward way to analyze your data in the cloud is to use <a href="http://hadoop.apache.org/">Hadoop</a> to store your data and then <a href="http://hive.apache.org/">Hive</a> to query it.</p>
+
+<p>Fortunately, companies such as Amazon have now abstracted away most of the pain points involved with setting up your own Hadoop cluster, so getting up and running with Hadoop is relatively painless. If you&rsquo;re looking for a way to try out Hadoop and Hive, I highly recommend <a href="http://johnbeieler.org/blog/2013/06/16/using-hive-with-social-science-data/">this excellent tutorial by John Beieler</a>.</p>
+
+<h3 id="hadoop-impala-parquet">Hadoop + Impala + Parquet</h3>
+
+<p>Although Hadoop and Hive are great, for even a 50GB dataset it can still take a few minutes for queries to finish.</p>
+
+<p>However, since exploring data is generally an iterative process, getting the query time down as low as possible makes a huge difference.</p>
+
+<p>At present probably the most cost-effective way to reduce the query time is to use a combination of <a href="https://github.com/cloudera/impala">Impala</a> and <a href="https://github.com/Parquet">Parquet</a>. The former is an improved query engine developed by <a href="http://www.cloudera.com/content/cloudera/en/products/cdh/impala.html">Cloudera</a>. The <a href="http://blog.cloudera.com/blog/2013/07/announcing-parquet-1-0-columnar-storage-for-hadoop/">latter is a novel storage format</a> developed by both <a href="http://blog.cloudera.com/blog/2013/03/introducing-parquet-columnar-storage-for-apache-hadoop/">Cloudera and Twitter</a> that stores data in columns rather than rows, and as a result allows queries to be run as <a href="http://en.wikipedia.org/wiki/Vectorization_(parallel_computing)">vectorized operations</a>. (There&rsquo;s a lot of other fancy stuff it does too, but the gist is that Parquet is a storage format that makes data retrieval/processing really, really efficient.)</p>
+
+<p>All told, the performance gains are significant: using Impala and Parquet, <a href="https://twitter.com/tlpinney">Travis Pinney</a> was able to get query times down to a few seconds or less.</p>
+
+<p>To try Impala and Parquet yourself, either follow <a href="https://github.com/tlpinney/funnelcloud/tree/master/clouds/gdelt">Travis&rsquo;s instructions on Github here</a> or a more fleshed-out <a href="http://gdeltblog.wordpress.com/2013/11/06/fast-gdelt-queries-using-impala-and-parquet/">tutorial by Pierre-Yves Taunay on the GDELT blog</a>.</p>
+
+<h3 id="spark-shark">Spark/Shark</h3>
+
+<p>Another way to reduce the query time dramatically (for GDELT, also in the single seconds) is to use Hadoop coupled with either <a href="http://spark.incubator.apache.org/">Spark</a> or <a href="https://github.com/amplab/shark">Shark</a>.</p>
+
+<p>Run out of <a href="https://amplab.cs.berkeley.edu/">Berkeley&rsquo;s AMPLab</a>, what Spark/Shark does is load your dataset into memory <em>across an entire cluster</em>. In a way, it&rsquo;s very similar to Hive &mdash; Shark even uses the identical syntax &mdash; except instead of having each machine query the portion of data that&rsquo;s on its hard drive, each machine instead queries the data that&rsquo;s in its RAM.</p>
+
+<p>The one catch is that because RAM is comparatively expensive, if all you&rsquo;re interested in are basic counts, subsetting, etc, Spark is not cost-effective compared with Impala and Parquet, much less Hive. It&rsquo;ll cost up to 10x more for the same performance times.</p>
+
+<p>However, the real value of Spark isn&rsquo;t just its basic query speeds. Instead, it&rsquo;s that because the entire dataset resides in memory, you can, for instance, run a k-means algorithm or fit a hierarchical model without constantly shuffling data in and out of memory. Further, since Spark has a Python API, you can use any of Python&rsquo;s scientific computing libraries to analyze the in-memory datastore as well.</p>
+
+<p>If you want try out Spark/Shark, <a href="http://chrismeserole.com/signals/shark-spark-gdelt-tutorial">see the next post</a> or <a href="https://github.com/amplab/shark/wiki#user-documentation">the Shark documentation</a>.
+For more about the project itself, this <a href="http://www.wired.com/wiredenterprise/2013/06/yahoo-amazon-amplab-spark/">Wired article</a> is a good place to start.</p>
+
+<h3 id="best-practices">Best Practices</h3>
+
+<p>At this point, for basic data exploration using Impala and Parquet is probably the most cost-effective way to query or subset large datasets.</p>
+
+<p>However, once you have a small dataset that you want to query quickly or run more sophisticated operations on, it may be worth spinning up a small cluster and switching to Spark/Shark.</p>
+
+<p>Accordingly, the next post is <a href="http://chrismeserole.com/signals/shark-spark-gdelt-tutorial">a tutorial for getting Shark up and running with the popular GDELT dataset</a>.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">December 12, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

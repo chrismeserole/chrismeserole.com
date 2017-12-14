@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Lark Now Runs Python : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Lark Now Runs Python</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Lark Now Runs Python</h2>
+
+		</header>
+
+		<div class="entry-content">  <p>One reason I&rsquo;ve been writing <a href="https://github.com/chrismeserole/lark/">Lark</a>, the static site generator that now powers this site, was to have the freedom to cook up unique ways of merging writing and data analysis.</p>
+
+<p>Thankfully, I&rsquo;m glad to say I hit the first milestone on that path today. It took a bit of hacking, but thanks to Matthew Rocklin&rsquo;s great new <a href="https://github.com/mrocklin/pymarkdown">pymarkdown</a> module, <a href="https://github.com/chrismeserole/lark/blob/master/_posts/python-example.md">Lark now executes Python code blocks in posts</a> when it builds the site.</p>
+
+<p>The end result? I can now stick this in a post &hellip;</p>
+
+<pre><code>```Python
+&gt;&gt;&gt; x = 3
+&gt;&gt;&gt; x + 1
+[should be 4]
+&gt;&gt;&gt; 2 + 2*x
+missing or wrong results will be overwritten
+```
+</code></pre>
+
+<p>&hellip; and have it show up as this:</p>
+
+<pre><code class="language-Python">&gt;&gt;&gt; x = 3
+&gt;&gt;&gt; x + 1
+[should be 4]
+&gt;&gt;&gt; 2 + 2*x
+missing or wrong results will be overwritten
+</code></pre>
+
+<p>Lark still needs a lot of work, but it&rsquo;s fun to think about the possibilities this opens up.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">April 17, 2015</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

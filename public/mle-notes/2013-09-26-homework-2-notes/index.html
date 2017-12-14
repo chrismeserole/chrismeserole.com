@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Homework 2 Notes : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Homework 2 Notes</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Homework 2 Notes</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>For the most part this homework was good.</p>
+
+<p>In the first two questions, some people didn&rsquo;t realize that they had to draw the betas from the normal distribution as well, or did draw them from the normal distribution, but forgot to include them when they generated <code>y</code>.</p>
+
+<p>The Stata code should have been something like:</p>
+
+<pre><code>drawnorm x1 x2 b1 b2 alpha error, n(10000) means(2,5,2,-2,1,0) sds(10,2,10,2,10,20) 
+gen y = alpha + b1*x1 + b2*x2 + error
+</code></pre>
+
+<h3 id="social-processes-observed-variables-vs-unobserved-variables">Social Processes: Observed Variables vs Unobserved Variables</h3>
+
+<p>This question tripped some people up, so I want to walk through it in-depth. Put simply, the social processes underlying your observed variables are very likely different from the social processes underlying your unobserved variables.</p>
+
+<p>To get an intuitive sense of this, consider the effect of violent protest on foreign direct investment. A simple, common sense theory would suggest that the more violent protest events a country experiences, the less likely foreign investers will be to invest in that country. Moreover, it&rsquo;s likely that the effect of violent protest on FDI is fairly constant across countries, enough so anyway that we can reasonably model the effect of violent protest as being normally distributed around some negative mean.</p>
+
+<p>We can thus model this as follows:</p>
+
+<div style="text-align: center;font-family: Georgia">FDI ~ N(&alpha; + &beta;<sub>protest</sub>*X<sub>protest</sub>, &sigma;)</div>
+
+<p>Where:</p>
+
+<div style="text-align: center;font-family: Georgia">&beta;<sub>protest</sub> ~ N(-&mu;, &sigma;<sub>&beta;</sub>)</div>
+
+<p>But what about the violent protests themselves? What are the social processes underlying that data?</p>
+
+<p>We can imagine a lot of reasons for why violent protests happen, from a food shortage to government repression. Theoretically, though, violent protest is costly for everyone, so we generally assume violent protests won&rsquo;t happen very often, but then when they do (since the government is unlikely to immediately give in), they&rsquo;ll probably happen a lot. A better distribution to model such a process is the Poisson.  We&rsquo;ll learn more about the Poisson and its variants later, but the gist here is that such a distribution can result in most countries having relatively low levels of violent protest, while a few have quite a lot.</p>
+
+<p>Formally, we would model this as:</p>
+
+<div style="text-align: center;font-family: Georgia">X<sub>protest</sub> ~ Poisson(&lambda;)</div>
+
+<p>That&rsquo;s clearly a very different distribution than we think our <strong>B<sub><emph>protest</emph></sub></strong> adheres to.</p>
+
+<p>To be clear, the differences between the distributions of our observed and unobserved data won&rsquo;t always be this extreme. For example, both your observed and unobserved variables may belong to the same family of distribution &ndash; which is what we assumed in the homework when we drew both observed and unobserved variables from the normal distribution &ndash; but the key point is that the social processes are generally separate/different, and as a result we ought to model our observed and unobserved variables separately too.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">September 26, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

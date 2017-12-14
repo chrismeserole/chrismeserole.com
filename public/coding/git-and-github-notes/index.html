@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Git and Github Notes : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Git and Github Notes</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Git and Github Notes</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p><em>These are just notes of my experience with git and github. If you know of better/best practices, by all means let me know.</em></p>
+
+<p>Initially I had trouble running <code>fetch</code> or <code>push</code> to my github repository. Every time I ran fetch, for instance, I got:</p>
+
+<pre><code>fatal: The remote end hung up unexpectedly
+</code></pre>
+
+<p>The reason I was getting this &ndash; I think &ndash; is that I ran</p>
+
+<pre><code>git remote add origin git://github.com/username/myrepo
+</code></pre>
+
+<p>whereas if you visited <code>http://github.com/username/myrepo</code>, the setting was for <code>https</code> rather than <code>git</code>.
+Regardless, I got fetching to work by running:</p>
+
+<pre><code>git remote add origin https://github.com/username/myrepo
+</code></pre>
+
+<p>The moral of the story: pay attention to the protocol.</p>
+
+<h4 id="commit-changes-efficiently">commit changes efficiently</h4>
+
+<p>Using <code>-a</code> automatically stages any files you previously tracked.</p>
+
+<pre><code>git commit -a -m 'added new edit'
+</code></pre>
+
+<p>The benefit: you don&rsquo;t have to run <code>git add</code> for every file you change.</p>
+
+<p>Remove file from staging area but leave on hard drive:</p>
+
+<pre><code>git rm --cached somefile.txt
+</code></pre>
+
+<p>Create and move to new branch:</p>
+
+<pre><code>git checkout -b newbranchname
+</code></pre>
+
+<p>Show the diffs from the last two commits:</p>
+
+<pre><code>git log -p -2
+</code></pre>
+
+<p>More on <a href="http://git-scm.com/book/en/Git-Basics-Viewing-the-Commit-History">git logs here</a>.</p>
+
+<p>How to <a href="http://git-scm.com/book/en/Git-Basics-Undoing-Things">unmodify a modified file here</a> (ie, how to change back to previous version).</p>
+
+<p><a href="http://stackoverflow.com/questions/292357/whats-the-difference-between-git-pull-and-git-fetch">Stackoverflow post</a> on the difference between <code>git pull</code> and <code>git fetch</code>: basically, <code>pull</code> both fetches <em>and</em> merges from remote into local.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">February 12, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

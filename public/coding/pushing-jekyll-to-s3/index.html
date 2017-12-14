@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Pushing Jekyll to s3 : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Pushing Jekyll to s3</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Pushing Jekyll to s3</h2>
+
+		</header>
+
+		<div class="entry-content">  <p>I have two workstations. The first is a custom built desktop that runs Windows (more on this later, hopefully). The second is an Asus laptop that primarily runs Linux.</p>
+
+<p>I recently moved my sites over to Jekyll. I host them locally in a Dropbox directory, then push them to s3.</p>
+
+<p>On Windows, I use jekyll-s3 to do the push. It&rsquo;s convenient and works well. Just run <code>gem install jekyll-s3</code> and then to push you run <code>jekyll-s3</code> (the first time you do this, it walks you through configuration).</p>
+
+<p>On Ubuntu, I couldn&rsquo;t get the jekyll-s3 gem to install. So I use <a href="http://s3tools.org/s3cmd">s3cmd</a>. Installing was straightforward, just run:</p>
+
+<pre><code>sudo apt-get install s3cmd
+</code></pre>
+
+<p>But configuring s3cmd I ran into a stupid roadblock: my Secret Access Key contains some <code>I</code> and <code>l</code> characters, which look exactly the same in my browser. I tried to configure my s3cmd in the terminal by guessing which were &ldquo;L&rdquo;s and which were &ldquo;I&rdquo;s, never correctly, before I finally realized I could cut and paste them out of the browser and into a text editor that would make the difference obvious. Why it took me that long to realize I don&rsquo;t know, but it worked like a charm once it did.</p>
+
+<p>For the encryption and other default config details, I followed the basic config setup for s3cmd using <a href="http://www.saltycrane.com/blog/2010/02/s3cmd-notes/">this tutorial here</a>.</p>
+
+<p>Once it was configured, I saved the following as <code>create-md.sh</code> in the root folder for all my sites:</p>
+
+<pre><code>#!/bin/bash
+cd /path/to/mysite.com
+jekyll --server
+</code></pre>
+
+<p>I also saved the following as <code>push-md.sh</code> in the root folder for all my sites:</p>
+
+<pre><code>#!/bin/bash
+cd /path/to/mysite.com
+s3cmd put --delete-removed _site/ s3://mydomain.com
+echo 's3cmd has been processed'
+</code></pre>
+
+<p>Ideally I&rsquo;d like to combine the scripts (or use a git hook), but I haven&rsquo;t found a way to programmaticaly shut down jekyll once it&rsquo;s regenerated the site. Doing it this way also lets me check the changes on a local server first.</p>
+
+<p>I then set an alias for each <code>.sh</code> file, so that all I have to do is open terminal and type <code>create-md</code>, check the site on a browser, and then <code>push-md</code> to push my site to s3.</p>
+
+<p>NB: A good list of all the options for the <a href="http://manpages.ubuntu.com/manpages/intrepid/man1/s3cmd.1.html">s3cmd commands is here</a>.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">February 26, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

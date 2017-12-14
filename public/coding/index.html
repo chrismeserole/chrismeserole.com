@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Coding : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Coding</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="http://chrismeserole.com/coding/index.xml" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main"><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/installing-edarf/">Installing Edarf</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>I&rsquo;ve been meaning to check out random forests in general and the <a href="https://github.com/zmjones/edarf">edarf package</a> in particular for a while now &ndash; at least since <a href="https://twitter.com/joneszm">Zach Jones</a> and <a href="https://twitter.com/fridolinlinder">Fridolin Linder</a> posted <a href="http://media.wix.com/ugd/13cbcb_b644c0023366475ab6cb640969303a62.pdf">their paper on Random Forests and EDA</a> last spring.</p>
+
+<p>I finally had a chance to go through package, and it&rsquo;s as great as I&rsquo;d hoped it would be. The standard errors and partial dependence plots point toward a future where ML plays a much larger role in political science overall rather than just the subset devoted to prediction.</p>
+
+<p>All that said though, edarf is still early going.</p>
+
+<p>For anyone trying to get up and running with edarf as well, below are a few issues I ran into while walking through Zach&rsquo;s <a href="https://github.com/zmjones/imc/blob/master/edarf.R">IMC tutorial for how to use edarf</a>.</p>
+
+<p>See the appendix for my exact R and OS versions.</p>
+
+<h5 id="1-fortan-compiler">1. Fortan compiler</h5>
+
+<p>I started by running:</p>
+
+<pre><code>devtools::install_github(&quot;zmjones/edarf&quot;)
+</code></pre>
+
+<p>That produced the following error message:</p>
+
+<pre><code>ld: warning: directory not found for option '-L/usr/local/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2'
+ld: library not found for -lgfortran
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make: *** [edarf.so] Error 1
+ERROR: compilation failed for package 'edarf'
+</code></pre>
+
+<p>Based on the <code>clang: error</code> and initial path it seemed like the compiler was having an issue finding the right version of fortran. I&rsquo;d updated to 10.10 lately and reinstalled Xcode, so I thought that might have something to do with it.</p>
+
+<p>After a bit of googling, it looks like the issue was that edarf relies on RcppArmadillo, which in turn relies on a version of gfortran that is not shipped with Mac OS X 10.9. Either the bug also applies to 10.10 or I botched the upgrade.</p>
+
+<p>At any rate, <a href="http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/">to fix the issue I ran</a>:</p>
+
+<pre><code>curl -O http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
+sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /
+</code></pre>
+
+<p>Installing edarf worked like a charm after that.</p>
+
+<h5 id="2-version-of-party">2. Version of party()</h5>
+
+<p>edarf also relies on a forked version of the <a href="https://cran.r-project.org/web/packages/party/">party package</a>:</p>
+
+<pre><code>devtools::install_github(&quot;zmjones/party&quot;, subdir = &quot;pkg&quot;)
+</code></pre>
+
+<p>The package installed ok, but I couldn&rsquo;t call the library at first.</p>
+
+<p>I&rsquo;d already called <code>library(party)</code> in my environment &ndash; I think while I was going through <a href="http://www.methods-colloquium.com/#!Zachary-Jones-Data-Mining-as-Exploratory-Data-Analysis/clv6/560ee37a0cf2f0ed7a2d727b">Zach&rsquo;s great international methods colloquium presentation</a> &ndash; and there seemed to be a conflict I couldn&rsquo;t get around.</p>
+
+<p>After restarting R though I could load the library fine.</p>
+
+<h5 id="3-plot-imp-error">3. plot_imp() error</h5>
+
+<p>Most of the plots in the tutorial worked well. But then I ran the following (lines 30-31):</p>
+
+<pre><code>imp &lt;- variable_importance(fit, features, type = &quot;local&quot;, oob = TRUE, parallel = TRUE)
+plot_imp(imp)
+</code></pre>
+
+<p>That yielded this:</p>
+
+<pre><code>Error in as.character(x$label) : 
+cannot coerce type 'closure' to vector of type 'character'
+</code></pre>
+
+<p>Based on the coercion/closure issue, my hunch is that <code>plot_imp()</code> is trying to coerce some function itself to character rather than that function&rsquo;s output.</p>
+
+<h5 id="4-rstudio-abort-cycle">4. RStudio Abort Cycle</h5>
+
+<p>After working through the tutorial and then using my own data, eventually I somehow got into a cycle in RStudio where something in my current project environment was causing RStudio to abort, but then since RStudio auto-loads the last project environment, it would immediately run into the same issue again.</p>
+
+<p>Eventually I just had to shut down the computer and restart everything.</p>
+
+<p>I didn&rsquo;t bother trying to reproduce the issue, which I think had something to do with socket settings and not edarf.</p>
+
+<h5 id="conclusion">Conclusion</h5>
+
+<p>Bugs aside the package is great. Can&rsquo;t wait to see where it goes.</p>
+
+<p>&ndash;</p>
+
+<p>APPENDIX</p>
+
+<p>Mac OS X version: 10.10.4</p>
+
+<p>R Version Info:</p>
+
+<pre><code>platform       x86_64-apple-darwin13.4.0   
+arch           x86_64                      
+os             darwin13.4.0                
+system         x86_64, darwin13.4.0        
+status                                     
+major          3                           
+minor          2.1                         
+year           2015                        
+month          06                          
+day            18                          
+svn rev        68531                       
+language       R                           
+version.string R version 3.2.1 (2015-06-18)
+nickname       World-Famous Astronaut   
+</code></pre>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Oct 21, 2015</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/poisson-saturated-log-likelihood/">Poisson Saturated Log Likelihood</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>I was poking around the web earlier for the saturated log-likehood in a poisson model, but couldn&rsquo;t find it.</p>
+
+<p>Here goes, using an example from <a href="https://books.google.com/books?id=qvzUGYmChxUC&amp;lpg=PT165&amp;dq=negative%20binomial%20deviance%20R%20code&amp;pg=PT165#v=onepage&amp;q=negative%20binomial%20deviance%20R%20code&amp;f=false">Millar&rsquo;s MLE Estimation and Inference</a>:</p>
+
+<pre><code class="language-r">library(MASS)
+
+z &lt;- c(rep(0,19), 1,1,2,2,3,3,3,3,4,4,4,5,6,6,6,6,7,7,7,9,9)
+
+mod &lt;- glm(z~1,family=&quot;poisson&quot;)
+
+z.pos &lt;- z[(z&gt;0)]
+
+saturated.ll &lt;- sum(z.pos*log(z.pos)-z.pos-log(factorial((z.pos))))
+intercept.ll &lt;- as.numeric(logLik(mod))
+
+saturated.ll
+intercept.ll
+(my.null.deviance &lt;- 2*(saturated.ll-intercept.ll))
+mod$null.deviance
+</code></pre>
+
+<p>If it&rsquo;s easier to understand what&rsquo;s going on, also try this:</p>
+
+<pre><code class="language-r">total &lt;- 0
+for(i in 1:40){
+  if(z[i]&gt;0)
+    total &lt;- total + z[i]*log(z[i])-(z[i])-log(factorial(z[i]))
+  else
+    # can't evaluate log(0) ... also, note z[i] here will always be 0 too
+    total &lt;- total + 0 - z[i] - 0  
+}
+total
+</code></pre>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Aug 31, 2015</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/example-r-and-python-code/">Example R and Python Code</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>In addition to Python, Lark now executes R at runtime as well, via <a href="http://yihui.name/knitr/">Knitr</a>.</p>
+
+<p>Still have an issue with Maplotlib, but otherwise things are looking good!</p>
+
+<hr />
+
+<p>Here goes. First let&rsquo;s try R:</p>
+
+<pre><code class="language-r">x &lt;- rnorm(100)
+summary(x)
+</code></pre>
+
+<p>Now let&rsquo;s switch over to Python:</p>
+
+<pre><code class="language-Python">&gt;&gt;&gt; x = 3
+&gt;&gt;&gt; x + 1
+[should be 4]
+&gt;&gt;&gt; 2 + 2*x
+missing or wrong results will be overwritten
+</code></pre>
+
+<p>Ok. Let&rsquo;s try plotting stuff.</p>
+
+<p>First in R:</p>
+
+<pre><code class="language-r">plot(cars)
+</code></pre>
+
+<p>Now let&rsquo;s try a plot in Python &hellip;</p>
+
+<pre><code class="language-Python">&gt;&gt;&gt; import matplotlib.pyplot as plt
+
+&gt;&gt;&gt; fig = plt.figure()
+&gt;&gt;&gt; plt.plot([1, 2, 3, 4, 5], [6, 7, 2, 4, 5])
+&gt;&gt;&gt; fig
+</code></pre>
+
+<p>Bummer. Looks like fig object exists, it&rsquo;s just not being passed properly to Lark.</p>
+
+<p>Hopefully we should be able to sort it out in time.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Apr 20, 2015</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/lark-now-runs-python/">Lark Now Runs Python</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>One reason I&rsquo;ve been writing <a href="https://github.com/chrismeserole/lark/">Lark</a>, the static site generator that now powers this site, was to have the freedom to cook up unique ways of merging writing and data analysis.</p>
+
+<p>Thankfully, I&rsquo;m glad to say I hit the first milestone on that path today. It took a bit of hacking, but thanks to Matthew Rocklin&rsquo;s great new <a href="https://github.com/mrocklin/pymarkdown">pymarkdown</a> module, <a href="https://github.com/chrismeserole/lark/blob/master/_posts/python-example.md">Lark now executes Python code blocks in posts</a> when it builds the site.</p>
+
+<p>The end result? I can now stick this in a post &hellip;</p>
+
+<pre><code>```Python
+&gt;&gt;&gt; x = 3
+&gt;&gt;&gt; x + 1
+[should be 4]
+&gt;&gt;&gt; 2 + 2*x
+missing or wrong results will be overwritten
+```
+</code></pre>
+
+<p>&hellip; and have it show up as this:</p>
+
+<pre><code class="language-Python">&gt;&gt;&gt; x = 3
+&gt;&gt;&gt; x + 1
+[should be 4]
+&gt;&gt;&gt; 2 + 2*x
+missing or wrong results will be overwritten
+</code></pre>
+
+<p>Lark still needs a lot of work, but it&rsquo;s fun to think about the possibilities this opens up.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Apr 17, 2015</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/rd2pdf-bug-in-devtoolscheck/">Rd2pdf bug in devtools::check()</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>I&rsquo;m currently trying to compile my first package in RStudio.</p>
+
+<p>I was consistently getting the following warning:</p>
+
+<pre><code>* checking PDF version of manual ... 
+WARNING LaTeX errors when creating PDF version.
+</code></pre>
+
+<p>I didn&rsquo;t have a clue what was going on, and I wasn&rsquo;t having any success following Hadley Wickham&rsquo;s advice to check my LaTeX logs; I didn&rsquo;t even know where the logs were.</p>
+
+<p>Thankfully though, a bit of google discovered the problem: as <a href="http://stackoverflow.com/a/29277121">Matt Bannert noted</a> in R 3.1.3 the commands <code>R CMD Rd2pdf</code> and <code>R CMD Check</code> expected <code>texi2dvi</code> to be in <code>/usr/bin/local/</code>, even though it was actually in <code>/usr/bin</code>.</p>
+
+<p>To fix it, I followed Matt&rsquo;s suggestion:</p>
+
+<pre><code># to check whether the same issue exists for you
+which texi2dvi
+# if so
+cd /usr/local/bin
+ln -s /usr/bin/texi2dvi
+</code></pre>
+
+<p>Worked like a charm, thankfully. After setting the symlink I haven&rsquo;t run into the same warning again.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Apr 13, 2015</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/installing-valgrind-on-mac-os-x-yosemite/">Installing Valgrind on Mac OS X Yosemite</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>I decided to learn a lower level like like C, in part because I want to learn about memory management, leaks, etc.</p>
+
+<p>While following Zed Shaw&rsquo;s tutorial I got stuck on installing Valgrind, which isn&rsquo;t yet supported on Yosemite.</p>
+
+<p>To get up and running, I generally followed Taras Kalapun&rsquo;s tutorial, which installs Valgrind from svn. However, initially I ran into issues because aclocal and autoconf weren&rsquo;t installed. Then I ran into issues because XCode wasn&rsquo;t installed.</p>
+
+<p>Below is how I got everything work.</p>
+
+<p>###ACLOCAL AND AUTOCONF</p>
+
+<p>After tinkering with yet another tutorial, first I installed autoconf:</p>
+
+<pre><code>curl -O http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+tar -xzvf autoconf-2.69.tar.gz
+cd autoconf-2.69
+./configure
+make
+make install
+</code></pre>
+
+<p>Second, I installed aclocal:</p>
+
+<pre><code>curl -O http://ftp.gnu.org/gnu/automake/automake-1.14.1.tar.gz
+tar -xzvf automake-1.14.1.tar.gz
+cd automake-1.14.1
+./configure
+make
+make install
+</code></pre>
+
+<p>Finally, with both installed, I could now run Taras&rsquo; tutorial:</p>
+
+<pre><code>svn co svn://svn.valgrind.org/valgrind/trunk valgrind
+cd valgrind
+./autogen.sh
+./configure
+make
+make install
+</code></pre>
+
+<p>Just kidding! When I ran make, I got this error:</p>
+
+<pre><code>Making all in coregrind
+make[2]: *** No rule to make target `/usr/include/mach/mach_vm.defs', needed by `m_mach/mach_vmUser.c'.  Stop.
+make[1]: *** [all-recursive] Error 1
+make: *** [all] Error 2
+</code></pre>
+
+<p>After some googling, it seemed the new problem was XCode.</p>
+
+<p>###INSTALLING COMMAND LINE X-CODE</p>
+
+<p>Thanks to Jinhui Zhang&rsquo;s tutorial, I realized that even though I had XCode installed in my applications, I didn&rsquo;t have it installed in my command line.</p>
+
+<p>So, I ran:</p>
+
+<pre><code>xcode-select --install
+</code></pre>
+
+<p>Then I got some coffee. xcode is a beast to install.</p>
+
+<p>###MAKE VALGRIND</p>
+
+<p>Once XCode was installed, I could finally finish the Valgrind install. I changed back to my valgrind directory, then ran:</p>
+
+<pre><code>make
+make install
+</code></pre>
+
+<p>And with that, finally, Valgrind worked like it was supposed to. I ran Zed&rsquo;s tutorial and my output matched his.</p>
+
+<p>Phew.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Nov 1, 2014</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/loading-octave-graphics-on-mac-os-x-10.8.4/">Loading Octave Graphics on Mac OS X 10.8.4</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>I decided to try my hand at Octave today, to see if it simplifies model prototyping.</p>
+
+<p>One issue was that Octave wasn&rsquo;t connecting properly to its graphics library. Anytime I ran <code>hist()</code>, for example, I would get:</p>
+
+<pre><code>dyld: Library not loaded: /usr/X11/lib/libfreetype.6.dylib
+  Referenced from: /usr/X11R6/lib/libfontconfig.1.dylib
+  Reason: Incompatible library version: libfontconfig.1.dylib requires version 13.0.0 or later, but libfreetype.6.dylib provides version 10.0.0
+dyld: Library not loaded: /usr/X11/lib/libfreetype.6.dylib
+  Referenced from: /usr/X11R6/lib/libfontconfig.1.dylib
+  Reason: Incompatible library version: libfontconfig.1.dylib requires version 13.0.0 or later, but libfreetype.6.dylib provides version 10.0.0
+/Applications/Gnuplot.app/Contents/Resources/bin/gnuplot: line 71:   865 Trace/BPT trap          GNUTERM=&quot;${GNUTERM}&quot; GNUPLOT_HOME=&quot;${GNUPLOT_HOME}&quot; PATH=&quot;${PATH}&quot; DYLD_LIBRARY_PATH=&quot;${DYLD_LIBRARY_PATH}&quot; HOME=&quot;${HOME}&quot; GNUHELP=&quot;${GNUHELP}&quot; DYLD_FRAMEWORK_PATH=&quot;${DYLD_FRAMEWORK_PATH}&quot; GNUPLOT_PS_DIR=&quot;${GNUPLOT_PS_DIR}&quot; DISPLAY=&quot;${DISPLAY}&quot; GNUPLOT_DRIVER_DIR=&quot;${GNUPLOT_DRIVER_DIR}&quot; &quot;${ROOT}/bin/gnuplot-4.2.6&quot; &quot;$@&quot;
+/Applications/Gnuplot.app/Contents/Resources/bin/gnuplot: line 71:   871 Trace/BPT trap          GNUTERM=&quot;${GNUTERM}&quot; GNUPLOT_HOME=&quot;${GNUPLOT_HOME}&quot; PATH=&quot;${PATH}&quot; DYLD_LIBRARY_PATH=&quot;${DYLD_LIBRARY_PATH}&quot; HOME=&quot;${HOME}&quot; GNUHELP=&quot;${GNUHELP}&quot; DYLD_FRAMEWORK_PATH=&quot;${DYLD_FRAMEWORK_PATH}&quot; GNUPLOT_PS_DIR=&quot;${GNUPLOT_PS_DIR}&quot; DISPLAY=&quot;${DISPLAY}&quot; GNUPLOT_DRIVER_DIR=&quot;${GNUPLOT_DRIVER_DIR}&quot; &quot;${ROOT}/bin/gnuplot-4.2.6&quot; &quot;$@&quot;
+error: you must have gnuplot installed to display graphics; if you have gnuplot installed in a non-standard location, see the 'gnuplot_binary' function
+</code></pre>
+
+<p>So, after stumbling across this <a href="http://stackoverflow.com/questions/4175411/plotting-with-octave-after-most-recent-mac-osx-update">SO question</a>, here&rsquo;s how I resolved the issue. First, I ran:</p>
+
+<pre><code>vim /Applications/Gnuplot.app/Contents/Resources/bin/gnuplot
+</code></pre>
+
+<p>Then, in vim, I ran:</p>
+
+<pre><code>:%s/DYLD_LIBRARY_PATH/DYLD_FALLBACK_LIBRARY_PATH/gc
+:wq
+</code></pre>
+
+<p>That worked like a charm.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Nov 20, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/managing-ruby-versions/">Managing Ruby Versions</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>For a project I&rsquo;m working on, I needed to install the <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-cli-install.html">command line interface</a> for AWS Elastic MapReduce.</p>
+
+<p>The catch is that the CLI requires using ruby 1.8.7, and is not compatible with later versions. Bummer, because when I ran <code>ruby -v</code> I learned I was using 1.9.3.</p>
+
+<p>However, I had a vague memory of upgrading to 1.9.3 when I was either playing with Rails or installing Jekyll a couple months back. I also had a vague memory of upgrading using <a href="http://rvm.io">RVM</a>, the Ruby Version Manager.</p>
+
+<p>To check, I ran <code>rvm -v</code>, and sure enough I&rsquo;d already installed it. This was good news, because it makes managing multiple versions of ruby <em>much</em> easier.</p>
+
+<p>In my case, from here there were two ways to get to running 1.8.7.</p>
+
+<p>###The lazy way</p>
+
+<p>It turns out that RVM doesn&rsquo;t touch the original system ruby or its gems. So getting back to 1.8.7, which was preinstalled on my Macbook, was simple. All I had to do was run:</p>
+
+<pre><code>rvm use system
+ruby -v
+</code></pre>
+
+<p>Sure enough, I was back to 1.8.7. To get back to the 1.9.3, all I had to do was then run</p>
+
+<pre><code>rvm use default
+</code></pre>
+
+<p>But switching back and forth from the system ruby to versions controlled by the RVM didn&rsquo;t seem right. It felt like a better approach in the long run would be to run a version of 1.8.7 that RVM itself controlled.</p>
+
+<h3 id="the-better-way">The better way</h3>
+
+<p>So, I switched back to back my rvm ruby and ran:</p>
+
+<pre><code>rvm install 1.8.7
+rvm use 1.8.7
+</code></pre>
+
+<p>That&rsquo;s it, surprisingly.</p>
+
+<p>Installing the new version takes a while, obviously, but it&rsquo;s time well spent. I feel like I&rsquo;m on much more solid footing now, and not just for making use of the Amazon EMR CLI.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Jul 4, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/pushing-jekyll-to-s3/">Pushing Jekyll to s3</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>I have two workstations. The first is a custom built desktop that runs Windows (more on this later, hopefully). The second is an Asus laptop that primarily runs Linux.</p>
+
+<p>I recently moved my sites over to Jekyll. I host them locally in a Dropbox directory, then push them to s3.</p>
+
+<p>On Windows, I use jekyll-s3 to do the push. It&rsquo;s convenient and works well. Just run <code>gem install jekyll-s3</code> and then to push you run <code>jekyll-s3</code> (the first time you do this, it walks you through configuration).</p>
+
+<p>On Ubuntu, I couldn&rsquo;t get the jekyll-s3 gem to install. So I use <a href="http://s3tools.org/s3cmd">s3cmd</a>. Installing was straightforward, just run:</p>
+
+<pre><code>sudo apt-get install s3cmd
+</code></pre>
+
+<p>But configuring s3cmd I ran into a stupid roadblock: my Secret Access Key contains some <code>I</code> and <code>l</code> characters, which look exactly the same in my browser. I tried to configure my s3cmd in the terminal by guessing which were &ldquo;L&rdquo;s and which were &ldquo;I&rdquo;s, never correctly, before I finally realized I could cut and paste them out of the browser and into a text editor that would make the difference obvious. Why it took me that long to realize I don&rsquo;t know, but it worked like a charm once it did.</p>
+
+<p>For the encryption and other default config details, I followed the basic config setup for s3cmd using <a href="http://www.saltycrane.com/blog/2010/02/s3cmd-notes/">this tutorial here</a>.</p>
+
+<p>Once it was configured, I saved the following as <code>create-md.sh</code> in the root folder for all my sites:</p>
+
+<pre><code>#!/bin/bash
+cd /path/to/mysite.com
+jekyll --server
+</code></pre>
+
+<p>I also saved the following as <code>push-md.sh</code> in the root folder for all my sites:</p>
+
+<pre><code>#!/bin/bash
+cd /path/to/mysite.com
+s3cmd put --delete-removed _site/ s3://mydomain.com
+echo 's3cmd has been processed'
+</code></pre>
+
+<p>Ideally I&rsquo;d like to combine the scripts (or use a git hook), but I haven&rsquo;t found a way to programmaticaly shut down jekyll once it&rsquo;s regenerated the site. Doing it this way also lets me check the changes on a local server first.</p>
+
+<p>I then set an alias for each <code>.sh</code> file, so that all I have to do is open terminal and type <code>create-md</code>, check the site on a browser, and then <code>push-md</code> to push my site to s3.</p>
+
+<p>NB: A good list of all the options for the <a href="http://manpages.ubuntu.com/manpages/intrepid/man1/s3cmd.1.html">s3cmd commands is here</a>.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Feb 26, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/coding/installing-jekyll-on-windows/">Installing Jekyll on Windows</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>There are two ways to install jekyll: the easy way and the (relatively) hard way.</p>
+
+<p>####THE EASY WAY</p>
+
+<p>The easy way is to download <a href="http://railsinstaller.org">Railsinstaller</a>. It sets up ruby, rails, bundler and other packages in <code>C:\Railsinstaller</code>. (Note: since I already have <code>git</code> installed elsewhere, I unchecked the install dialog box for <code>git</code> and <code>ssh</code>.)</p>
+
+<p>Once you&rsquo;ve got Railsinstaller up and running, open powershell and run:</p>
+
+<pre><code>cd C:/Railsinstaller 
+gem install jekyll
+</code></pre>
+
+<p>I tried to run <code>gem install rdiscount</code> as well, but couldn&rsquo;t get it to work. As a result, in the <code>_config.yml</code> file for any jekyll project I create, I have to add <code>markdown: kramdown</code>. (The other option is <code>markdown: maruku</code>, but that also doesn&rsquo;t work on Windows.)</p>
+
+<p>####THE (RELATIVELY) HARDER WAY</p>
+
+<p>(<em>Note</em>: since Railsinstaller alters the <code>PATH</code>, if you&rsquo;ve ever installed ruby before, <a href="http://www.computerhope.com/issues/ch000549.htm">make sure you amend</a> your <code>PATH</code> variable to not include ruby before you start this.)</p>
+
+<p>First, go to <a href="http://rubyinstaller.org/downloads">rubyinstaller.org/downloads</a>.</p>
+
+<p>Then, download ruby 1.9.3 <em>as well as</em> the dev kit.</p>
+
+<p>Run the ruby-1.9.3 executable. When prompted, be sure to check the box for adding ruby to your path; without this, ruby commands won&rsquo;t work in powershell. Also check the other boxes. Finally, specify that the ruby files should be installed to <code>C:/ruby193</code>.</p>
+
+<p>Now extract the devkit files into <code>C:\RubyDevKit</code>.</p>
+
+<p>Open powershell and run:</p>
+
+<pre><code>cd C:\RubyDevKit
+ruby dk.rb init
+ruby dk.rb install
+</code></pre>
+
+<p>From within the same devkit directory, now run:</p>
+
+<pre><code>gem install jekyll
+gem install rdiscount
+</code></pre>
+
+<p>Note: as with the easy method, I couldn&rsquo;t get <code>rdiscount</code> to work here either. So I also had to add <code>markdown: kramdown</code> to the <code>_config.yml</code> file of my projects using this method as well.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Feb 16, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article>
+
+    </main>
+  </div>
+</div>
+</div>
+
+
+ 
+
+</div>
+
+
+
+</body>
+</html>
+

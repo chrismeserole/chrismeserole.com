@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Coding on Chris Meserole</title>
+    <link>http://chrismeserole.com/coding/</link>
+    <description>Recent content in Coding on Chris Meserole</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2004-2017</copyright>
+    <lastBuildDate>Wed, 21 Oct 2015 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chrismeserole.com/coding/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Installing Edarf</title>
+      <link>http://chrismeserole.com/coding/installing-edarf/</link>
+      <pubDate>Wed, 21 Oct 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/installing-edarf/</guid>
+      <description>I&amp;rsquo;ve been meaning to check out random forests in general and the edarf package in particular for a while now &amp;ndash; at least since Zach Jones and Fridolin Linder posted their paper on Random Forests and EDA last spring.
+I finally had a chance to go through package, and it&amp;rsquo;s as great as I&amp;rsquo;d hoped it would be. The standard errors and partial dependence plots point toward a future where ML plays a much larger role in political science overall rather than just the subset devoted to prediction.</description>
+    </item>
+    
+    <item>
+      <title>Poisson Saturated Log Likelihood</title>
+      <link>http://chrismeserole.com/coding/poisson-saturated-log-likelihood/</link>
+      <pubDate>Mon, 31 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/poisson-saturated-log-likelihood/</guid>
+      <description>I was poking around the web earlier for the saturated log-likehood in a poisson model, but couldn&amp;rsquo;t find it.
+Here goes, using an example from Millar&amp;rsquo;s MLE Estimation and Inference:
+library(MASS) z &amp;lt;- c(rep(0,19), 1,1,2,2,3,3,3,3,4,4,4,5,6,6,6,6,7,7,7,9,9) mod &amp;lt;- glm(z~1,family=&amp;quot;poisson&amp;quot;) z.pos &amp;lt;- z[(z&amp;gt;0)] saturated.ll &amp;lt;- sum(z.pos*log(z.pos)-z.pos-log(factorial((z.pos)))) intercept.ll &amp;lt;- as.numeric(logLik(mod)) saturated.ll intercept.ll (my.null.deviance &amp;lt;- 2*(saturated.ll-intercept.ll)) mod$null.deviance  If it&amp;rsquo;s easier to understand what&amp;rsquo;s going on, also try this:
+total &amp;lt;- 0 for(i in 1:40){ if(z[i]&amp;gt;0) total &amp;lt;- total + z[i]*log(z[i])-(z[i])-log(factorial(z[i])) else # can&#39;t evaluate log(0) .</description>
+    </item>
+    
+    <item>
+      <title>Example R and Python Code</title>
+      <link>http://chrismeserole.com/coding/example-r-and-python-code/</link>
+      <pubDate>Mon, 20 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/example-r-and-python-code/</guid>
+      <description>In addition to Python, Lark now executes R at runtime as well, via Knitr.
+Still have an issue with Maplotlib, but otherwise things are looking good!
+Here goes. First let&amp;rsquo;s try R:
+x &amp;lt;- rnorm(100) summary(x)  Now let&amp;rsquo;s switch over to Python:
+&amp;gt;&amp;gt;&amp;gt; x = 3 &amp;gt;&amp;gt;&amp;gt; x + 1 [should be 4] &amp;gt;&amp;gt;&amp;gt; 2 + 2*x missing or wrong results will be overwritten  Ok. Let&amp;rsquo;s try plotting stuff.</description>
+    </item>
+    
+    <item>
+      <title>Lark Now Runs Python</title>
+      <link>http://chrismeserole.com/coding/lark-now-runs-python/</link>
+      <pubDate>Fri, 17 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/lark-now-runs-python/</guid>
+      <description>One reason I&amp;rsquo;ve been writing Lark, the static site generator that now powers this site, was to have the freedom to cook up unique ways of merging writing and data analysis.
+Thankfully, I&amp;rsquo;m glad to say I hit the first milestone on that path today. It took a bit of hacking, but thanks to Matthew Rocklin&amp;rsquo;s great new pymarkdown module, Lark now executes Python code blocks in posts when it builds the site.</description>
+    </item>
+    
+    <item>
+      <title>Rd2pdf bug in devtools::check()</title>
+      <link>http://chrismeserole.com/coding/rd2pdf-bug-in-devtoolscheck/</link>
+      <pubDate>Mon, 13 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/rd2pdf-bug-in-devtoolscheck/</guid>
+      <description>I&amp;rsquo;m currently trying to compile my first package in RStudio.
+I was consistently getting the following warning:
+* checking PDF version of manual ... WARNING LaTeX errors when creating PDF version.  I didn&amp;rsquo;t have a clue what was going on, and I wasn&amp;rsquo;t having any success following Hadley Wickham&amp;rsquo;s advice to check my LaTeX logs; I didn&amp;rsquo;t even know where the logs were.
+Thankfully though, a bit of google discovered the problem: as Matt Bannert noted in R 3.</description>
+    </item>
+    
+    <item>
+      <title>Installing Valgrind on Mac OS X Yosemite</title>
+      <link>http://chrismeserole.com/coding/installing-valgrind-on-mac-os-x-yosemite/</link>
+      <pubDate>Sat, 01 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/installing-valgrind-on-mac-os-x-yosemite/</guid>
+      <description>I decided to learn a lower level like like C, in part because I want to learn about memory management, leaks, etc.
+While following Zed Shaw&amp;rsquo;s tutorial I got stuck on installing Valgrind, which isn&amp;rsquo;t yet supported on Yosemite.
+To get up and running, I generally followed Taras Kalapun&amp;rsquo;s tutorial, which installs Valgrind from svn. However, initially I ran into issues because aclocal and autoconf weren&amp;rsquo;t installed. Then I ran into issues because XCode wasn&amp;rsquo;t installed.</description>
+    </item>
+    
+    <item>
+      <title>Loading Octave Graphics on Mac OS X 10.8.4</title>
+      <link>http://chrismeserole.com/coding/loading-octave-graphics-on-mac-os-x-10.8.4/</link>
+      <pubDate>Wed, 20 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/loading-octave-graphics-on-mac-os-x-10.8.4/</guid>
+      <description>I decided to try my hand at Octave today, to see if it simplifies model prototyping.
+One issue was that Octave wasn&amp;rsquo;t connecting properly to its graphics library. Anytime I ran hist(), for example, I would get:
+dyld: Library not loaded: /usr/X11/lib/libfreetype.6.dylib Referenced from: /usr/X11R6/lib/libfontconfig.1.dylib Reason: Incompatible library version: libfontconfig.1.dylib requires version 13.0.0 or later, but libfreetype.6.dylib provides version 10.0.0 dyld: Library not loaded: /usr/X11/lib/libfreetype.6.dylib Referenced from: /usr/X11R6/lib/libfontconfig.1.dylib Reason: Incompatible library version: libfontconfig.</description>
+    </item>
+    
+    <item>
+      <title>Managing Ruby Versions</title>
+      <link>http://chrismeserole.com/coding/managing-ruby-versions/</link>
+      <pubDate>Thu, 04 Jul 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/managing-ruby-versions/</guid>
+      <description>For a project I&amp;rsquo;m working on, I needed to install the command line interface for AWS Elastic MapReduce.
+The catch is that the CLI requires using ruby 1.8.7, and is not compatible with later versions. Bummer, because when I ran ruby -v I learned I was using 1.9.3.
+However, I had a vague memory of upgrading to 1.9.3 when I was either playing with Rails or installing Jekyll a couple months back.</description>
+    </item>
+    
+    <item>
+      <title>Pushing Jekyll to s3</title>
+      <link>http://chrismeserole.com/coding/pushing-jekyll-to-s3/</link>
+      <pubDate>Tue, 26 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/pushing-jekyll-to-s3/</guid>
+      <description>I have two workstations. The first is a custom built desktop that runs Windows (more on this later, hopefully). The second is an Asus laptop that primarily runs Linux.
+I recently moved my sites over to Jekyll. I host them locally in a Dropbox directory, then push them to s3.
+On Windows, I use jekyll-s3 to do the push. It&amp;rsquo;s convenient and works well. Just run gem install jekyll-s3 and then to push you run jekyll-s3 (the first time you do this, it walks you through configuration).</description>
+    </item>
+    
+    <item>
+      <title>Installing Jekyll on Windows</title>
+      <link>http://chrismeserole.com/coding/installing-jekyll-on-windows/</link>
+      <pubDate>Sat, 16 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/installing-jekyll-on-windows/</guid>
+      <description>There are two ways to install jekyll: the easy way and the (relatively) hard way.
+####THE EASY WAY
+The easy way is to download Railsinstaller. It sets up ruby, rails, bundler and other packages in C:\Railsinstaller. (Note: since I already have git installed elsewhere, I unchecked the install dialog box for git and ssh.)
+Once you&amp;rsquo;ve got Railsinstaller up and running, open powershell and run:
+cd C:/Railsinstaller gem install jekyll  I tried to run gem install rdiscount as well, but couldn&amp;rsquo;t get it to work.</description>
+    </item>
+    
+    <item>
+      <title>My Jekyll Set-Up</title>
+      <link>http://chrismeserole.com/coding/my-jekyll-set-up/</link>
+      <pubDate>Sat, 16 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/my-jekyll-set-up/</guid>
+      <description>I was pretty frustrated with how slowly this site was running, so I recently followed the herd and moved over to Jekyll.
+The transition was pretty smooth, but there were two issues I encountered.
+Redirecting the Index I wanted the homepage for chrismeserole.com to forward to my /about/ page. In wordpress, this is pretty trivial &amp;ndash; I think it was just a check box in the settings tab.
+But for Jekyll it&amp;rsquo;s not so simple.</description>
+    </item>
+    
+    <item>
+      <title>Install Octoprress</title>
+      <link>http://chrismeserole.com/coding/install-octoprress/</link>
+      <pubDate>Thu, 14 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/install-octoprress/</guid>
+      <description>Install Octopress
+I followed this tutorial.</description>
+    </item>
+    
+    <item>
+      <title>Git Workflow with Jekyll</title>
+      <link>http://chrismeserole.com/coding/git-workflow-with-jekyll/</link>
+      <pubDate>Wed, 13 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/git-workflow-with-jekyll/</guid>
+      <description>Early in 2013 I switched over to using Jekyll for this site and a couple others.
+Here&amp;rsquo;s the workflow I use to edit one of the sites. First, I open terminal or Powershell and start a new branch:
+cd ~Dropbox/Sites/mysite git checkout -b draft  Then I edit relevant files and commit the changes:
+git commit -a -m &#39;Edited such-and-such file&#39;  Or I&amp;rsquo;ll add a file and commit the change:</description>
+    </item>
+    
+    <item>
+      <title>Linux Install Checklist</title>
+      <link>http://chrismeserole.com/coding/linux-install-checklist/</link>
+      <pubDate>Wed, 13 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/linux-install-checklist/</guid>
+      <description>Last Updated: Feb 16, 2013.
+Just installed Ubuntu 12.10 for the first time, on my Asus UL30VT from an external DVD.
+The following is a checklist I&amp;rsquo;ve been putting together for how to set up a Linux install.
+####Get Spotify Working
+First, open /etc/apt/sources.list. This will open a dialog box asking for a repository. Type this:
+deb http://repository.spotify.com stable non-free  Then, open terminal and run:
+sudo apt-get update sudo apt-get install spotify-client  That should do it.</description>
+    </item>
+    
+    <item>
+      <title>Git and Github Notes</title>
+      <link>http://chrismeserole.com/coding/git-and-github-notes/</link>
+      <pubDate>Tue, 12 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/git-and-github-notes/</guid>
+      <description>These are just notes of my experience with git and github. If you know of better/best practices, by all means let me know.
+Initially I had trouble running fetch or push to my github repository. Every time I ran fetch, for instance, I got:
+fatal: The remote end hung up unexpectedly  The reason I was getting this &amp;ndash; I think &amp;ndash; is that I ran
+git remote add origin git://github.</description>
+    </item>
+    
+  </channel>
+</rss>

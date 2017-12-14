@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Rd2pdf bug in devtools::check() : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Rd2pdf bug in devtools::check()</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Rd2pdf bug in devtools::check()</h2>
+
+		</header>
+
+		<div class="entry-content">  <p>I&rsquo;m currently trying to compile my first package in RStudio.</p>
+
+<p>I was consistently getting the following warning:</p>
+
+<pre><code>* checking PDF version of manual ... 
+WARNING LaTeX errors when creating PDF version.
+</code></pre>
+
+<p>I didn&rsquo;t have a clue what was going on, and I wasn&rsquo;t having any success following Hadley Wickham&rsquo;s advice to check my LaTeX logs; I didn&rsquo;t even know where the logs were.</p>
+
+<p>Thankfully though, a bit of google discovered the problem: as <a href="http://stackoverflow.com/a/29277121">Matt Bannert noted</a> in R 3.1.3 the commands <code>R CMD Rd2pdf</code> and <code>R CMD Check</code> expected <code>texi2dvi</code> to be in <code>/usr/bin/local/</code>, even though it was actually in <code>/usr/bin</code>.</p>
+
+<p>To fix it, I followed Matt&rsquo;s suggestion:</p>
+
+<pre><code># to check whether the same issue exists for you
+which texi2dvi
+# if so
+cd /usr/local/bin
+ln -s /usr/bin/texi2dvi
+</code></pre>
+
+<p>Worked like a charm, thankfully. After setting the symlink I haven&rsquo;t run into the same warning again.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">April 13, 2015</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

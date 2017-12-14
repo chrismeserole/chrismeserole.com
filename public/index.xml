@@ -1,0 +1,406 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Chris Meserole</title>
+    <link>http://chrismeserole.com/</link>
+    <description>Recent content on Chris Meserole</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2004-2017</copyright>
+    <lastBuildDate>Tue, 05 Dec 2017 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chrismeserole.com/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>About</title>
+      <link>http://chrismeserole.com/about/</link>
+      <pubDate>Tue, 05 Dec 2017 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/about/</guid>
+      <description>I&amp;rsquo;m a fellow in Foreign Policy at the Brookings Institution, where I research violent extremism and emerging technology. My work has been featured in the New Yorker, Vox, and other publications.
+I have a B.A. from Harvard, an M.Div. from Yale Divinity School, and a Ph.D. in comparative politics and political methodology from the University of Maryland.</description>
+    </item>
+    
+    <item>
+      <title>What Went Wrong</title>
+      <link>http://chrismeserole.com/blog/what-went-wrong/2016/</link>
+      <pubDate>Wed, 09 Nov 2016 19:39:59 -0400</pubDate>
+      
+      <guid>http://chrismeserole.com/blog/what-went-wrong/2016/</guid>
+      <description>In 1936, the Literary Digest infamously predicted a landslide win for Alf Landon over FDR. In 1948, Gallup even more infamously had Dewey decisively besting Truman. And now, in 2016, yet another reckoning: &amp;ldquo;Clinton Trumps Trump&amp;rdquo; has yielded to &amp;ldquo;Trump Triumphs.&amp;rdquo;
+No doubt it would be easy to lump these failures together. However, it would also be a mistake. Landon&amp;rsquo;s hopes and Dewey&amp;rsquo;s aspirations ultimately lost out to fundamental errors in polling methodology.</description>
+    </item>
+    
+    <item>
+      <title>Software</title>
+      <link>http://chrismeserole.com/software/</link>
+      <pubDate>Thu, 21 Apr 2016 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/software/</guid>
+      <description>I&amp;rsquo;ve worked on several public pieces of software:
+ obsval() is an R package that aims to make it much easier to calculate predicted effects in R, particularly when using observed covariate values for generalized linear models. It&amp;rsquo;s based on Hanmer and Kalkan (2013) and is under active development.
+ gbNgram() is an R package that fetches Google Books Ngrams data, and makes it possible to plot joint frequencies across cognate terms.</description>
+    </item>
+    
+    <item>
+      <title>Installing Edarf</title>
+      <link>http://chrismeserole.com/coding/installing-edarf/</link>
+      <pubDate>Wed, 21 Oct 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/installing-edarf/</guid>
+      <description>I&amp;rsquo;ve been meaning to check out random forests in general and the edarf package in particular for a while now &amp;ndash; at least since Zach Jones and Fridolin Linder posted their paper on Random Forests and EDA last spring.
+I finally had a chance to go through package, and it&amp;rsquo;s as great as I&amp;rsquo;d hoped it would be. The standard errors and partial dependence plots point toward a future where ML plays a much larger role in political science overall rather than just the subset devoted to prediction.</description>
+    </item>
+    
+    <item>
+      <title>Where Do We Go From Here?</title>
+      <link>http://chrismeserole.com/blog/where-do-we-go-from-here/2015/</link>
+      <pubDate>Sat, 19 Sep 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/blog/where-do-we-go-from-here/2015/</guid>
+      <description>There was a great panel at Brookings this week on counter-terrorism and the future of global jihadism, hosted by Will McCants and featuring Ambassador Kaidanow, Dan Byman, and Bruce Riedel. (If you missed it, the audio is here.)
+Now that I have a minute, I thought I&amp;rsquo;d offer up a few quick thoughts in response:
+ We&amp;rsquo;re still in need of new ways to evaluate foreign policy success. At one point there was a conversation about whether our foreign policy has made us safer since September 2001.</description>
+    </item>
+    
+    <item>
+      <title>Poisson Saturated Log Likelihood</title>
+      <link>http://chrismeserole.com/coding/poisson-saturated-log-likelihood/</link>
+      <pubDate>Mon, 31 Aug 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/poisson-saturated-log-likelihood/</guid>
+      <description>I was poking around the web earlier for the saturated log-likehood in a poisson model, but couldn&amp;rsquo;t find it.
+Here goes, using an example from Millar&amp;rsquo;s MLE Estimation and Inference:
+library(MASS) z &amp;lt;- c(rep(0,19), 1,1,2,2,3,3,3,3,4,4,4,5,6,6,6,6,7,7,7,9,9) mod &amp;lt;- glm(z~1,family=&amp;quot;poisson&amp;quot;) z.pos &amp;lt;- z[(z&amp;gt;0)] saturated.ll &amp;lt;- sum(z.pos*log(z.pos)-z.pos-log(factorial((z.pos)))) intercept.ll &amp;lt;- as.numeric(logLik(mod)) saturated.ll intercept.ll (my.null.deviance &amp;lt;- 2*(saturated.ll-intercept.ll)) mod$null.deviance  If it&amp;rsquo;s easier to understand what&amp;rsquo;s going on, also try this:
+total &amp;lt;- 0 for(i in 1:40){ if(z[i]&amp;gt;0) total &amp;lt;- total + z[i]*log(z[i])-(z[i])-log(factorial(z[i])) else # can&#39;t evaluate log(0) .</description>
+    </item>
+    
+    <item>
+      <title>Example R and Python Code</title>
+      <link>http://chrismeserole.com/coding/example-r-and-python-code/</link>
+      <pubDate>Mon, 20 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/example-r-and-python-code/</guid>
+      <description>In addition to Python, Lark now executes R at runtime as well, via Knitr.
+Still have an issue with Maplotlib, but otherwise things are looking good!
+Here goes. First let&amp;rsquo;s try R:
+x &amp;lt;- rnorm(100) summary(x)  Now let&amp;rsquo;s switch over to Python:
+&amp;gt;&amp;gt;&amp;gt; x = 3 &amp;gt;&amp;gt;&amp;gt; x + 1 [should be 4] &amp;gt;&amp;gt;&amp;gt; 2 + 2*x missing or wrong results will be overwritten  Ok. Let&amp;rsquo;s try plotting stuff.</description>
+    </item>
+    
+    <item>
+      <title>Lark Now Runs Python</title>
+      <link>http://chrismeserole.com/coding/lark-now-runs-python/</link>
+      <pubDate>Fri, 17 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/lark-now-runs-python/</guid>
+      <description>One reason I&amp;rsquo;ve been writing Lark, the static site generator that now powers this site, was to have the freedom to cook up unique ways of merging writing and data analysis.
+Thankfully, I&amp;rsquo;m glad to say I hit the first milestone on that path today. It took a bit of hacking, but thanks to Matthew Rocklin&amp;rsquo;s great new pymarkdown module, Lark now executes Python code blocks in posts when it builds the site.</description>
+    </item>
+    
+    <item>
+      <title>Rd2pdf bug in devtools::check()</title>
+      <link>http://chrismeserole.com/coding/rd2pdf-bug-in-devtoolscheck/</link>
+      <pubDate>Mon, 13 Apr 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/rd2pdf-bug-in-devtoolscheck/</guid>
+      <description>I&amp;rsquo;m currently trying to compile my first package in RStudio.
+I was consistently getting the following warning:
+* checking PDF version of manual ... WARNING LaTeX errors when creating PDF version.  I didn&amp;rsquo;t have a clue what was going on, and I wasn&amp;rsquo;t having any success following Hadley Wickham&amp;rsquo;s advice to check my LaTeX logs; I didn&amp;rsquo;t even know where the logs were.
+Thankfully though, a bit of google discovered the problem: as Matt Bannert noted in R 3.</description>
+    </item>
+    
+    <item>
+      <title>Error</title>
+      <link>http://chrismeserole.com/error/</link>
+      <pubDate>Fri, 13 Mar 2015 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/error/</guid>
+      <description>Alas, there&amp;rsquo;s no page for the URL you requested.
+Please drop me a line on twitter to let me know where you were trying to go.
+Thanks!</description>
+    </item>
+    
+    <item>
+      <title>Installing Valgrind on Mac OS X Yosemite</title>
+      <link>http://chrismeserole.com/coding/installing-valgrind-on-mac-os-x-yosemite/</link>
+      <pubDate>Sat, 01 Nov 2014 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/installing-valgrind-on-mac-os-x-yosemite/</guid>
+      <description>I decided to learn a lower level like like C, in part because I want to learn about memory management, leaks, etc.
+While following Zed Shaw&amp;rsquo;s tutorial I got stuck on installing Valgrind, which isn&amp;rsquo;t yet supported on Yosemite.
+To get up and running, I generally followed Taras Kalapun&amp;rsquo;s tutorial, which installs Valgrind from svn. However, initially I ran into issues because aclocal and autoconf weren&amp;rsquo;t installed. Then I ran into issues because XCode wasn&amp;rsquo;t installed.</description>
+    </item>
+    
+    <item>
+      <title>Part IV: Parsing GDELT with Spark/Shark on EC2</title>
+      <link>http://chrismeserole.com/signals/part-iv-parsing-gdelt-with-spark-shark-on-ec2/</link>
+      <pubDate>Wed, 18 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/part-iv-parsing-gdelt-with-spark-shark-on-ec2/</guid>
+      <description>This tutorial walks through how to query the GDELT dataset using Spark/Shark.
+I highlighted a few of Spark&amp;rsquo;s advantages earlier in a prior post, but two bear repeating here. First, since Spark holds your dataset in memory across a cluster, queries run up to 100x faster than they would in a more common engine like Hive. Second, since there&amp;rsquo;s no need to reload data with each iteration, machine learning and maximum likelihood estimation all run much faster in Spark.</description>
+    </item>
+    
+    <item>
+      <title>The Morning Light</title>
+      <link>http://chrismeserole.com/the-morning-light/</link>
+      <pubDate>Sat, 14 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/the-morning-light/</guid>
+      <description>The first year we were married, my wife served as a part-time youth pastor in a sleepy exurb. The town was typical New England: lush grass and immaculate homes in the town square; then down the hill nearer water&amp;rsquo;s edge, the echo of a working class neighborhood. More modest houses, quaint in their faded shingling, clustered along the riverbank.
+My wife&amp;rsquo;s church was just up from the river. Occasionally I&amp;rsquo;d get there early and take a quick walk along the water, crossing the bridge just below the local elementary school.</description>
+    </item>
+    
+    <item>
+      <title>Part III: Big Data in the Cloud</title>
+      <link>http://chrismeserole.com/signals/part-iii-big-data-in-the-cloud/</link>
+      <pubDate>Thu, 12 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/part-iii-big-data-in-the-cloud/</guid>
+      <description>As I mention in the previous post, there are a few ways you can speed up analysis of big data on your desktop or laptop.
+However, the fastest/most efficient solution is often to just shift data storage and processing to a networked computer cluster. Generally speaking, this solves the I/O problem by splitting the processing across multiple computers rather than one.
+Fortunately there are now several options available for large-scale data storage and analysis, with varying degrees of cost-effectiveness.</description>
+    </item>
+    
+    <item>
+      <title>Big Data and Social Science: Introduction</title>
+      <link>http://chrismeserole.com/signals/big-data-and-social-science-introduction/</link>
+      <pubDate>Tue, 10 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/big-data-and-social-science-introduction/</guid>
+      <description>Big datasets are increasingly common in social science today, and understandably generating a lot of excitement.
+However, for anyone just beginning to work with such data, the task of merely managing large datasets &amp;ndash; let alone analyzing them &amp;ndash; can be daunting.
+Since I&amp;rsquo;ve been working a lot lately with relatively big datasets, I thought I&amp;rsquo;d offer up a series of posts here on how to go about dealing with them.</description>
+    </item>
+    
+    <item>
+      <title>Part I: The I/O Problem, Or Why Big Data Takes Forever to Process</title>
+      <link>http://chrismeserole.com/signals/part-i-the-i-o-problem-or-why-big-data-takes-forever-to-process/</link>
+      <pubDate>Tue, 10 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/part-i-the-i-o-problem-or-why-big-data-takes-forever-to-process/</guid>
+      <description>As I mentioned in the introduction to this series, large datasets are increasingly common in social science, but they&amp;rsquo;re also difficult to deal with efficiently.
+In the next few posts I&amp;rsquo;ll look at various solutions to that problem. First though we need to figure out what&amp;rsquo;s causing it to begin with.
+Big Data: What&amp;rsquo;s the Problem? So: why exactly does it take so long to parse large datasets, even with modern computers?</description>
+    </item>
+    
+    <item>
+      <title>Loading Octave Graphics on Mac OS X 10.8.4</title>
+      <link>http://chrismeserole.com/coding/loading-octave-graphics-on-mac-os-x-10.8.4/</link>
+      <pubDate>Wed, 20 Nov 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/loading-octave-graphics-on-mac-os-x-10.8.4/</guid>
+      <description>I decided to try my hand at Octave today, to see if it simplifies model prototyping.
+One issue was that Octave wasn&amp;rsquo;t connecting properly to its graphics library. Anytime I ran hist(), for example, I would get:
+dyld: Library not loaded: /usr/X11/lib/libfreetype.6.dylib Referenced from: /usr/X11R6/lib/libfontconfig.1.dylib Reason: Incompatible library version: libfontconfig.1.dylib requires version 13.0.0 or later, but libfreetype.6.dylib provides version 10.0.0 dyld: Library not loaded: /usr/X11/lib/libfreetype.6.dylib Referenced from: /usr/X11R6/lib/libfontconfig.1.dylib Reason: Incompatible library version: libfontconfig.</description>
+    </item>
+    
+    <item>
+      <title>Part II: Big Data on the Desktop</title>
+      <link>http://chrismeserole.com/signals/part-ii-big-data-on-the-desktop/</link>
+      <pubDate>Tue, 01 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/part-ii-big-data-on-the-desktop/</guid>
+      <description>As the previous post in this series notes, large data takes a while to process not because processors are too slow, but because getting data from the hard drive to the processor takes a while.
+Ultimately the best way to deal with such data will probably be to shift your processing to a computer cluster, but if that&amp;rsquo;s not an option, there are still a few things you can do to cut down query times dramatically.</description>
+    </item>
+    
+    <item>
+      <title>R Code for Maximum Likelihood</title>
+      <link>http://chrismeserole.com/mle-notes/2013-10-01-r-code-for-mle/</link>
+      <pubDate>Tue, 01 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-10-01-r-code-for-mle/</guid>
+      <description>In class we learned about Stata&amp;rsquo;s ml command.
+R actually has several similar commands. Below is an R equivalent for most of what is covered in the Class 3 sheet, using R&amp;rsquo;s optim() command. R is very useful for this sort of thing, so I&amp;rsquo;ll try to walk through it in one of the labs.
+ml.logit &amp;lt;- function(specification, data, betas.init, method) { beta.iterations &amp;lt;- matrix(nrow=0,ncol=dim(data)[2]) loglik.iterations &amp;lt;- numeric(0) sumloglik &amp;lt;- function(beta, y, x){ loglik &amp;lt;- sum(-y*log(1 + exp(-(x%*%beta))) - (1-y)*log(1 + exp(x%*%beta))) loglik.</description>
+    </item>
+    
+    <item>
+      <title>Homework 3 Notes</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-28-hw3-logit-probit/</link>
+      <pubDate>Sat, 28 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-28-hw3-logit-probit/</guid>
+      <description>In general the homeworks were good again.
+Just one note: from here on out, always write a brief description for each question.
+Even if you&amp;rsquo;re just writing a function &amp;ndash; as in question 1 &amp;ndash; be sure to write out at least one or two sentences about what the function is doing. Likewise, if the HW asks for a graph or table, assume that you&amp;rsquo;re also implicitly being asked to discuss it for a bit.</description>
+    </item>
+    
+    <item>
+      <title>R Code for HW 2</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-28-hw2-r-code/</link>
+      <pubDate>Sat, 28 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-28-hw2-r-code/</guid>
+      <description>If you wanted to do HW 2 in R, here&amp;rsquo;s one way you could have done it:
+require(mvtnorm) # for rmvnorm() require(Matrix) # for diagonal matrix # create the data n &amp;lt;- 1000 sds &amp;lt;- c(1,2,3,5,2,1) means &amp;lt;- c(rep(0,length(sds))) cov.matrix &amp;lt;- as.matrix(Diagonal(length(sds),sds)) mydata &amp;lt;- rmvnorm(n,means,cov.matrix) # label the data colnames(mydata) &amp;lt;- c(&amp;quot;alpha&amp;quot;,&amp;quot;x1&amp;quot;,&amp;quot;x2&amp;quot;,&amp;quot;b1&amp;quot;,&amp;quot;b2&amp;quot;,&amp;quot;error&amp;quot;) mydata &amp;lt;- data.frame(mydata) attach(mydata) # show b1 summary(b1) plot(density(b1)) # create and show y y &amp;lt;- alpha + b1*x1 + b2*x2 + error summary(y) plot(density(y))  Note that rmvnorm() relies on the covariance matrix rather than the correlation matrix.</description>
+    </item>
+    
+    <item>
+      <title>Homework 2 Notes</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-26-homework-2-notes/</link>
+      <pubDate>Thu, 26 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-26-homework-2-notes/</guid>
+      <description>For the most part this homework was good.
+In the first two questions, some people didn&amp;rsquo;t realize that they had to draw the betas from the normal distribution as well, or did draw them from the normal distribution, but forgot to include them when they generated y.
+The Stata code should have been something like:
+drawnorm x1 x2 b1 b2 alpha error, n(10000) means(2,5,2,-2,1,0) sds(10,2,10,2,10,20) gen y = alpha + b1*x1 + b2*x2 + error  Social Processes: Observed Variables vs Unobserved Variables This question tripped some people up, so I want to walk through it in-depth.</description>
+    </item>
+    
+    <item>
+      <title>Colophon</title>
+      <link>http://chrismeserole.com/colophon/</link>
+      <pubDate>Fri, 20 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/colophon/</guid>
+      <description>I use Hugo to build this site locally, and s3cmd to upload it to Amazon s3. Eventually I may also push the site to Amazon&amp;rsquo;s CDN, but for now the site seems plenty fast enough.
+The fonts used are Lato and Ubuntu.
+The design is adapted from the Casper theme.
+Hardware I predominantly use a Macbook, but I also have a custom-built desktop that runs both Windows and Linux (Ubuntu 13.</description>
+    </item>
+    
+    <item>
+      <title>Homework 1 Notes</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-20-homework-1-notes-multivariate-normal-distributions-and-regression/</link>
+      <pubDate>Fri, 20 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-20-homework-1-notes-multivariate-normal-distributions-and-regression/</guid>
+      <description>Thankfully everyone did pretty well on this. There are a few minor points that came up often though.
+Coefficient Standard Errors So. Fortunately everyone seemed to understand what happens to b1&amp;rsquo;s standard error when you increase the variance of x1 on the one hand and of the error term on the other. But no one included the formal explanation, so here it is:
+Note that within the square root you&amp;rsquo;ve really got a fraction, with the model variance in the numerator and the jj-th element of the model&amp;rsquo;s variance-covariance matrix (ie, the (X&#39;X)) in the denominator.</description>
+    </item>
+    
+    <item>
+      <title>R Code for Class 1</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-20-r-code-for-simulations-and-ols/</link>
+      <pubDate>Fri, 20 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-20-r-code-for-simulations-and-ols/</guid>
+      <description>Below I&amp;rsquo;m going to walk through some examples for how to do in R the kinds of things we covered in class using Stata.
+The whole .R file for this is here.
+Simulate Data and Run Linear Regression Here&amp;rsquo;s how to simulate some basic data and run a regression:
+set.seed(123) n &amp;lt;- 100 x1 &amp;lt;- rnorm(n,0,1) x2 &amp;lt;- rnorm(n,3,5) error &amp;lt;- rnorm(n,0,10) y &amp;lt;- x1 + x2 + error model &amp;lt;- lm(y~x1+x2) summary(model) vcov(model)  One thing to pay attention to are the last two lines.</description>
+    </item>
+    
+    <item>
+      <title>Managing Ruby Versions</title>
+      <link>http://chrismeserole.com/coding/managing-ruby-versions/</link>
+      <pubDate>Thu, 04 Jul 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/managing-ruby-versions/</guid>
+      <description>For a project I&amp;rsquo;m working on, I needed to install the command line interface for AWS Elastic MapReduce.
+The catch is that the CLI requires using ruby 1.8.7, and is not compatible with later versions. Bummer, because when I ran ruby -v I learned I was using 1.9.3.
+However, I had a vague memory of upgrading to 1.9.3 when I was either playing with Rails or installing Jekyll a couple months back.</description>
+    </item>
+    
+    <item>
+      <title>Pushing Jekyll to s3</title>
+      <link>http://chrismeserole.com/coding/pushing-jekyll-to-s3/</link>
+      <pubDate>Tue, 26 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/pushing-jekyll-to-s3/</guid>
+      <description>I have two workstations. The first is a custom built desktop that runs Windows (more on this later, hopefully). The second is an Asus laptop that primarily runs Linux.
+I recently moved my sites over to Jekyll. I host them locally in a Dropbox directory, then push them to s3.
+On Windows, I use jekyll-s3 to do the push. It&amp;rsquo;s convenient and works well. Just run gem install jekyll-s3 and then to push you run jekyll-s3 (the first time you do this, it walks you through configuration).</description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>http://chrismeserole.com/contact/</link>
+      <pubDate>Sat, 16 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/contact/</guid>
+      <description>If you&amp;rsquo;d like to be in touch, just shoot me an email or connect on twitter.</description>
+    </item>
+    
+    <item>
+      <title>Installing Jekyll on Windows</title>
+      <link>http://chrismeserole.com/coding/installing-jekyll-on-windows/</link>
+      <pubDate>Sat, 16 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/installing-jekyll-on-windows/</guid>
+      <description>There are two ways to install jekyll: the easy way and the (relatively) hard way.
+####THE EASY WAY
+The easy way is to download Railsinstaller. It sets up ruby, rails, bundler and other packages in C:\Railsinstaller. (Note: since I already have git installed elsewhere, I unchecked the install dialog box for git and ssh.)
+Once you&amp;rsquo;ve got Railsinstaller up and running, open powershell and run:
+cd C:/Railsinstaller gem install jekyll  I tried to run gem install rdiscount as well, but couldn&amp;rsquo;t get it to work.</description>
+    </item>
+    
+    <item>
+      <title>My Jekyll Set-Up</title>
+      <link>http://chrismeserole.com/coding/my-jekyll-set-up/</link>
+      <pubDate>Sat, 16 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/my-jekyll-set-up/</guid>
+      <description>I was pretty frustrated with how slowly this site was running, so I recently followed the herd and moved over to Jekyll.
+The transition was pretty smooth, but there were two issues I encountered.
+Redirecting the Index I wanted the homepage for chrismeserole.com to forward to my /about/ page. In wordpress, this is pretty trivial &amp;ndash; I think it was just a check box in the settings tab.
+But for Jekyll it&amp;rsquo;s not so simple.</description>
+    </item>
+    
+    <item>
+      <title>Install Octoprress</title>
+      <link>http://chrismeserole.com/coding/install-octoprress/</link>
+      <pubDate>Thu, 14 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/install-octoprress/</guid>
+      <description>Install Octopress
+I followed this tutorial.</description>
+    </item>
+    
+    <item>
+      <title>Git Workflow with Jekyll</title>
+      <link>http://chrismeserole.com/coding/git-workflow-with-jekyll/</link>
+      <pubDate>Wed, 13 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/git-workflow-with-jekyll/</guid>
+      <description>Early in 2013 I switched over to using Jekyll for this site and a couple others.
+Here&amp;rsquo;s the workflow I use to edit one of the sites. First, I open terminal or Powershell and start a new branch:
+cd ~Dropbox/Sites/mysite git checkout -b draft  Then I edit relevant files and commit the changes:
+git commit -a -m &#39;Edited such-and-such file&#39;  Or I&amp;rsquo;ll add a file and commit the change:</description>
+    </item>
+    
+    <item>
+      <title>Linux Install Checklist</title>
+      <link>http://chrismeserole.com/coding/linux-install-checklist/</link>
+      <pubDate>Wed, 13 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/linux-install-checklist/</guid>
+      <description>Last Updated: Feb 16, 2013.
+Just installed Ubuntu 12.10 for the first time, on my Asus UL30VT from an external DVD.
+The following is a checklist I&amp;rsquo;ve been putting together for how to set up a Linux install.
+####Get Spotify Working
+First, open /etc/apt/sources.list. This will open a dialog box asking for a repository. Type this:
+deb http://repository.spotify.com stable non-free  Then, open terminal and run:
+sudo apt-get update sudo apt-get install spotify-client  That should do it.</description>
+    </item>
+    
+    <item>
+      <title>Git and Github Notes</title>
+      <link>http://chrismeserole.com/coding/git-and-github-notes/</link>
+      <pubDate>Tue, 12 Feb 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/coding/git-and-github-notes/</guid>
+      <description>These are just notes of my experience with git and github. If you know of better/best practices, by all means let me know.
+Initially I had trouble running fetch or push to my github repository. Every time I ran fetch, for instance, I got:
+fatal: The remote end hung up unexpectedly  The reason I was getting this &amp;ndash; I think &amp;ndash; is that I ran
+git remote add origin git://github.</description>
+    </item>
+    
+    <item>
+      <title>Teaching</title>
+      <link>http://chrismeserole.com/teaching/</link>
+      <pubDate>Thu, 24 Jan 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/teaching/</guid>
+      <description>During the fall 2013 semester I&amp;rsquo;ll be helping to teach GVPT 729a, &amp;ldquo;Special Topics in Quantitative Political Analysis, Advanced MLE.&amp;rdquo;
+If you need anything, just email me or stop by the LeFrak Labs on Wednesdays from 1pm to 2:30pm.
+You can find my notes and code for the class here.</description>
+    </item>
+    
+  </channel>
+</rss>

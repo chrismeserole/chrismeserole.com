@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Installing Valgrind on Mac OS X Yosemite : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Installing Valgrind on Mac OS X Yosemite</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Installing Valgrind on Mac OS X Yosemite</h2>
+
+		</header>
+
+		<div class="entry-content">  <p>I decided to learn a lower level like like C, in part because I want to learn about memory management, leaks, etc.</p>
+
+<p>While following Zed Shaw&rsquo;s tutorial I got stuck on installing Valgrind, which isn&rsquo;t yet supported on Yosemite.</p>
+
+<p>To get up and running, I generally followed Taras Kalapun&rsquo;s tutorial, which installs Valgrind from svn. However, initially I ran into issues because aclocal and autoconf weren&rsquo;t installed. Then I ran into issues because XCode wasn&rsquo;t installed.</p>
+
+<p>Below is how I got everything work.</p>
+
+<p>###ACLOCAL AND AUTOCONF</p>
+
+<p>After tinkering with yet another tutorial, first I installed autoconf:</p>
+
+<pre><code>curl -O http://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+tar -xzvf autoconf-2.69.tar.gz
+cd autoconf-2.69
+./configure
+make
+make install
+</code></pre>
+
+<p>Second, I installed aclocal:</p>
+
+<pre><code>curl -O http://ftp.gnu.org/gnu/automake/automake-1.14.1.tar.gz
+tar -xzvf automake-1.14.1.tar.gz
+cd automake-1.14.1
+./configure
+make
+make install
+</code></pre>
+
+<p>Finally, with both installed, I could now run Taras&rsquo; tutorial:</p>
+
+<pre><code>svn co svn://svn.valgrind.org/valgrind/trunk valgrind
+cd valgrind
+./autogen.sh
+./configure
+make
+make install
+</code></pre>
+
+<p>Just kidding! When I ran make, I got this error:</p>
+
+<pre><code>Making all in coregrind
+make[2]: *** No rule to make target `/usr/include/mach/mach_vm.defs', needed by `m_mach/mach_vmUser.c'.  Stop.
+make[1]: *** [all-recursive] Error 1
+make: *** [all] Error 2
+</code></pre>
+
+<p>After some googling, it seemed the new problem was XCode.</p>
+
+<p>###INSTALLING COMMAND LINE X-CODE</p>
+
+<p>Thanks to Jinhui Zhang&rsquo;s tutorial, I realized that even though I had XCode installed in my applications, I didn&rsquo;t have it installed in my command line.</p>
+
+<p>So, I ran:</p>
+
+<pre><code>xcode-select --install
+</code></pre>
+
+<p>Then I got some coffee. xcode is a beast to install.</p>
+
+<p>###MAKE VALGRIND</p>
+
+<p>Once XCode was installed, I could finally finish the Valgrind install. I changed back to my valgrind directory, then ran:</p>
+
+<pre><code>make
+make install
+</code></pre>
+
+<p>And with that, finally, Valgrind worked like it was supposed to. I ran Zed&rsquo;s tutorial and my output matched his.</p>
+
+<p>Phew.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">November 1, 2014</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

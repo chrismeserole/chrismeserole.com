@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Part II: Big Data on the Desktop : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Part II: Big Data on the Desktop</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Part II: Big Data on the Desktop</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>As <a href="http://chrismeserole.com/signals/the-i-o-problem-or-why-big-data-takes-forever-to-process/">the previous post in this series</a> notes, large data takes a while to process not because processors are too slow, but because getting data from the hard drive to the processor takes a while.</p>
+
+<p>Ultimately the best way to deal with such data will probably be to shift your processing to a computer cluster, but if that&rsquo;s not an option, there are still a few things you can do to cut down query times dramatically.</p>
+
+<p>This post profiles two in particular: adding RAM, and parallelizing your code.</p>
+
+<h3 id="adding-ram">ADDING RAM</h3>
+
+<p>As the <a href="http://chrismeserole.com/signals/the-i-o-problem-or-why-big-data-takes-forever-to-process/#kitchen">prior post mentions</a>, there are three places a computer &ldquo;stores&rdquo; data: the CPU cache, RAM (also known as memory), and the hard drive. Each of those places holds orders of magnitude more data than the last, but each is also orders of magnitude slower to access &ndash; meaning the hard drive can hold way more data than the cache or RAM, but also takes way longer to reach.</p>
+
+<p>One obvious way to speed things up then is to just <a href="https://duckduckgo.com/?q=upgrade+ram+tutorial">increase the amount of RAM on your computer</a>. The more RAM you have, the more data you can store in memory as opposed to the hard drive, and the faster you can process it.</p>
+
+<p>Fortunately upgrading RAM is pretty straightforward, with the notable exception of unibody laptops. Most modern computers can also handle between 8GB and 32GB of total RAM, so if your data is big but not <em>that</em> big, buying more RAM is probably the way to go.</p>
+
+<p>That said, there is one caveat to all this: datasets can &ldquo;blow up&rdquo; by several multiples when you store them in memory, meaning a 5GB dataset can take up more than 10GB of RAM. Add in the fact that most operating systems now take up significant space as well, and you&rsquo;ll quickly hit limits on how much data you can actually store in memory on your personal computer.</p>
+
+<h3 id="parallelize-where-possible">PARALLELIZE WHERE POSSIBLE</h3>
+
+<p>If upgrading RAM isn&rsquo;t an option, another thing you can do is to &lsquo;parallelize&rsquo; your queries, or spread them across all the cores of your processor. In the restaurant analogy I used in the last post, it&rsquo;s (very loosely) akin to having multiple waiters go and get your food rather than just one. As a result it can dramatically reduce query times on a local computer.</p>
+
+<p>To take advantage of all your computer&rsquo;s cores, there are two issues: first, you need to be doing operations that can actually be spread across multiple cores; second, you need to be using software that allows for parallelization.</p>
+
+<p>For basic data exploration, parallelizing your operations is usually possible. In common languages like <a href="http://r-project.org">R</a> or <a href="http://www.python.org">Python</a>, it&rsquo;s just a question of installing the right packages and structuring both your code and data appropriately. By way of example, see <a href="http://johnbeieler.org/blog/2012/12/07/parallel-data-subsetting/">John Beieler&rsquo;s tutorial</a> on how to subset the popular <a href="http://gdelt.utdallas.edu/">GDELT dataset</a> using Python&rsquo;s <a href="http://pythonhosted.org/joblib/index.html">joblib library</a>.</p>
+
+<p>Parallelizing your operations won&rsquo;t get you down to second-level latency, but the improvements can still be impressive. On my desktop, for example, parallelizing alone cut the time it takes to subset GDELT by half. Meanwhile, both adding RAM <em>and</em> parallelizing the code cut the same operation by over two-thirds.</p>
+
+<h3 id="best-practices">BEST PRACTICES</h3>
+
+<p>If there&rsquo;s a specific subset of your data that you&rsquo;re interested in, you&rsquo;ll probably want to make a slow initial cut through the data, and then explore the subset using Python or R.</p>
+
+<p>By contrast, if you don&rsquo;t know which subset you want to use or the subset won&rsquo;t fit in RAM, then it&rsquo;s going to be tough to get the latency to the point where you can quickly interact with and explore the data on just your local machine alone.</p>
+
+<p>In that case, to explore your data efficiently, you can either draw and explore a random subset of your data, or you can shift the processing to a cluster, <a href="http://chrismeserole.com/signals/big-data-in-the-cloud">which I discuss in the next post</a>.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">October 1, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

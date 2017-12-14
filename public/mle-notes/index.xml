@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Mle-notes on Chris Meserole</title>
+    <link>http://chrismeserole.com/mle-notes/</link>
+    <description>Recent content in Mle-notes on Chris Meserole</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2004-2017</copyright>
+    <lastBuildDate>Tue, 01 Oct 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chrismeserole.com/mle-notes/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>R Code for Maximum Likelihood</title>
+      <link>http://chrismeserole.com/mle-notes/2013-10-01-r-code-for-mle/</link>
+      <pubDate>Tue, 01 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-10-01-r-code-for-mle/</guid>
+      <description>In class we learned about Stata&amp;rsquo;s ml command.
+R actually has several similar commands. Below is an R equivalent for most of what is covered in the Class 3 sheet, using R&amp;rsquo;s optim() command. R is very useful for this sort of thing, so I&amp;rsquo;ll try to walk through it in one of the labs.
+ml.logit &amp;lt;- function(specification, data, betas.init, method) { beta.iterations &amp;lt;- matrix(nrow=0,ncol=dim(data)[2]) loglik.iterations &amp;lt;- numeric(0) sumloglik &amp;lt;- function(beta, y, x){ loglik &amp;lt;- sum(-y*log(1 + exp(-(x%*%beta))) - (1-y)*log(1 + exp(x%*%beta))) loglik.</description>
+    </item>
+    
+    <item>
+      <title>Homework 3 Notes</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-28-hw3-logit-probit/</link>
+      <pubDate>Sat, 28 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-28-hw3-logit-probit/</guid>
+      <description>In general the homeworks were good again.
+Just one note: from here on out, always write a brief description for each question.
+Even if you&amp;rsquo;re just writing a function &amp;ndash; as in question 1 &amp;ndash; be sure to write out at least one or two sentences about what the function is doing. Likewise, if the HW asks for a graph or table, assume that you&amp;rsquo;re also implicitly being asked to discuss it for a bit.</description>
+    </item>
+    
+    <item>
+      <title>R Code for HW 2</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-28-hw2-r-code/</link>
+      <pubDate>Sat, 28 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-28-hw2-r-code/</guid>
+      <description>If you wanted to do HW 2 in R, here&amp;rsquo;s one way you could have done it:
+require(mvtnorm) # for rmvnorm() require(Matrix) # for diagonal matrix # create the data n &amp;lt;- 1000 sds &amp;lt;- c(1,2,3,5,2,1) means &amp;lt;- c(rep(0,length(sds))) cov.matrix &amp;lt;- as.matrix(Diagonal(length(sds),sds)) mydata &amp;lt;- rmvnorm(n,means,cov.matrix) # label the data colnames(mydata) &amp;lt;- c(&amp;quot;alpha&amp;quot;,&amp;quot;x1&amp;quot;,&amp;quot;x2&amp;quot;,&amp;quot;b1&amp;quot;,&amp;quot;b2&amp;quot;,&amp;quot;error&amp;quot;) mydata &amp;lt;- data.frame(mydata) attach(mydata) # show b1 summary(b1) plot(density(b1)) # create and show y y &amp;lt;- alpha + b1*x1 + b2*x2 + error summary(y) plot(density(y))  Note that rmvnorm() relies on the covariance matrix rather than the correlation matrix.</description>
+    </item>
+    
+    <item>
+      <title>Homework 2 Notes</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-26-homework-2-notes/</link>
+      <pubDate>Thu, 26 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-26-homework-2-notes/</guid>
+      <description>For the most part this homework was good.
+In the first two questions, some people didn&amp;rsquo;t realize that they had to draw the betas from the normal distribution as well, or did draw them from the normal distribution, but forgot to include them when they generated y.
+The Stata code should have been something like:
+drawnorm x1 x2 b1 b2 alpha error, n(10000) means(2,5,2,-2,1,0) sds(10,2,10,2,10,20) gen y = alpha + b1*x1 + b2*x2 + error  Social Processes: Observed Variables vs Unobserved Variables This question tripped some people up, so I want to walk through it in-depth.</description>
+    </item>
+    
+    <item>
+      <title>Homework 1 Notes</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-20-homework-1-notes-multivariate-normal-distributions-and-regression/</link>
+      <pubDate>Fri, 20 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-20-homework-1-notes-multivariate-normal-distributions-and-regression/</guid>
+      <description>Thankfully everyone did pretty well on this. There are a few minor points that came up often though.
+Coefficient Standard Errors So. Fortunately everyone seemed to understand what happens to b1&amp;rsquo;s standard error when you increase the variance of x1 on the one hand and of the error term on the other. But no one included the formal explanation, so here it is:
+Note that within the square root you&amp;rsquo;ve really got a fraction, with the model variance in the numerator and the jj-th element of the model&amp;rsquo;s variance-covariance matrix (ie, the (X&#39;X)) in the denominator.</description>
+    </item>
+    
+    <item>
+      <title>R Code for Class 1</title>
+      <link>http://chrismeserole.com/mle-notes/2013-09-20-r-code-for-simulations-and-ols/</link>
+      <pubDate>Fri, 20 Sep 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/mle-notes/2013-09-20-r-code-for-simulations-and-ols/</guid>
+      <description>Below I&amp;rsquo;m going to walk through some examples for how to do in R the kinds of things we covered in class using Stata.
+The whole .R file for this is here.
+Simulate Data and Run Linear Regression Here&amp;rsquo;s how to simulate some basic data and run a regression:
+set.seed(123) n &amp;lt;- 100 x1 &amp;lt;- rnorm(n,0,1) x2 &amp;lt;- rnorm(n,3,5) error &amp;lt;- rnorm(n,0,10) y &amp;lt;- x1 + x2 + error model &amp;lt;- lm(y~x1+x2) summary(model) vcov(model)  One thing to pay attention to are the last two lines.</description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Homework 1 Notes : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Homework 1 Notes</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Homework 1 Notes</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>Thankfully everyone did pretty well on this. There are a few minor points that came up often though.</p>
+
+<h3 id="coefficient-standard-errors">Coefficient Standard Errors</h3>
+
+<p>So. Fortunately everyone seemed to understand what happens to <code>b1</code>&rsquo;s standard error when you increase the variance of <code>x1</code> on the one hand and of the error term on the other. But no one included the formal explanation, so here it is:</p>
+
+<p><img align="center" src="/assets/regression_coefficient_se.png" /></p>
+
+<p>Note that within the square root you&rsquo;ve really got a fraction, with the model variance in the numerator and the <em>jj</em>-th element of the model&rsquo;s variance-covariance matrix (ie, the <code>(X'X)</code>) in the denominator. Since the model variance is on the top of the fraction, any increase in it will lead to an increase in all standard errors, while since the variance of a particular <code>x(j)</code> will be on the bottom of the fraction, increasing it will lead to a <em>decrease</em> in the standard error of the corresponding coefficient.</p>
+
+<p>Finally, while it may be clear from the equation why a 10x increase in the overall model standard error leads to a correspondng 10x increase in the coefficient standard errors (namely, you&rsquo;ve got a square within a square root, so the exponents cancel out), it&rsquo;s probably less obvious from the equation as shown that the cells along the diagonal of the variance-covariance matrix are themselves squared, which is why you also get a similar 10x decrease in coefficient standard error when you increase the standard deviation of a particular <code>x(j)</code> by exactly 10x.</p>
+
+<p>For more on this, see <a href="http://en.wikipedia.org/wiki/Ordinary_least_squares#CITEREFHayashi2000">Wikipedia</a> or work through the R code in <a href="http://stats.stackexchange.com/a/44842">this answer</a> on <a href="http://stats.stackexchange.com/questions/44838/how-are-the-standard-errors-of-coefficients-calculated-in-a-regression">a question about regression coefficient standard errors</a> on the cross-validation forum.</p>
+
+<h3 id="biased-models-correlated-errors-vs-inefficient-models-heteroskedastic-errors">Biased Models (Correlated Errors) vs Inefficient Models (Heteroskedastic Errors)</h3>
+
+<p>This one gives me a headache every time I think about it. In fact, I even have a vague memory of confusing them in the first lab.</p>
+
+<p>But here&rsquo;s the deal.</p>
+
+<p>Correlating the error term with <code>x1</code> or <code>x2</code> generates biased estimated coefficients. In a word, your betas themselves are going to be off.</p>
+
+<p>By contast, heteroskedasticizing (is that a word?) your error term generates inefficient standard errors for your estimated coefficients. This is different from bias. Your estimates can still be right, but it&rsquo;s going to take more information for you to be as confident that they are right. Put differently, with heteroskedastic errors, with a large enough N you&rsquo;ll end up with the same coefficients, but your standard errors are going to be bigger than they would be if the model was homoskedastic. The only way to get the standard errors down in that case is to keep increasing your N (the need for more data for the same result is why the term &lsquo;inefficient&rsquo; is used.)</p>
+
+<p>One last point about this: OLS can handle some types of heteroskedasticity, provided that you correct for it appropriately in your model. So heteroskedastic errors do not immediately rule out OLS as an option. They only rule it out if there&rsquo;s no way to correct for them fully (as is the case, say, with binary data).</p>
+
+<h3 id="endogeneity">Endogeneity</h3>
+
+<p>A few people said something to the effect of, &ldquo;correlated errors so omitted variable bias so OMG ENDOGENEITY AHHH!&rsquo;</p>
+
+<p>That&rsquo;s true as far as it goes. Endogeneity is in fact present when one variable is informed/determined by another variable in your system.</p>
+
+<p>The issue is that there&rsquo;s two very different kinds of endogeneity. The endogeneity that is really problematic is when your <code>y</code> is influencing your <code>x1</code>. Since the whole point of this social science thing is causal inference, when your IVs are endogenous with your DV, that&rsquo;s a HUGE problem. That&rsquo;s why when a senior prof goes off on endogeneity in someone&rsquo;s model at a job talk and things get super awkward, this is almost always the kind of endogeneity being discussed.</p>
+
+<p>By contrast, when an IV is endogenous with an omitted variable, that&rsquo;s problematic, but it&rsquo;s problematic because it&rsquo;s messing with your estimate of an IV&rsquo;s causal effect, not because it&rsquo;s throwing into doubt the entire direction of the causal relationship between your IV and DV.</p>
+
+<p>I guess what I&rsquo;m saying is: be careful when you throw up your hands and shout &lsquo;endogeneity!&rsquo; It only really merits the shout if the dependent variable might be involved.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">September 20, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

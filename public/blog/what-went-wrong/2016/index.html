@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="What Went Wrong : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>What Went Wrong</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">What Went Wrong</h2>
+
+		</header>
+
+		<div class="entry-content">  <p>In 1936, the Literary Digest infamously predicted a <a href="https://www.qualtrics.com/blog/the-1936-election-a-polling-catastrophe/">landslide win</a> for Alf Landon over FDR. In 1948, Gallup even more infamously had Dewey decisively <a href="http://www.chicagotribune.com/news/nationworld/politics/chi-chicagodays-deweydefeats-story-story.html">besting Truman</a>. And now, in 2016, yet another reckoning: &ldquo;Clinton Trumps Trump&rdquo; has yielded to &ldquo;<a href="http://money.cnn.com/2016/11/09/media/election-2016-election-night-newspaper-headlines/">Trump Triumphs</a>.&rdquo;</p>
+
+<p>No doubt it would be easy to lump these failures together. However, it would also be a mistake. Landon&rsquo;s hopes and Dewey&rsquo;s aspirations ultimately lost out to fundamental errors in polling methodology. By contrast, Clinton fell prey to something far more befitting the 21st century. The problem wasn&rsquo;t with the polls, but with how they were aggregated &mdash; or more specifically, with the sophisticated models that were built on top of them.</p>
+
+<p>Where the models went wrong was this: they assumed that the fifty state elections were largely independent. Think of the election as a series of fifty coin flips. One way to model that series is by flipping fifty distinct coins exactly once, with each coin biased in a way that&rsquo;s both unique and random. The allure of this model is its simplicity. If each state&rsquo;s bias is independent from the others, then over fifty states the biases will ultimately cancel out, and the actual results will fall in a narrow band around the national polling average. (As best I can tell, this is why Huff Post&rsquo;s model had a <a href="http://www.huffingtonpost.com/entry/nate-silver-election-forecast_us_581e1c33e4b0d9ce6fbc6f7f">win probability for Hillary</a> of 98%.)</p>
+
+<p>However, that model is almost certainly not true. In reality, many state elections are likely to be biased in a similar way. In that case, the election overall is more like fifty flips of the same biased coin. If we model the election that way, then the actual election results will converge on the polling average <em>plus the consistent bias</em>. The polls for PA, NC, FL, MI, and WI, among others, suggest that this is likely what happened: the polling error in each of these states <a href="https://twitter.com/jameskanag/status/796303144351399936">moved in the same way</a>, due to mistaken likely-voter estimates for white citizens without a college degree. In that regard, it&rsquo;s not a concidence that Nate Silver, the aggregator who most strongly accounted for the possibility of correlated state-level errors, also had the greatest uncertainty in his forecasts.</p>
+
+<p>So where to go from here?</p>
+
+<p>To be sure, the polls themselves could be improved. [1] But again, they were not the problem. The median polling error was only around 4%, and even then the polls got the popular vote right. It&rsquo;s the aggregation that needs work. And to be clear, it&rsquo;s not that the aggregators should have identified the specific bias among white, non-college voters &mdash; it&rsquo;s that they should have accounted for the possibility that that kind of bias might exist. In the next election, aggregators either need to pay more attention to how they model correlated errors, or publish clear disclaimers about potential sources of uncertainty that are not represented in their models.</p>
+
+<p>Finally, one last point. This is the same mistake that contributed to the housing bubble a decade ago, just prior to Obama entering office. As with the aggregators today, the banks back then assumed that state and regional real estate markets were all independent &mdash; many separate coins, so to speak, rather than one coin flipped many times. In retrospect treating sub-national errors in this way was clearly wrong then and is clearly wrong now. [2]</p>
+
+<p>The first time we made this mistake it was devastating for millions. But at least then we could argue, with something of a straight face, that we didn&rsquo;t know better.</p>
+
+<p>We have no such luxury here.</p>
+
+<p><br /></p>
+
+<p>NOTES</p>
+
+<p>[1] In particular, there need to be greater incentives for pollsters to release their raw data. When the Times commissioned a <a href="http://www.nytimes.com/interactive/2016/09/20/upshot/the-error-the-polling-world-rarely-talks-about.html">survey of Florida voters</a> last September and asked five separate teams to analyze it, it&rsquo;s telling that the one team who got Florida &ldquo;right&rdquo; also used a unique likely voter screen. Ideally, this kind of open analysis should be the norm, not the exception.</p>
+
+<p>[2] I&rsquo;d also go a step further than this, and suggest that in this case the bias probably wasn&rsquo;t just correlated across states in the U.S. If you had tried to model U.S. and U.K. politics together one year ago, you likely would have found that the national-level errors were correlated too &mdash; i.e., that the polls had a similar downward bias in their likely-voter screens for white non-college voters.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">November 9, 2016</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

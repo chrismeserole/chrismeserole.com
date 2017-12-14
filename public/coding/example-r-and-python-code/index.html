@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Example R and Python Code : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Example R and Python Code</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Example R and Python Code</h2>
+
+		</header>
+
+		<div class="entry-content">  <p>In addition to Python, Lark now executes R at runtime as well, via <a href="http://yihui.name/knitr/">Knitr</a>.</p>
+
+<p>Still have an issue with Maplotlib, but otherwise things are looking good!</p>
+
+<hr />
+
+<p>Here goes. First let&rsquo;s try R:</p>
+
+<pre><code class="language-r">x &lt;- rnorm(100)
+summary(x)
+</code></pre>
+
+<p>Now let&rsquo;s switch over to Python:</p>
+
+<pre><code class="language-Python">&gt;&gt;&gt; x = 3
+&gt;&gt;&gt; x + 1
+[should be 4]
+&gt;&gt;&gt; 2 + 2*x
+missing or wrong results will be overwritten
+</code></pre>
+
+<p>Ok. Let&rsquo;s try plotting stuff.</p>
+
+<p>First in R:</p>
+
+<pre><code class="language-r">plot(cars)
+</code></pre>
+
+<p>Now let&rsquo;s try a plot in Python &hellip;</p>
+
+<pre><code class="language-Python">&gt;&gt;&gt; import matplotlib.pyplot as plt
+
+&gt;&gt;&gt; fig = plt.figure()
+&gt;&gt;&gt; plt.plot([1, 2, 3, 4, 5], [6, 7, 2, 4, 5])
+&gt;&gt;&gt; fig
+</code></pre>
+
+<p>Bummer. Looks like fig object exists, it&rsquo;s just not being passed properly to Lark.</p>
+
+<p>Hopefully we should be able to sort it out in time.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">April 20, 2015</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

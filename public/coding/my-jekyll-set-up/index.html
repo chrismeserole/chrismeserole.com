@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="My Jekyll Set-Up : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>My Jekyll Set-Up</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">My Jekyll Set-Up</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>I was pretty frustrated with how slowly this site was running, so I recently followed the herd and moved over to Jekyll.</p>
+
+<p>The transition was pretty smooth, but there were two issues I encountered.</p>
+
+<h3 id="redirecting-the-index">Redirecting the Index</h3>
+
+<p>I wanted the homepage for <code>chrismeserole.com</code> to forward to my <code>/about/</code> page. In wordpress, this is pretty trivial &ndash; I think it was just a check box in the settings tab.</p>
+
+<p>But for Jekyll it&rsquo;s not so simple. I&rsquo;m sure there&rsquo;s a better way to do this, but for now the best I could manage was to overwrite the <code>index.html</code> file in the root directory with this:</p>
+
+<pre><code>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+&lt;meta http-equiv=&quot;content-type&quot; content=&quot;text/html; charset=utf-8&quot; /&gt;
+&lt;meta http-equiv=&quot;refresh&quot; content=&quot;0;url=/about&quot; /&gt;
+&lt;/head&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h3 id="setting-up-category-blogs">Setting up category blogs</h3>
+
+<p>The other challenge was setting up what are, in effect, separate blogs: one for my thoughts on life, politics, culture, reviews, etc, and another for everything related to coding. Since I wanted the layout/design to remain consistent though, I also wanted to do this with a single jekyll install.</p>
+
+<p>The best way to do that was to setup separate sub-directories in the root, one for <code>/life</code> and another for <code>/coding</code>. Each of those folders then has its own <code>_posts</code> sub-directory, as well as its own <code>index.html</code> and <code>feed.xml</code>.</p>
+
+<p>To make sure the urls work, I then added the following line to <code>_config.yml</code>:</p>
+
+<pre><code>permalinks: /:categories/:title
+</code></pre>
+
+<p>The other thing to note is that this means that any posts in the root <code>_posts</code> sub-directory effectively serve as pages, provided there&rsquo;s no category listed in the yml front matter.</p>
+
+<h3 id="going-forward">Going Forward</h3>
+
+<p>There&rsquo;s still a little more I&rsquo;d like to do, such as setting up separate sidebars and archives for each category, etc.</p>
+
+<p>I&rsquo;ll update this post as I get to them.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">February 16, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

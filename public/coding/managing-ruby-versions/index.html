@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Managing Ruby Versions : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Managing Ruby Versions</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Managing Ruby Versions</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>For a project I&rsquo;m working on, I needed to install the <a href="http://docs.aws.amazon.com/ElasticMapReduce/latest/DeveloperGuide/emr-cli-install.html">command line interface</a> for AWS Elastic MapReduce.</p>
+
+<p>The catch is that the CLI requires using ruby 1.8.7, and is not compatible with later versions. Bummer, because when I ran <code>ruby -v</code> I learned I was using 1.9.3.</p>
+
+<p>However, I had a vague memory of upgrading to 1.9.3 when I was either playing with Rails or installing Jekyll a couple months back. I also had a vague memory of upgrading using <a href="http://rvm.io">RVM</a>, the Ruby Version Manager.</p>
+
+<p>To check, I ran <code>rvm -v</code>, and sure enough I&rsquo;d already installed it. This was good news, because it makes managing multiple versions of ruby <em>much</em> easier.</p>
+
+<p>In my case, from here there were two ways to get to running 1.8.7.</p>
+
+<p>###The lazy way</p>
+
+<p>It turns out that RVM doesn&rsquo;t touch the original system ruby or its gems. So getting back to 1.8.7, which was preinstalled on my Macbook, was simple. All I had to do was run:</p>
+
+<pre><code>rvm use system
+ruby -v
+</code></pre>
+
+<p>Sure enough, I was back to 1.8.7. To get back to the 1.9.3, all I had to do was then run</p>
+
+<pre><code>rvm use default
+</code></pre>
+
+<p>But switching back and forth from the system ruby to versions controlled by the RVM didn&rsquo;t seem right. It felt like a better approach in the long run would be to run a version of 1.8.7 that RVM itself controlled.</p>
+
+<h3 id="the-better-way">The better way</h3>
+
+<p>So, I switched back to back my rvm ruby and ran:</p>
+
+<pre><code>rvm install 1.8.7
+rvm use 1.8.7
+</code></pre>
+
+<p>That&rsquo;s it, surprisingly.</p>
+
+<p>Installing the new version takes a while, obviously, but it&rsquo;s time well spent. I feel like I&rsquo;m on much more solid footing now, and not just for making use of the Amazon EMR CLI.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">July 4, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

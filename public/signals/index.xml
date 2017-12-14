@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Signals on Chris Meserole</title>
+    <link>http://chrismeserole.com/signals/</link>
+    <description>Recent content in Signals on Chris Meserole</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; 2004-2017</copyright>
+    <lastBuildDate>Wed, 18 Dec 2013 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="http://chrismeserole.com/signals/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Part IV: Parsing GDELT with Spark/Shark on EC2</title>
+      <link>http://chrismeserole.com/signals/part-iv-parsing-gdelt-with-spark-shark-on-ec2/</link>
+      <pubDate>Wed, 18 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/part-iv-parsing-gdelt-with-spark-shark-on-ec2/</guid>
+      <description>This tutorial walks through how to query the GDELT dataset using Spark/Shark.
+I highlighted a few of Spark&amp;rsquo;s advantages earlier in a prior post, but two bear repeating here. First, since Spark holds your dataset in memory across a cluster, queries run up to 100x faster than they would in a more common engine like Hive. Second, since there&amp;rsquo;s no need to reload data with each iteration, machine learning and maximum likelihood estimation all run much faster in Spark.</description>
+    </item>
+    
+    <item>
+      <title>Part III: Big Data in the Cloud</title>
+      <link>http://chrismeserole.com/signals/part-iii-big-data-in-the-cloud/</link>
+      <pubDate>Thu, 12 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/part-iii-big-data-in-the-cloud/</guid>
+      <description>As I mention in the previous post, there are a few ways you can speed up analysis of big data on your desktop or laptop.
+However, the fastest/most efficient solution is often to just shift data storage and processing to a networked computer cluster. Generally speaking, this solves the I/O problem by splitting the processing across multiple computers rather than one.
+Fortunately there are now several options available for large-scale data storage and analysis, with varying degrees of cost-effectiveness.</description>
+    </item>
+    
+    <item>
+      <title>Big Data and Social Science: Introduction</title>
+      <link>http://chrismeserole.com/signals/big-data-and-social-science-introduction/</link>
+      <pubDate>Tue, 10 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/big-data-and-social-science-introduction/</guid>
+      <description>Big datasets are increasingly common in social science today, and understandably generating a lot of excitement.
+However, for anyone just beginning to work with such data, the task of merely managing large datasets &amp;ndash; let alone analyzing them &amp;ndash; can be daunting.
+Since I&amp;rsquo;ve been working a lot lately with relatively big datasets, I thought I&amp;rsquo;d offer up a series of posts here on how to go about dealing with them.</description>
+    </item>
+    
+    <item>
+      <title>Part I: The I/O Problem, Or Why Big Data Takes Forever to Process</title>
+      <link>http://chrismeserole.com/signals/part-i-the-i-o-problem-or-why-big-data-takes-forever-to-process/</link>
+      <pubDate>Tue, 10 Dec 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/part-i-the-i-o-problem-or-why-big-data-takes-forever-to-process/</guid>
+      <description>As I mentioned in the introduction to this series, large datasets are increasingly common in social science, but they&amp;rsquo;re also difficult to deal with efficiently.
+In the next few posts I&amp;rsquo;ll look at various solutions to that problem. First though we need to figure out what&amp;rsquo;s causing it to begin with.
+Big Data: What&amp;rsquo;s the Problem? So: why exactly does it take so long to parse large datasets, even with modern computers?</description>
+    </item>
+    
+    <item>
+      <title>Part II: Big Data on the Desktop</title>
+      <link>http://chrismeserole.com/signals/part-ii-big-data-on-the-desktop/</link>
+      <pubDate>Tue, 01 Oct 2013 00:00:00 +0000</pubDate>
+      
+      <guid>http://chrismeserole.com/signals/part-ii-big-data-on-the-desktop/</guid>
+      <description>As the previous post in this series notes, large data takes a while to process not because processors are too slow, but because getting data from the hard drive to the processor takes a while.
+Ultimately the best way to deal with such data will probably be to shift your processing to a computer cluster, but if that&amp;rsquo;s not an option, there are still a few things you can do to cut down query times dramatically.</description>
+    </item>
+    
+  </channel>
+</rss>

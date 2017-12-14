@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Installing Edarf : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Installing Edarf</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Installing Edarf</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>I&rsquo;ve been meaning to check out random forests in general and the <a href="https://github.com/zmjones/edarf">edarf package</a> in particular for a while now &ndash; at least since <a href="https://twitter.com/joneszm">Zach Jones</a> and <a href="https://twitter.com/fridolinlinder">Fridolin Linder</a> posted <a href="http://media.wix.com/ugd/13cbcb_b644c0023366475ab6cb640969303a62.pdf">their paper on Random Forests and EDA</a> last spring.</p>
+
+<p>I finally had a chance to go through package, and it&rsquo;s as great as I&rsquo;d hoped it would be. The standard errors and partial dependence plots point toward a future where ML plays a much larger role in political science overall rather than just the subset devoted to prediction.</p>
+
+<p>All that said though, edarf is still early going.</p>
+
+<p>For anyone trying to get up and running with edarf as well, below are a few issues I ran into while walking through Zach&rsquo;s <a href="https://github.com/zmjones/imc/blob/master/edarf.R">IMC tutorial for how to use edarf</a>.</p>
+
+<p>See the appendix for my exact R and OS versions.</p>
+
+<h5 id="1-fortan-compiler">1. Fortan compiler</h5>
+
+<p>I started by running:</p>
+
+<pre><code>devtools::install_github(&quot;zmjones/edarf&quot;)
+</code></pre>
+
+<p>That produced the following error message:</p>
+
+<pre><code>ld: warning: directory not found for option '-L/usr/local/lib/gcc/x86_64-apple-darwin13.0.0/4.8.2'
+ld: library not found for -lgfortran
+clang: error: linker command failed with exit code 1 (use -v to see invocation)
+make: *** [edarf.so] Error 1
+ERROR: compilation failed for package 'edarf'
+</code></pre>
+
+<p>Based on the <code>clang: error</code> and initial path it seemed like the compiler was having an issue finding the right version of fortran. I&rsquo;d updated to 10.10 lately and reinstalled Xcode, so I thought that might have something to do with it.</p>
+
+<p>After a bit of googling, it looks like the issue was that edarf relies on RcppArmadillo, which in turn relies on a version of gfortran that is not shipped with Mac OS X 10.9. Either the bug also applies to 10.10 or I botched the upgrade.</p>
+
+<p>At any rate, <a href="http://thecoatlessprofessor.com/programming/rcpp-rcpparmadillo-and-os-x-mavericks-lgfortran-and-lquadmath-error/">to fix the issue I ran</a>:</p>
+
+<pre><code>curl -O http://r.research.att.com/libs/gfortran-4.8.2-darwin13.tar.bz2
+sudo tar fvxz gfortran-4.8.2-darwin13.tar.bz2 -C /
+</code></pre>
+
+<p>Installing edarf worked like a charm after that.</p>
+
+<h5 id="2-version-of-party">2. Version of party()</h5>
+
+<p>edarf also relies on a forked version of the <a href="https://cran.r-project.org/web/packages/party/">party package</a>:</p>
+
+<pre><code>devtools::install_github(&quot;zmjones/party&quot;, subdir = &quot;pkg&quot;)
+</code></pre>
+
+<p>The package installed ok, but I couldn&rsquo;t call the library at first.</p>
+
+<p>I&rsquo;d already called <code>library(party)</code> in my environment &ndash; I think while I was going through <a href="http://www.methods-colloquium.com/#!Zachary-Jones-Data-Mining-as-Exploratory-Data-Analysis/clv6/560ee37a0cf2f0ed7a2d727b">Zach&rsquo;s great international methods colloquium presentation</a> &ndash; and there seemed to be a conflict I couldn&rsquo;t get around.</p>
+
+<p>After restarting R though I could load the library fine.</p>
+
+<h5 id="3-plot-imp-error">3. plot_imp() error</h5>
+
+<p>Most of the plots in the tutorial worked well. But then I ran the following (lines 30-31):</p>
+
+<pre><code>imp &lt;- variable_importance(fit, features, type = &quot;local&quot;, oob = TRUE, parallel = TRUE)
+plot_imp(imp)
+</code></pre>
+
+<p>That yielded this:</p>
+
+<pre><code>Error in as.character(x$label) : 
+cannot coerce type 'closure' to vector of type 'character'
+</code></pre>
+
+<p>Based on the coercion/closure issue, my hunch is that <code>plot_imp()</code> is trying to coerce some function itself to character rather than that function&rsquo;s output.</p>
+
+<h5 id="4-rstudio-abort-cycle">4. RStudio Abort Cycle</h5>
+
+<p>After working through the tutorial and then using my own data, eventually I somehow got into a cycle in RStudio where something in my current project environment was causing RStudio to abort, but then since RStudio auto-loads the last project environment, it would immediately run into the same issue again.</p>
+
+<p>Eventually I just had to shut down the computer and restart everything.</p>
+
+<p>I didn&rsquo;t bother trying to reproduce the issue, which I think had something to do with socket settings and not edarf.</p>
+
+<h5 id="conclusion">Conclusion</h5>
+
+<p>Bugs aside the package is great. Can&rsquo;t wait to see where it goes.</p>
+
+<p>&ndash;</p>
+
+<p>APPENDIX</p>
+
+<p>Mac OS X version: 10.10.4</p>
+
+<p>R Version Info:</p>
+
+<pre><code>platform       x86_64-apple-darwin13.4.0   
+arch           x86_64                      
+os             darwin13.4.0                
+system         x86_64, darwin13.4.0        
+status                                     
+major          3                           
+minor          2.1                         
+year           2015                        
+month          06                          
+day            18                          
+svn rev        68531                       
+language       R                           
+version.string R version 3.2.1 (2015-06-18)
+nickname       World-Famous Astronaut   
+</code></pre>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">October 21, 2015</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

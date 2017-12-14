@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Signals : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Signals</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="http://chrismeserole.com/signals/index.xml" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main"><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/signals/part-iv-parsing-gdelt-with-spark-shark-on-ec2/">Part IV: Parsing GDELT with Spark/Shark on EC2</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>This tutorial walks through how to query the GDELT dataset using Spark/Shark.</p>
+
+<p>I <a href="http://chrismeserole.com/signals/big-data-in-the-cloud#spark-shark">highlighted a few of Spark&rsquo;s advantages earlier in a prior post</a>, but two bear repeating here. First, since Spark holds your dataset in memory across a cluster, queries run up to 100x faster than they would in a more common engine like Hive. Second, since there&rsquo;s no need to reload data with each iteration, machine learning and maximum likelihood estimation all run <em>much</em> faster in Spark. (I hope to show how to take advantage of this in a future tutorial.)</p>
+
+<p>Before getting started I should probably also note that this tutorial was written for use on Mac OS X, but it should be fairly trivial to replicate on Linux. With a bit of work it should also be adaptable for use with Windows.</p>
+
+<p>Also, although I try not to assume familiarity with the command line, there may be some things I&rsquo;ve overlooked. If you&rsquo;re new to working with the shell and run into any problems, <a href="http://chrismeserole.com/contact">let me know</a>.</p>
+
+<h3 id="set-up">SET UP</h3>
+
+<p>This is an optional first step, but to make the rest of the tutorial easier to follow for those just starting out on the command line, I&rsquo;m including it here.</p>
+
+<p>To start off, <a href="http://blog.teamtreehouse.com/introduction-to-the-mac-os-x-command-line">open Terminal</a> in your Applications folder and for each line enter the following at the <code>$</code> prompt:</p>
+
+<pre><code>mkdir ~/workspace
+mkdir ~/workspace/spark
+mkdir ~/workspace/scala
+</code></pre>
+
+<p>If you type <code>ls</code> you should see &lsquo;workspace&rsquo; listed. Likewise, if you type <code>ls workspace</code>, you should now see both &lsquo;spark&rsquo; and &lsquo;scala&rsquo; listed.</p>
+
+<p>In case you&rsquo;re curious, the logic here is that since Spark and Scala are under active development, a directory structure like this makes it easy to switch between versions as they&rsquo;re released.</p>
+
+<h3 id="build-spark-locally">BUILD SPARK LOCALLY</h3>
+
+<p>Now that we&rsquo;ve got a basic workspace set up, let&rsquo;s download the latest stable version of Spark, and the version of Scala it depends on. At present, that means we need to <a href="http://spark-project.org/download/spark-0.8.0-incubating.tgz">download Spark 0.8.0</a> and <a href="http://www.scala-lang.org/files/archive/scala-2.9.3.tgz">download Scala 2.9.3</a>.</p>
+
+<p>Once you&rsquo;ve got each downloaded, unpack them to their appropriate directories:</p>
+
+<pre><code>tar -xf ~/Downloads/spark-0.8.0-incubating.tgz -C ~/workspace/spark
+tar -xf ~/Downloads/scala-2.9.3.tgz -C ~/workspace/scala
+</code></pre>
+
+<p>Now we need to tell Spark how to find Scala. You can use any text editor for this, but for the sake of consistency, I&rsquo;m going to use <a href="http://www.vim.org/">vim</a> here. (We&rsquo;ll also use vim later on.)</p>
+
+<p>To edit the file, run the following:</p>
+
+<pre><code>cd ~/workspace/spark/spark-0.8.0-incubating/conf/
+vim spark-env.sh.template
+</code></pre>
+
+<p>The first line changes to the shell to the appropriate directory. The second opens the file in vim. Type <code>G</code> to move to the end of the file. Then type <code>i</code> so that you can insert text.</p>
+
+<p>Then enter:</p>
+
+<pre><code>SCALA_HOME=~/workspace/scala/scala-2.9.3/
+</code></pre>
+
+<p>Now, hit <code>esc</code> and then <code>:wq</code>. That will save the file and return you to your shell session.</p>
+
+<p>Once you&rsquo;ve edited the template file, you need to rename it as just &lsquo;spark-env.sh&rsquo;. You can do this from the command line as follows:</p>
+
+<pre><code>mv spark-env.sh.template spark-env.sh
+</code></pre>
+
+<p>Finally, since the build process for Spark requires Git, you&rsquo;ll also need to install Git if you haven&rsquo;t already. You can <a href="http://git-scm.com/downloads">install it very easily here</a>.</p>
+
+<p>At this point you should be ready to build Spark. To do that, run:</p>
+
+<pre><code>~/workspace/spark/spark-0.8.0-incubating/sbt/sbt assembly
+</code></pre>
+
+<p>You should see a bunch of lines start whizzing by. Basically, the command is downloading a slew of libraries and dependencies and then compiling everything for you. Depending on your internet connection, it could take a little while, so you may want to go grab a cup of coffee.</p>
+
+<p>Once the build process is done, you should be able to run Spark locally. Run:</p>
+
+<pre><code>cd ~/workspace/spark/spark-0.8.0-incubating
+./spark-shell
+</code></pre>
+
+<p>If a Scala interpreter opens, you&rsquo;ve got everything running. Enter <code>exit;</code> to close the interpreter.</p>
+
+<p>Alternately, if you prefer Python to Scala, you can run:</p>
+
+<pre><code>./pyspark
+</code></pre>
+
+<p>For more on using PySpark (especially how to use it with any of Python&rsquo;s scientific computing libraries), see <a href="http://spark.incubator.apache.org/docs/latest/python-programming-guide.html">the official docs here</a>.</p>
+
+<h3 id="configuring-spark-and-aws">CONFIGURING SPARK AND AWS</h3>
+
+<p>It&rsquo;s nice to have Spark running locally, but to fully make use of it we want to get it going on a computer cluster.</p>
+
+<p>There are several ways to do this, but using Amazon&rsquo;s Web Services is probably the easiest. To set up a cluster with Amazon, you&rsquo;ll need to do three things:</p>
+
+<ol>
+<li><a href="http://docs.aws.amazon.com/AmazonSimpleDB/latest/DeveloperGuide/AboutAWSAccounts.html">Create an AWS account</a>.</li>
+<li><a href="http://docs.aws.amazon.com/general/latest/gr/getting-aws-sec-creds.html">Get your security credentials</a>.</li>
+<li><a href="http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html">Generate a keypair</a>.</li>
+</ol>
+
+<p>Each of those steps is fairly straightforward. Although the first step takes the longest, if you want you can speed things up by linking your AWS account to a pre-existing Amazon account.</p>
+
+<p>At the end of steps 2 and 3, your browser should download a .csv file and a .pem file, respectively.</p>
+
+<p>Once the .pem file has downloaded, return to Terminal and run the following:</p>
+
+<pre><code>mkdir ~/.aws
+mv ~/Downloads/YOURKEYNAME.pem ~/.aws/ 
+chmod 400 ~/.aws/YOURKEYNAME.pem
+</code></pre>
+
+<p>The first command creates a &lsquo;hidden&rsquo; folder to hold your AWS key, and the last sets permissions for how it&rsquo;s to be accessed. Don&rsquo;t skip this step; later on you won&rsquo;t be able to launch an EC2 instance unless your key has the proper permissions.</p>
+
+<p>Once you&rsquo;ve set permissions, you then need to tell your shell how to access each file. The variables you create here are what your local install of Spark uses under the hood to talk to Amazon&rsquo;s servers. To do this, in your Terminal session, enter the following:</p>
+
+<pre><code>export AWS_KEY_FILE='/Users/YOURUSERNAME/.aws/YOURKEYNAME.pem'
+export AWS_KEY_PAIR='YOURKEYNAME'
+</code></pre>
+
+<p>Note that in the second command, the &lsquo;.pem&rsquo; should NOT appear in the key name. You just enter the name itself.</p>
+
+<p>Finally, open the .csv file that you downloaded in step 2 above in a spreadsheet or text editor. Go back to Terminal in a separate window, and based on the information in the spreadsheet, enter the appropriate information as follows:</p>
+
+<pre><code>export AWS_ACCESS_KEY_ID='YOURACCESSKEYID'
+export AWS_SECRET_ACCESS_KEY='YOURSECRETACCESSKEY'
+</code></pre>
+
+<p>Again, those are variables that Spark will use later on to talk with your Amazon account. Note that if you&rsquo;ll be running Spark or EC2 frequently, you&rsquo;ll probably want to store all the AWS security variables more permanently, possibly in a .bash_profile or .bashrc file. That way you won&rsquo;t have to enter them each time you want to spin up a cluster.</p>
+
+<p>Finally, one option I would <em>HIGHLY</em> recommend before going any further is setting alerts on your AWS account. If you start a cluster and forget to stop or terminate it, you could be in for a nasty surprise at the end of the month. By setting an alert, Amazon will email you any time your monthly bill increases above a specified threshold. To set an alert, see <a href="https://portal.aws.amazon.com/gp/aws/developer/account?ie=UTF8&amp;action=billing-alerts">here</a>.</p>
+
+<h3 id="connecting-to-aws">CONNECTING TO AWS</h3>
+
+<p>Now that you&rsquo;ve defined your AWS credentials for your environment, you can finally try to get a cluster up and running.</p>
+
+<p>Before you begin though, you&rsquo;ll want to know what kind of EC2 instances you want in your cluster. The available types, and their prices, are <a href="http://aws.amazon.com/ec2/pricing/">listed here</a>. Since Spark runs in memory, what you&rsquo;ll want to pay attention to is the memory per instance; make sure the total memory in your cluster will be a sufficient multiple of the data you&rsquo;ll be working with.</p>
+
+<p>For this tutorial, to keep the costs down, we&rsquo;re only going to analyze a few GB of data. So we&rsquo;ll only use a small instance (it&rsquo;ll cost less than $1/hr). To launch your cluster, run:</p>
+
+<pre><code>cd ~/workspace/spark/spark-0.8.0-incubating/ec2/
+./spark-ec2 -k $AWS_KEY_PAIR -i $AWS_KEY_FILE -s 1 --instance-type m1.large launch YOURINSTANCENAME
+</code></pre>
+
+<p>You should see a bunch of status updates scroll by over a couple minutes. At the end, if everything works, you should see output like this:</p>
+
+<pre><code>Ganglia started at http://ec2-XXX-XX-XXX-XXX.compute-1.amazonaws.com:5080/ganglia
+Done!
+</code></pre>
+
+<p>There are a few cases in which the launch script doesn&rsquo;t work, mostly notably when there aren&rsquo;t any instances available at a given moment. In that case, you&rsquo;ll see some Boto messages such as &ldquo;The requested Availability Zone is currently constrained &hellip; &rdquo; If that happens, either specify a separate availability zone, or just wait a few seconds. I&rsquo;ve never had to wait longer than a minute or so for one to become available.</p>
+
+<p>Once you&rsquo;ve got a cluster up and running, you&rsquo;ll want to login to the master. To do that, run:</p>
+
+<pre><code>./spark-ec2 -k $AWS_KEY_PAIR -i $AWS_KEY_FILE login YOURINSTANCENAME
+</code></pre>
+
+<p>Alternately, you can also run the following manually, using the same URL that&rsquo;s provided at the very end of output when Spark finishes launching the cluster:</p>
+
+<pre><code>ssh -i $AWS_KEY_FILE root@ec2-XXX-XX-XXX-XXX.compute-1.amazonaws.com
+</code></pre>
+
+<p>Either way, that should put you through to your EC2 instance.</p>
+
+<h3 id="load-your-data">LOAD YOUR DATA</h3>
+
+<p>At this point we&rsquo;ve got everything we need, except we don&rsquo;t yet have data. There are a lot of different ways to handle this, but for this tutorial we&rsquo;re going to store some data in S3. To do that, set up an S3 bucket. You can name it whatever you want. Then also create one subdirectory entitled &lsquo;tutorial_data&rsquo; and another &lsquo;tutorial_output&rsquo;.  You can read <a href="http://docs.aws.amazon.com/AmazonS3/latest/gsg/CreatingABucket.html">how to create an S3 bucket and subdirectories here</a>.</p>
+
+<p>Once you&rsquo;ve set up your S3 bucket and subdirectories, you need to get the data from GDELT into the S3 bucket.</p>
+
+<p>One way to do that is to download GDELT to your desktop/laptop, and then upload to S3. I don&rsquo;t recommend that. Unless you work at Amazon it will take forever. Instead, download GDELT to your EC2 instance, and then upload to S3. That way, the upload trip happens entirely within Amazon&rsquo;s internal network, which is much faster.</p>
+
+<p>First we need to set up a way to send data to S3. Once you&rsquo;re logged into your EC2 shell, run:</p>
+
+<pre><code>curl https://raw.github.com/timkay/aws/master/aws -o aws
+chmod +x aws
+export EC2_ACCESS_KEY='YOURACCESSKEYHERE'
+export EC2_SECRET_KEY='YOURSECRETACCESSKEYHERE'
+perl aws --install
+</code></pre>
+
+<p>Now that we can talk with S3, let&rsquo;s download some GDELT data:</p>
+
+<pre><code>curl -O http://chrismeserole.com/code/gdelt_downloader.sh
+sh gdelt_download_tutorial.sh
+</code></pre>
+
+<p>That script downloads the files for 2000 and 2001. If you&rsquo;d like to download different years, just edit gdelt_downloader.sh. For most years the changes you&rsquo;d have to make are pretty self-explanatory, though for 2006-present, GDELT releases the files by month, so be sure to account for that. In that case be sure to visit the <a href="http://gdelt.utdallas.edu/data/backfiles/?O=D">GDELT downloads page</a> to see what the URL pattern is.</p>
+
+<p>Once the files have all downloaded, upload them to your bucket:</p>
+
+<pre><code>s3put YOURBUCKETNAME/tutorial_data/ 2000.csv
+s3put YOURBUCKETNAME/tutorial_data/ 2001.csv
+</code></pre>
+
+<p>When the uploads are finished, you can check that the files are where they should be by running <code>s3ls YOURBUCKETNAME/tutorial_data</code> or visting the <a href="https://console.aws.amazon.com/s3/">s3 console in your browser</a>.</p>
+
+<h3 id="configuring-spark-shark-and-s3">CONFIGURING SPARK/SHARK AND S3</h3>
+
+<p>Now that we&rsquo;ve got our data, we need to tell Shark how to access it. Hopefully in the future Spark will automatically pass your AWS keys to Shark, but for now we need to use the following work-around:</p>
+
+<pre><code>vim ephemeral-hdfs/conf/core-site.xml
+</code></pre>
+
+<p>That opens a config file in Vim. Type <code>G</code>, then scroll up a line so you&rsquo;re just above <code>&lt;/configuration&gt;</code>. Press <code>i</code> to switch to edit mode, then paste the following to the file, using your own key and ID:</p>
+
+<pre><code>&lt;property&gt;
+  &lt;name&gt;fs.s3.awsAccessKeyId&lt;/name&gt;
+  &lt;value&gt;XXXXXXXXXXXX&lt;/value&gt;
+&lt;/property&gt;
+
+&lt;property&gt;
+  &lt;name&gt;fs.s3.awsSecretAccessKey&lt;/name&gt;
+  &lt;value&gt;XXXXXXXXXXXX&lt;/value&gt;
+&lt;/property&gt;
+
+&lt;property&gt;
+  &lt;name&gt;fs.s3n.awsAccessKeyId&lt;/name&gt;
+  &lt;value&gt;XXXXXXXXXXXX&lt;/value&gt;
+&lt;/property&gt;
+
+&lt;property&gt;
+  &lt;name&gt;fs.s3n.awsSecretAccessKey&lt;/name&gt;
+  &lt;value&gt;XXXXXXXXXXXX&lt;/value&gt;
+&lt;/property&gt;
+</code></pre>
+
+<p>Press <code>esc</code>, then <code>:wq</code>. That will save the config file with the changes you made. Don&rsquo;t worry if the tab-spacing gets distorted.</p>
+
+<h3 id="launching-shark">LAUNCHING SHARK</h3>
+
+<p>Now that everything is set up, you can finally run Shark. In your shell, enter:</p>
+
+<pre><code>export MASTER=`cat /root/spark-ec2/cluster-url`
+./shark/bin/shark
+</code></pre>
+
+<p>The first command above specifies where the master node is located. If you leave it out, the &lsquo;slave&rsquo; nodes can&rsquo;t communicate with the master, and the master node will effectively run everything on its own. Be sure to include it.</p>
+
+<p>The second command launches the Shark shell. By default, I *think* it allocates the maximum RAM minus 2gb to each machine, but if need be you can allocate memory manually.</p>
+
+<p>At this point, the Spark interpeter should be open. (Just a tip: Shark is still fairly immature, and will often seem to hang. Sometimes you may need to hit <code>enter</code> to make the shell interactive again.)</p>
+
+<p>Also, if you need to set the number of mapreduce tasks, you can use something like:</p>
+
+<pre><code>set mapred.reduce.tasks=10;
+</code></pre>
+
+<h3 id="querying-shark">QUERYING SHARK</h3>
+
+<p>Now that Shark is working, let&rsquo;s import our data from S3.</p>
+
+<p>First we need to create a table to house the data. Fortunately the syntax for Shark is effectively identical to Hive, which in turn is very similar to basic SQL syntax. To set up a table for GDELT, just run:</p>
+
+<pre><code>CREATE EXTERNAL TABLE IF NOT EXISTS gdelt (
+ GLOBALEVENTID BIGINT,
+ SQLDATE INT,
+ MonthYear INT,
+ Year INT,
+ FractionDate DOUBLE,
+ Actor1Code STRING,
+ Actor1Name STRING,
+ Actor1CountryCode STRING,
+ Actor1KnownGroupCode STRING,
+ Actor1EthnicCode STRING,
+ Actor1Religion1Code STRING,
+ Actor1Religion2Code STRING,
+ Actor1Type1Code STRING,
+ Actor1Type2Code STRING,
+ Actor1Type3Code STRING,
+ Actor2Code STRING,
+ Actor2Name STRING,
+ Actor2CountryCode STRING,
+ Actor2KnownGroupCode STRING,
+ Actor2EthnicCode STRING,
+ Actor2Religion1Code STRING,
+ Actor2Religion2Code STRING,
+ Actor2Type1Code STRING,
+ Actor2Type2Code STRING,
+ Actor2Type3Code STRING,
+ IsRootEvent INT,
+ EventCode STRING,
+ EventBaseCode STRING,
+ EventRootCode STRING,
+ QuadClass INT,
+ GoldsteinScale DOUBLE,
+ NumMentions INT,
+ NumSources INT,
+ NumArticles INT,
+ AvgTone DOUBLE,
+ Actor1Geo_Type INT,
+ Actor1Geo_FullName STRING,
+ Actor1Geo_CountryCode INT,
+ Actor1Geo_ADM1Code STRING,
+ Actor1Geo_Lat FLOAT,
+ Actor1Geo_Long FLOAT,
+ Actor1Geo_FeatureID INT,
+ Actor2Geo_Type INT,
+ Actor2Geo_FullName STRING,
+ Actor2Geo_CountryCode STRING,
+ Actor2Geo_ADM1Code STRING,
+ Actor2Geo_Lat FLOAT,
+ Actor2Geo_Long FLOAT,
+ Actor2Geo_FeatureID INT,
+ ActionGeo_Type INT,
+ ActionGeo_FullName STRING,
+ ActionGeo_CountryCode STRING,
+ ActionGeo_ADM1Code STRING,
+ ActionGeo_Lat FLOAT,
+ ActionGeo_Long FLOAT,
+ ActionGeo_FeatureID INT,
+ DATEADDED INT,
+ SOURCEURL STRING )
+ROW FORMAT DELIMITED
+FIELDS TERMINATED BY '\t'
+STORED AS TEXTFILE
+LOCATION 's3n://cmes-gdelt-tutorial/tutorial_data/' ;
+</code></pre>
+
+<p>Now we&rsquo;ve got a full copy of all our data stored in the ephemeral-hdfs. But this is still stored on the hard drive, and as I mentioned above, what we want is for the data to be stored in RAM.</p>
+
+<p>For that, all you have to do is run:</p>
+
+<pre><code>CREATE TABLE gdelt_cached as SELECT * FROM gdelt;
+</code></pre>
+
+<p>All the magic happens in that &lsquo;_cached&rsquo; suffix! Or put differently, it&rsquo;s the whole point of this tutorial. Any table with that suffix appended will automatically be stored in memory rather than to disk, which makes it much faster to query.</p>
+
+<p>Once Shark finishes building the cache &ndash; in this case, it&rsquo;ll probably take seven or eight minutes &ndash;
+try the following:</p>
+
+<pre><code>SELECT count(*) from gdelt_cached;
+</code></pre>
+
+<p>That should produce output like this:</p>
+
+<pre><code>shark&gt; SELECT count(*) FROM gdelt_cached;
+OK
+9536449
+Time taken: 1.86 seconds
+</code></pre>
+
+<p>Not too bad.</p>
+
+<h3 id="exporting-subsets">EXPORTING SUBSETS</h3>
+
+<p>Often times you&rsquo;ll work with your data and want to export some portion of it. I don&rsquo;t generally think it&rsquo;s best practice to subset with Shark (Hive or Impala is a lot more cost effective), but there are times you might need to.</p>
+
+<p>Shark currently doesn&rsquo;t have an ability to export to s3 directly, so instead let&rsquo;s grab all the protest events in our data and store them locally on your cluster:</p>
+
+<pre><code>INSERT OVERWRITE LOCAL DIRECTORY '/home/tmp/protestdata' select * from gdelt_cached WHERE EventRootCode=='14';
+</code></pre>
+
+<p>Now type <code>exit;</code> to quit Shark and return to the EC2 shell. Then run:</p>
+
+<pre><code>cd /home/tmp/protestdata/
+s3put YOURBUCKETNAME/tutorial_output/ 000000_0
+s3put YOURBUCKETNAME/tutorial_output/ 000001_0
+</code></pre>
+
+<h3 id="end-ec2-session">END EC2 SESSION</h3>
+
+<p>Once your subset is exported, you&rsquo;ll definitely want to pause or terminate the EC2 cluster when you&rsquo;re done, so that you don&rsquo;t have to pay an exorbitant bill.</p>
+
+<p>If you think you&rsquo;ll use the cluster again and want your data to persist, type <code>exit</code> in the EC2 shell and then run:</p>
+
+<pre><code>./spark-ec2 -k $AWS_KEY_PAIR -i $AWS_KEY_FILE stop YOURINSTANCENAME 
+</code></pre>
+
+<p>If you do this, you won&rsquo;t be charged for EC2, but you will be charged for any data in an attached EBS volume.</p>
+
+<p>If you&rsquo;re not going to be using this again for a while, you may want to terminate the cluster altogether. In that case, run:</p>
+
+<pre><code>./spark-ec2 -k $AWS_KEY_PAIR -i $AWS_KEY_FILE destroy YOURINSTANCENAME 
+</code></pre>
+
+<p>And that&rsquo;s it. If you created a subset and exported to S3, you can download it locally to your machine via the aws command line tools, or just visit the aws web console.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Dec 18, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/signals/part-iii-big-data-in-the-cloud/">Part III: Big Data in the Cloud</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>As I mention <a href="http://chrismeserole.com/signals/big-data-on-the-desktop/">in the previous post</a>, there are a few ways you can speed up analysis of big data on your desktop or laptop.</p>
+
+<p>However, the fastest/most efficient solution is often to just shift data storage and processing to a networked computer cluster. Generally speaking, this solves the <a href="http://chrismeserole.com/signals/the-i-o-problem-or-why-big-data-takes-forever-to-process/">I/O problem</a> by splitting the processing across multiple computers rather than one.</p>
+
+<p>Fortunately there are now several options available for large-scale data storage and analysis, with varying degrees of cost-effectiveness. Most solutions use Hadoop for data storage and then one of the following open-source solutions for analysis:</p>
+
+<ul>
+<li><a href="http://hive.apache.org/">Hive</a></li>
+<li><a href="http://pig.apache.org/">Pig</a></li>
+<li><a href="https://github.com/cloudera/impala">Impala</a></li>
+<li><a href="http://spark.incubator.apache.org/">Spark</a> / <a href="https://github.com/amplab/shark">Shark</a></li>
+<li><a href="https://www.facebook.com/notes/facebook-engineering/presto-interacting-with-petabytes-of-data-at-facebook/10151786197628920">Presto</a></li>
+</ul>
+
+<p>With the exception of Presto, which was recently released by Facebook and is designed more for petabyte-scale analysis, I profile each of those options below.</p>
+
+<h3 id="hadoop-hive">Hadoop + Hive</h3>
+
+<p>At this point, probably the most straightforward way to analyze your data in the cloud is to use <a href="http://hadoop.apache.org/">Hadoop</a> to store your data and then <a href="http://hive.apache.org/">Hive</a> to query it.</p>
+
+<p>Fortunately, companies such as Amazon have now abstracted away most of the pain points involved with setting up your own Hadoop cluster, so getting up and running with Hadoop is relatively painless. If you&rsquo;re looking for a way to try out Hadoop and Hive, I highly recommend <a href="http://johnbeieler.org/blog/2013/06/16/using-hive-with-social-science-data/">this excellent tutorial by John Beieler</a>.</p>
+
+<h3 id="hadoop-impala-parquet">Hadoop + Impala + Parquet</h3>
+
+<p>Although Hadoop and Hive are great, for even a 50GB dataset it can still take a few minutes for queries to finish.</p>
+
+<p>However, since exploring data is generally an iterative process, getting the query time down as low as possible makes a huge difference.</p>
+
+<p>At present probably the most cost-effective way to reduce the query time is to use a combination of <a href="https://github.com/cloudera/impala">Impala</a> and <a href="https://github.com/Parquet">Parquet</a>. The former is an improved query engine developed by <a href="http://www.cloudera.com/content/cloudera/en/products/cdh/impala.html">Cloudera</a>. The <a href="http://blog.cloudera.com/blog/2013/07/announcing-parquet-1-0-columnar-storage-for-hadoop/">latter is a novel storage format</a> developed by both <a href="http://blog.cloudera.com/blog/2013/03/introducing-parquet-columnar-storage-for-apache-hadoop/">Cloudera and Twitter</a> that stores data in columns rather than rows, and as a result allows queries to be run as <a href="http://en.wikipedia.org/wiki/Vectorization_(parallel_computing)">vectorized operations</a>. (There&rsquo;s a lot of other fancy stuff it does too, but the gist is that Parquet is a storage format that makes data retrieval/processing really, really efficient.)</p>
+
+<p>All told, the performance gains are significant: using Impala and Parquet, <a href="https://twitter.com/tlpinney">Travis Pinney</a> was able to get query times down to a few seconds or less.</p>
+
+<p>To try Impala and Parquet yourself, either follow <a href="https://github.com/tlpinney/funnelcloud/tree/master/clouds/gdelt">Travis&rsquo;s instructions on Github here</a> or a more fleshed-out <a href="http://gdeltblog.wordpress.com/2013/11/06/fast-gdelt-queries-using-impala-and-parquet/">tutorial by Pierre-Yves Taunay on the GDELT blog</a>.</p>
+
+<h3 id="spark-shark">Spark/Shark</h3>
+
+<p>Another way to reduce the query time dramatically (for GDELT, also in the single seconds) is to use Hadoop coupled with either <a href="http://spark.incubator.apache.org/">Spark</a> or <a href="https://github.com/amplab/shark">Shark</a>.</p>
+
+<p>Run out of <a href="https://amplab.cs.berkeley.edu/">Berkeley&rsquo;s AMPLab</a>, what Spark/Shark does is load your dataset into memory <em>across an entire cluster</em>. In a way, it&rsquo;s very similar to Hive &mdash; Shark even uses the identical syntax &mdash; except instead of having each machine query the portion of data that&rsquo;s on its hard drive, each machine instead queries the data that&rsquo;s in its RAM.</p>
+
+<p>The one catch is that because RAM is comparatively expensive, if all you&rsquo;re interested in are basic counts, subsetting, etc, Spark is not cost-effective compared with Impala and Parquet, much less Hive. It&rsquo;ll cost up to 10x more for the same performance times.</p>
+
+<p>However, the real value of Spark isn&rsquo;t just its basic query speeds. Instead, it&rsquo;s that because the entire dataset resides in memory, you can, for instance, run a k-means algorithm or fit a hierarchical model without constantly shuffling data in and out of memory. Further, since Spark has a Python API, you can use any of Python&rsquo;s scientific computing libraries to analyze the in-memory datastore as well.</p>
+
+<p>If you want try out Spark/Shark, <a href="http://chrismeserole.com/signals/shark-spark-gdelt-tutorial">see the next post</a> or <a href="https://github.com/amplab/shark/wiki#user-documentation">the Shark documentation</a>.
+For more about the project itself, this <a href="http://www.wired.com/wiredenterprise/2013/06/yahoo-amazon-amplab-spark/">Wired article</a> is a good place to start.</p>
+
+<h3 id="best-practices">Best Practices</h3>
+
+<p>At this point, for basic data exploration using Impala and Parquet is probably the most cost-effective way to query or subset large datasets.</p>
+
+<p>However, once you have a small dataset that you want to query quickly or run more sophisticated operations on, it may be worth spinning up a small cluster and switching to Spark/Shark.</p>
+
+<p>Accordingly, the next post is <a href="http://chrismeserole.com/signals/shark-spark-gdelt-tutorial">a tutorial for getting Shark up and running with the popular GDELT dataset</a>.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Dec 12, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/signals/big-data-and-social-science-introduction/">Big Data and Social Science: Introduction</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>Big datasets are increasingly common in social science today, and understandably generating a lot of excitement.</p>
+
+<p>However, for anyone just beginning to work with such data, the task of merely managing large datasets &ndash; let alone analyzing them &ndash; can be daunting.</p>
+
+<p>Since I&rsquo;ve been working a lot lately with relatively big datasets, I thought I&rsquo;d offer up a series of posts here on how to go about dealing with them. Although I&rsquo;m not a computer scientist, hopefully anyone just starting out will find the overview useful.</p>
+
+<p>The series runs as follows:</p>
+
+<ul>
+<li><p><a href="http://chrismeserole.com/signals/the-i-o-problem-or-why-big-data-takes-forever-to-process">Part I: The I/O Problem, or Why Big Data Takes Forever to Process</a></p></li>
+
+<li><p><a href="http://chrismeserole.com/signals/big-data-on-the-desktop">Part II: Big Data on the Desktop</a></p></li>
+
+<li><p><a href="http://chrismeserole.com/signals/big-data-in-the-cloud">Part III: Big Data in the Cloud</a></p></li>
+
+<li><p><a href="http://chrismeserole.com/signals/shark-spark-gdelt-tutorial">Tutorial: Parsing GDELT with Spark/Shark on EC2</a></p></li>
+</ul>
+
+<p>If you have any corrections or suggestions for the series, <a href="http://chrismeserole.com/contact/">please be in touch</a>.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Dec 10, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/signals/part-i-the-i-o-problem-or-why-big-data-takes-forever-to-process/">Part I: The I/O Problem, Or Why Big Data Takes Forever to Process</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>As I mentioned in the <a href="http://chrismeserole.com/signals/big-data-and-social-science-introduction/">introduction to this series</a>, large datasets are increasingly common in social science, but they&rsquo;re also difficult to deal with efficiently.</p>
+
+<p>In the next few posts I&rsquo;ll look at various solutions to that problem. First though we need to figure out what&rsquo;s causing it to begin with.</p>
+
+<h3 id="big-data-what-s-the-problem">Big Data: What&rsquo;s the Problem?</h3>
+
+<p>So: why exactly does it take so long to parse large datasets, even with modern computers?</p>
+
+<p>The intuitive answer is that the processor must be the problem. Get a newer, snappier processor, and surely the query time would come down.</p>
+
+<p>Yet it turns out the processor isn&rsquo;t really the problem. A <em>slow</em> processor today is 1GHz, meaning the processor can run through 1 billion  cycles per second. For a dataset with &ldquo;only&rdquo; 200 million observations, in theory even a slow computer should be able to subset it very quickly.</p>
+
+<p>Yet on a modern Macbook, a single pass through a dataset of that size can take 45 minutes rather than 4 to 5 seconds. So what&rsquo;s going on?</p>
+
+<p>In technical terms, large datasets face an <a href="https://en.wikipedia.org/wiki/I/O_bound">I/O-bound</a> rather than a <a href="https://en.wikipedia.org/wiki/CPU_bound">CPU-bound</a>. Or in plain English: the bottleneck isn&rsquo;t in the processor, it&rsquo;s in getting the data to and from the processor.</p>
+
+<p>For most of your computer&rsquo;s billion-plus cycles each second, the processor is just twiddling its thumbs while waiting for the data to come in. Too much data has too far to travel (and on too few potential routes) to take advantage of how fast the processor is.</p>
+
+<h3 id="kitchen">Hard Drives and &hellip; Kitchens?</h3>
+
+<p>By way of (a very rough) analogy, to understand the problem here think of how you get food in a buffet restaurant. In general there are three places where such a restaurant &ldquo;stores&rdquo; food: your plate, the buffet table, and the back kitchen.</p>
+
+<p>Similarly, in a computer there are three places that data is &ldquo;stored.&rdquo; The first is <a href="http://en.wikipedia.org/wiki/CPU_cache">a small set of caches on the processor itself</a>. If the data the processor needs is already in the processor&rsquo;s cache, it can just take that data and immediately use it &ndash; just like when the food you want is already on your plate, you can just go ahead and eat it. The only catch is that the speed comes with a cost: you can&rsquo;t store much data in your processor&rsquo;s cache, just as you can&rsquo;t store much food on a single plate.</p>
+
+<p>Meanwhile, the second place the processor searches is <a href="http://continuations.com/post/12194075974/tech-tuesday-main-memory-dumb-lazy-and-slow">&ldquo;main memory&rdquo;, or RAM</a>. In this case, data in RAM is analogous to food on a buffet table. Getting to it is still pretty fast, but it&rsquo;s at least an order of magnitude slower than if the data was already in the processor&rsquo;s cache.  Moreover, this level of storage is also constrained by size; you can fit a lot more data in memory than in the cache, but not as much data as you may need.</p>
+
+<p>Finally, the third place your computer stores data is your <a href="http://continuations.com/post/12510627878/tech-tuesday-storage-oh-my-how-it-has-grown">hard drive</a>. As with a restaurant kitchen, the advantage of this layer is that you can store a <em>lot</em> of data in it. Once again though, the catch is that it takes a lot more time to access. Think about what happens when you want some salad but there&rsquo;s none on your plate or the buffet table. In that case, someone has to go back into the kitchen, open the freezer, figure out where the salad is, and then grab it. The end result is that it&rsquo;s going to take several orders of magnitude longer to get your food. The same is true for your hard drive. Although you can speed things up somewhat by using an <a href="http://en.wikipedia.org/wiki/Solid-state_drive">SSD</a>, getting your data to and from the hard drive is still going to be orders of magnitude slower than getting the same data to and from the CPU cache or RAM.</p>
+
+<h3 id="going-forward">GOING FORWARD</h3>
+
+<p>To sum up: the reason it takes so long to query big datasets is that shuffling data to and from your processor takes a while, particularly if the data is all the way over on the hard drive.</p>
+
+<p>Obviously there&rsquo;s a bit more to the problem than that, but the gist is that size of big data compounds whatever I/O constraints your computer may have. Fortunately though there are a few things you can do to at least cut down on the query times, which we&rsquo;ll begin to look at in <a href="http://chrismeserole.com/signals/big-data-on-the-desktop/">the next post</a>.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Dec 10, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/signals/part-ii-big-data-on-the-desktop/">Part II: Big Data on the Desktop</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>As <a href="http://chrismeserole.com/signals/the-i-o-problem-or-why-big-data-takes-forever-to-process/">the previous post in this series</a> notes, large data takes a while to process not because processors are too slow, but because getting data from the hard drive to the processor takes a while.</p>
+
+<p>Ultimately the best way to deal with such data will probably be to shift your processing to a computer cluster, but if that&rsquo;s not an option, there are still a few things you can do to cut down query times dramatically.</p>
+
+<p>This post profiles two in particular: adding RAM, and parallelizing your code.</p>
+
+<h3 id="adding-ram">ADDING RAM</h3>
+
+<p>As the <a href="http://chrismeserole.com/signals/the-i-o-problem-or-why-big-data-takes-forever-to-process/#kitchen">prior post mentions</a>, there are three places a computer &ldquo;stores&rdquo; data: the CPU cache, RAM (also known as memory), and the hard drive. Each of those places holds orders of magnitude more data than the last, but each is also orders of magnitude slower to access &ndash; meaning the hard drive can hold way more data than the cache or RAM, but also takes way longer to reach.</p>
+
+<p>One obvious way to speed things up then is to just <a href="https://duckduckgo.com/?q=upgrade+ram+tutorial">increase the amount of RAM on your computer</a>. The more RAM you have, the more data you can store in memory as opposed to the hard drive, and the faster you can process it.</p>
+
+<p>Fortunately upgrading RAM is pretty straightforward, with the notable exception of unibody laptops. Most modern computers can also handle between 8GB and 32GB of total RAM, so if your data is big but not <em>that</em> big, buying more RAM is probably the way to go.</p>
+
+<p>That said, there is one caveat to all this: datasets can &ldquo;blow up&rdquo; by several multiples when you store them in memory, meaning a 5GB dataset can take up more than 10GB of RAM. Add in the fact that most operating systems now take up significant space as well, and you&rsquo;ll quickly hit limits on how much data you can actually store in memory on your personal computer.</p>
+
+<h3 id="parallelize-where-possible">PARALLELIZE WHERE POSSIBLE</h3>
+
+<p>If upgrading RAM isn&rsquo;t an option, another thing you can do is to &lsquo;parallelize&rsquo; your queries, or spread them across all the cores of your processor. In the restaurant analogy I used in the last post, it&rsquo;s (very loosely) akin to having multiple waiters go and get your food rather than just one. As a result it can dramatically reduce query times on a local computer.</p>
+
+<p>To take advantage of all your computer&rsquo;s cores, there are two issues: first, you need to be doing operations that can actually be spread across multiple cores; second, you need to be using software that allows for parallelization.</p>
+
+<p>For basic data exploration, parallelizing your operations is usually possible. In common languages like <a href="http://r-project.org">R</a> or <a href="http://www.python.org">Python</a>, it&rsquo;s just a question of installing the right packages and structuring both your code and data appropriately. By way of example, see <a href="http://johnbeieler.org/blog/2012/12/07/parallel-data-subsetting/">John Beieler&rsquo;s tutorial</a> on how to subset the popular <a href="http://gdelt.utdallas.edu/">GDELT dataset</a> using Python&rsquo;s <a href="http://pythonhosted.org/joblib/index.html">joblib library</a>.</p>
+
+<p>Parallelizing your operations won&rsquo;t get you down to second-level latency, but the improvements can still be impressive. On my desktop, for example, parallelizing alone cut the time it takes to subset GDELT by half. Meanwhile, both adding RAM <em>and</em> parallelizing the code cut the same operation by over two-thirds.</p>
+
+<h3 id="best-practices">BEST PRACTICES</h3>
+
+<p>If there&rsquo;s a specific subset of your data that you&rsquo;re interested in, you&rsquo;ll probably want to make a slow initial cut through the data, and then explore the subset using Python or R.</p>
+
+<p>By contrast, if you don&rsquo;t know which subset you want to use or the subset won&rsquo;t fit in RAM, then it&rsquo;s going to be tough to get the latency to the point where you can quickly interact with and explore the data on just your local machine alone.</p>
+
+<p>In that case, to explore your data efficiently, you can either draw and explore a random subset of your data, or you can shift the processing to a cluster, <a href="http://chrismeserole.com/signals/big-data-in-the-cloud">which I discuss in the next post</a>.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Oct 1, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article>
+
+    </main>
+  </div>
+</div>
+</div>
+
+
+ 
+
+</div>
+
+
+
+</body>
+</html>
+

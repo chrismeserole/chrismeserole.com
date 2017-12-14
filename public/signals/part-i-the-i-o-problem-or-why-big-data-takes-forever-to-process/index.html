@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Part I: The I/O Problem, Or Why Big Data Takes Forever to Process : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Part I: The I/O Problem, Or Why Big Data Takes Forever to Process</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Part I: The I/O Problem, Or Why Big Data Takes Forever to Process</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>As I mentioned in the <a href="http://chrismeserole.com/signals/big-data-and-social-science-introduction/">introduction to this series</a>, large datasets are increasingly common in social science, but they&rsquo;re also difficult to deal with efficiently.</p>
+
+<p>In the next few posts I&rsquo;ll look at various solutions to that problem. First though we need to figure out what&rsquo;s causing it to begin with.</p>
+
+<h3 id="big-data-what-s-the-problem">Big Data: What&rsquo;s the Problem?</h3>
+
+<p>So: why exactly does it take so long to parse large datasets, even with modern computers?</p>
+
+<p>The intuitive answer is that the processor must be the problem. Get a newer, snappier processor, and surely the query time would come down.</p>
+
+<p>Yet it turns out the processor isn&rsquo;t really the problem. A <em>slow</em> processor today is 1GHz, meaning the processor can run through 1 billion  cycles per second. For a dataset with &ldquo;only&rdquo; 200 million observations, in theory even a slow computer should be able to subset it very quickly.</p>
+
+<p>Yet on a modern Macbook, a single pass through a dataset of that size can take 45 minutes rather than 4 to 5 seconds. So what&rsquo;s going on?</p>
+
+<p>In technical terms, large datasets face an <a href="https://en.wikipedia.org/wiki/I/O_bound">I/O-bound</a> rather than a <a href="https://en.wikipedia.org/wiki/CPU_bound">CPU-bound</a>. Or in plain English: the bottleneck isn&rsquo;t in the processor, it&rsquo;s in getting the data to and from the processor.</p>
+
+<p>For most of your computer&rsquo;s billion-plus cycles each second, the processor is just twiddling its thumbs while waiting for the data to come in. Too much data has too far to travel (and on too few potential routes) to take advantage of how fast the processor is.</p>
+
+<h3 id="kitchen">Hard Drives and &hellip; Kitchens?</h3>
+
+<p>By way of (a very rough) analogy, to understand the problem here think of how you get food in a buffet restaurant. In general there are three places where such a restaurant &ldquo;stores&rdquo; food: your plate, the buffet table, and the back kitchen.</p>
+
+<p>Similarly, in a computer there are three places that data is &ldquo;stored.&rdquo; The first is <a href="http://en.wikipedia.org/wiki/CPU_cache">a small set of caches on the processor itself</a>. If the data the processor needs is already in the processor&rsquo;s cache, it can just take that data and immediately use it &ndash; just like when the food you want is already on your plate, you can just go ahead and eat it. The only catch is that the speed comes with a cost: you can&rsquo;t store much data in your processor&rsquo;s cache, just as you can&rsquo;t store much food on a single plate.</p>
+
+<p>Meanwhile, the second place the processor searches is <a href="http://continuations.com/post/12194075974/tech-tuesday-main-memory-dumb-lazy-and-slow">&ldquo;main memory&rdquo;, or RAM</a>. In this case, data in RAM is analogous to food on a buffet table. Getting to it is still pretty fast, but it&rsquo;s at least an order of magnitude slower than if the data was already in the processor&rsquo;s cache.  Moreover, this level of storage is also constrained by size; you can fit a lot more data in memory than in the cache, but not as much data as you may need.</p>
+
+<p>Finally, the third place your computer stores data is your <a href="http://continuations.com/post/12510627878/tech-tuesday-storage-oh-my-how-it-has-grown">hard drive</a>. As with a restaurant kitchen, the advantage of this layer is that you can store a <em>lot</em> of data in it. Once again though, the catch is that it takes a lot more time to access. Think about what happens when you want some salad but there&rsquo;s none on your plate or the buffet table. In that case, someone has to go back into the kitchen, open the freezer, figure out where the salad is, and then grab it. The end result is that it&rsquo;s going to take several orders of magnitude longer to get your food. The same is true for your hard drive. Although you can speed things up somewhat by using an <a href="http://en.wikipedia.org/wiki/Solid-state_drive">SSD</a>, getting your data to and from the hard drive is still going to be orders of magnitude slower than getting the same data to and from the CPU cache or RAM.</p>
+
+<h3 id="going-forward">GOING FORWARD</h3>
+
+<p>To sum up: the reason it takes so long to query big datasets is that shuffling data to and from your processor takes a while, particularly if the data is all the way over on the hard drive.</p>
+
+<p>Obviously there&rsquo;s a bit more to the problem than that, but the gist is that size of big data compounds whatever I/O constraints your computer may have. Fortunately though there are a few things you can do to at least cut down on the query times, which we&rsquo;ll begin to look at in <a href="http://chrismeserole.com/signals/big-data-on-the-desktop/">the next post</a>.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">December 10, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

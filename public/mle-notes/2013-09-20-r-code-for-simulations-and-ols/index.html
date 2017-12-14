@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="R Code for Class 1 : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>R Code for Class 1</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">R Code for Class 1</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p>Below I&rsquo;m going to walk through some examples for how to do in R the kinds of things we covered in class using Stata.</p>
+
+<p>The whole .R file for this is <a href="http://chrismeserole.com/code/MultivariateNormalDistributions.R">here</a>.</p>
+
+<h3 id="simulate-data-and-run-linear-regression">Simulate Data and Run Linear Regression</h3>
+
+<p>Here&rsquo;s how to simulate some basic data and run a regression:</p>
+
+<pre><code>set.seed(123)
+n &lt;- 100
+x1 &lt;- rnorm(n,0,1)
+x2 &lt;- rnorm(n,3,5)
+error &lt;- rnorm(n,0,10)
+y &lt;- x1 + x2 + error
+
+model &lt;- lm(y~x1+x2)
+summary(model)
+vcov(model)
+</code></pre>
+
+<p>One thing to pay attention to are the last two lines. In the variable <code>model</code>, you&rsquo;re storing in a single object all the data associated with your regression. <code>summary</code> and <code>vcov</code> perform operations on the data in that object, but you can also access those data directly.</p>
+
+<p>Try running the following and see what happens:</p>
+
+<pre><code>model$coefficients
+model$residuals
+</code></pre>
+
+<h3 id="simulate-data-from-a-multivariate-normal-distribution">Simulate Data from a Multivariate Normal Distribution</h3>
+
+<p>In Stata, we learned how to use <code>drawnorm</code>.</p>
+
+<p>To do the same in R, you first need to install the <a href="http://cran.r-project.org/web/packages/mvtnorm/index.html">mtvnorm</a> package. Then run the following:</p>
+
+<pre><code>set.seed(123)
+n&lt;-10000
+require(mvtnorm)
+my.means &lt;- c(x1=0,x2=3,err=0)
+my.varcov &lt;- matrix(c(3^2,0,0,0,5^2,0,0,0,10^2),ncol=3)
+my.data &lt;- rmvnorm(n,my.means,my.varcov)
+my.data &lt;- list(x1=my.data[,1],x2=my.data[,2],err=my.data[,3])
+attach(my.data)
+y &lt;- x1 + x2 + err
+model&lt;-lm(y~x1+x2)
+summary(model)
+vcov(model)
+</code></pre>
+
+<p>You should get fairly similar results compared with what you got above. Note that you&rsquo;re using the variance-covariance matrix though, not the correlation matrix, so you&rsquo;re not bounded -1 to 1.</p>
+
+<h3 id="checking-your-errors">Checking Your Errors</h3>
+
+<p>R actually comes with a residual plotter built in. Run the following:</p>
+
+<pre><code>set.seed(123)
+x1 &lt;- rnorm(1000)
+error &lt;- rnorm(1000)
+y &lt;- x1 + error
+qqnorm(y)
+qqline(y)
+</code></pre>
+
+<p>Now try again with heteroskedastic errors:</p>
+
+<pre><code>y &lt;- 2 + x1 + error*error
+qqnorm(y)
+qqline(y)
+</code></pre>
+
+<p>Needless to say, for linear models, this is a great way to visually verify the homoskedasticity assumption.</p>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">September 20, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Mle-notes : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Mle-notes</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="http://chrismeserole.com/mle-notes/index.xml" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+  <div id="primary" class="content-area">
+    <main id="main" class="site-main" role="main"><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/mle-notes/2013-10-01-r-code-for-mle/">R Code for Maximum Likelihood</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>In class we learned about Stata&rsquo;s <code>ml</code> command.</p>
+
+<p>R actually has <a href="http://en.wikibooks.org/wiki/R_Programming/Optimization">several similar commands</a>. Below is an R equivalent for most of what is covered in the Class 3 sheet, using R&rsquo;s <code>optim()</code> command. R is very useful for this sort of thing, so I&rsquo;ll try to walk through it in one of the labs.</p>
+
+<pre><code>ml.logit &lt;- function(specification, data, betas.init, method) { 
+
+    beta.iterations     &lt;- matrix(nrow=0,ncol=dim(data)[2])
+    loglik.iterations   &lt;- numeric(0)
+
+    sumloglik &lt;- function(beta, y, x){  
+        loglik &lt;- sum(-y*log(1 + exp(-(x%*%beta))) - (1-y)*log(1 + exp(x%*%beta)))
+
+        loglik.iterations   &lt;&lt;- c(loglik.iterations, loglik)
+        beta.iterations     &lt;&lt;- rbind(beta.iterations, betas=beta)
+
+        return(-loglik) # switch sign b/c optim() minimizes rather than maximizes
+    } 
+
+    # get the dependent variable name
+    dv = rownames(attr(terms(specification),&quot;factors&quot;))[1]
+    # now get dependent variable data
+    y = as.numeric(data[,match(dv,colnames(data))])
+
+    # now get all our independent variable data
+    # note: model.matrix() creates a matrix with an initial column
+    # of 1s plus all columns in &quot;data&quot; corresponding
+    # to right-hand side variables in &quot;specification&quot;
+    x=model.matrix(specification, model.frame(data))
+
+    # name betas
+    names(betas.init) = colnames(x) 
+
+    mle = optim(betas.init,sumloglik,x=x,y=y,hessian=T, control=list(trace=6),method=method)
+    return(list(betas=mle$par,vcov=solve(mle$hessian),log.likelihood=-mle$value, beta.iterations = beta.iterations, loglik.iterations=loglik.iterations))
+
+}
+
+# create data
+n &lt;- 1000
+x1 &lt;- rnorm(n,0,3) 
+x2 &lt;- rnorm(n,0,5)
+require(arm) # if not installed, can also use pnorm()
+y &lt;- rbinom(n,1,invlogit(x1-x2))
+
+# specify model, data, etc
+data &lt;- data.frame(x1=x1,x2=x2,y=y)
+specification &lt;- as.formula(&quot;y~x1+x2&quot;)
+betas.init &lt;- rep(0,dim(data)[2]) # length works b/c y dropped, but intercept added
+method &lt;- &quot;Nelder-Mead&quot; # also try &quot;BFGS&quot;, &quot;CG&quot;, &quot;L-BFGS-B&quot;, &quot;SANN&quot;, &quot;Brent&quot;
+
+# run model
+model &lt;- ml.logit(specification,data,betas.init,method)
+model$betas
+model$vcov
+model$log.likelihood
+
+# check against regular logit
+require(arm)
+(model2 &lt;- glm(y~x1+x2,family=&quot;binomial&quot;(link=&quot;logit&quot;)))
+
+# plot evolution of likelihood and parameters
+par(mfrow=c(2,2))
+plot(model$loglik.iterations, xlab=&quot;Iteration&quot;, ylab=&quot;Log-Likelihood&quot;, cex=.6)
+plot(model$beta.iterations[,1], xlab=&quot;Iteration&quot;, ylab=&quot;Intercept Estimate&quot;, cex=.6) # evolution of Intercept
+plot(model$beta.iterations[,2], xlab=&quot;Iteration&quot;, ylab=&quot;b1 Estimate&quot;, cex=.6) # evolution of b1
+plot(model$beta.iterations[,3], xlab=&quot;Iteration&quot;, ylab=&quot;b2 Estimate&quot;, cex=.6) # evolution of b2
+</code></pre>
+
+<p>You can download the full code <a href="http://chrismeserole.com/code/MLEa.R">here</a>.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Oct 1, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/mle-notes/2013-09-28-hw3-logit-probit/">Homework 3 Notes</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>In general the homeworks were good again.</p>
+
+<p>Just one note: from here on out, always write a brief description for each question.</p>
+
+<p>Even if you&rsquo;re just writing a function &ndash; as in question 1 &ndash; be sure to write out at least one or two sentences about what the function is doing. Likewise, if the HW asks for a graph or table, assume that you&rsquo;re also implicitly being asked to discuss it for a bit. The goal isn&rsquo;t to trip you up, but to make sure you&rsquo;ve got some kind of intuition about what you&rsquo;ve just done.</p>
+
+<p>A couple other notes about the homework follow below &hellip; they&rsquo;re kind of long-ish, so see the sidebar if you want to skip around.</p>
+
+<h3 id="logit-probit">LOGIT vs Probit</h3>
+
+<p>A few people read too much into the different sizes of the logit vs. probit coefficients.</p>
+
+<p>Remember, for logit the <a href="http://en.wikipedia.org/wiki/Odds_ratio#Role_in_logistic_regression">coefficients are log-odds ratios</a>, while for probit, the coefficients are <a href="http://en.wikipedia.org/wiki/Standard_score">z-scores</a>. In themselves, they&rsquo;re not going to tell you much. All you should pay attention to are the direction (ie, positive or negative) and, in some cases, the statistical significance.</p>
+
+<p>The coefficients only become meaningful when we move into the probability space, at which point we can in fact start to talk about the size of a parameter&rsquo;s effect and whether or not it is substantively significant.</p>
+
+<p>(Note: for more on the different between logit and probit, <a href="http://stats.stackexchange.com/a/30909">I highly recommend reading this answer on CrossValidated</a>.)</p>
+
+<h3 id="gradients">GRADIENTS</h3>
+
+<p>Thankfully pretty much everyone recognized that the gradients were getting smaller as the log-likelihood converged on its maximum.</p>
+
+<p>After digging into gradients a lot more, I think the best way to explain them is to imagine you&rsquo;re hiking in the Appalachians but you&rsquo;re not allowed to use a footpath. What&rsquo;s the best way to reach the nearest peak?</p>
+
+<p>One way would be to take the gradient with respect to height at your starting point &ndash; ie, the exact direction in the north-south/east-west plane that the mountain rises the fastest &ndash; and begin climbing in that direction.</p>
+
+<p>Pretty soon you&rsquo;ll face a problem though: how far do you keep travelling in that direction? Unless by some miracle the mountain is symmetrical, the first gradient you measure will not point you in the exact direction of the summit. (And even if it is symmetrical, the gradient still won&rsquo;t tell you how far to travel to get to the top.)</p>
+
+<p>To reach the peak, then, you need to stop and calculate the gradient every so often. Unfortunately, there&rsquo;s no perfect way to know how often to do this: depending on the contour of the mountain, it might be better to find the gradient every 100 feet, or it might be better to find it every 1000. Or it might be best to do it every thousand feet at first, and then every few feet at the top. Or it might be some other combination.</p>
+
+<p>You probably already realized where this is heading. Instead of a mountain in a three-dimensional space of length, width and height, imagine plotting a dataset in the three-dimensional space of age, income and education.</p>
+
+<p>The way you know you&rsquo;ve reached a peak in that space (or a valley; see below) is when the rate of change in each dimension approaches zero at the same time.</p>
+
+<p>The question is how to get to such a peak from any given starting point. As with our mountain, the best way to get there will depend on the specific contour of the surface connecting our data. Sometimes you&rsquo;ll want to calculate a gradient vector early and often, other times you&rsquo;ll want to do it less.</p>
+
+<p>Since it&rsquo;s not always clear what the most efficient way is to arrive at the peak, you want multiple ways of trying to get there &ndash; which is why multiple algorithms have been developed, such as the <a href="https://en.wikipedia.org/wiki/Newton's_method">Newton-Raphson</a>, <a href="http://en.wikipedia.org/wiki/Broyden%E2%80%93Fletcher%E2%80%93Goldfarb%E2%80%93Shanno_algorithm">BFGS</a>, etc.</p>
+
+<h3 id="hessian-matrix">HESSIAN</h3>
+
+<p>So where does the Hessian come in?</p>
+
+<p>As I hinted at above, a three-dimensional space of age, income and education is the same, mathematically, as a three-dimensional space of length, width and height. The difference is that when we deal with length, width and height, we&rsquo;ve got a very clear sense &ndash; thanks to both our eyes and the wonders of gravity &ndash; of what a peak is and what a valley is.</p>
+
+<p>In any other space though we can&rsquo;t rely on those senses. Instead we need a way of distinguishing peaks from valleys mathematically.</p>
+
+<p>And the way we do that is with the <a href="http://en.wikipedia.org/wiki/Hessian_matrix">Hessian matrix</a>. Along its diagonal are the second partial derivatives for each variable, which tell us the rate of change of the rate of change for each dimension.</p>
+
+<p>If the rate of change of our function is zero in all dimensions and the diagonals along the Hessian are all positive, then we know we&rsquo;ve hit a valley. If they&rsquo;re all negative, then we know we&rsquo;ve hit a peak.</p>
+
+<h3 id="hessian-and-variance">HESSIAN AND VARIANCE</h3>
+
+<p>Finally, the other thing the Hessian does is provide cross-partial second derivatives. These are the points off the diagonal, and they tell us about our function with respect to the rate of change in one dimension times the rate of change in another.</p>
+
+<p>If you think of what covariance is &ndash; ie, how two variables move together in your space &ndash; you can see how such cross-partials would be useful. The information they provide about simultaneous rates of change is what makes it possible to then use the Hessian to calculate the variance-covariance matrix for our parameters.</p>
+
+<p>The ability to use the Hessian in this way is why you can think of the Hessian as the &ldquo;variance&rdquo;.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Sep 28, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/mle-notes/2013-09-28-hw2-r-code/">R Code for HW 2</a></h2>
+
+    </header>
+
+    <div class="entry-content">  <p>If you wanted to do HW 2 in R, here&rsquo;s one way you could have done it:</p>
+
+<pre><code>require(mvtnorm) # for rmvnorm() 
+require(Matrix)  # for diagonal matrix
+
+
+# create the data
+n &lt;- 1000
+sds &lt;- c(1,2,3,5,2,1)
+means &lt;- c(rep(0,length(sds)))
+cov.matrix &lt;- as.matrix(Diagonal(length(sds),sds))
+mydata &lt;- rmvnorm(n,means,cov.matrix)
+
+# label the data
+colnames(mydata) &lt;- c(&quot;alpha&quot;,&quot;x1&quot;,&quot;x2&quot;,&quot;b1&quot;,&quot;b2&quot;,&quot;error&quot;)
+mydata &lt;- data.frame(mydata)
+attach(mydata)
+
+# show b1
+summary(b1)
+plot(density(b1))
+
+# create and show y
+y &lt;- alpha + b1*x1 + b2*x2 + error
+summary(y)
+plot(density(y))
+</code></pre>
+
+<p>Note that <code>rmvnorm()</code> relies on the covariance matrix rather than the correlation matrix.</p>
+
+<p>If you wanted to use the correlation matrix (as <code>drawnorm</code> does in Stata), here&rsquo;s how you could do it:</p>
+
+<p>{% highlight r linenos %}
+require(mvtnorm) # for rmvnorm()
+require(Matrix)  # for diagonal matrix</p>
+
+<p>cor_to_cov &lt;- function (sds,cor.matrix) {
+    diag.matrix &lt;- Diagonal(length(sds),sds)
+    return(as.matrix(diag.matrix %<em>% cor.matrix %</em>% diag.matrix))
+}</p>
+
+<p>n &lt;- 1000
+cor.matrix &lt;- matrix(c( 1, 0.1, 0.1,
+                0.1,   1, 0.1,
+                0.1,  0.1,  1),3)
+sds &lt;- c(1,2,1)
+means &lt;- c(rep(0,length(sds)))
+mydata &lt;- rmvnorm(n,means,cor_to_cov(sds,cor.matrix))</p>
+
+<p>colnames(mydata) &lt;- c(&ldquo;alpha&rdquo;,&ldquo;x1&rdquo;,&ldquo;b1&rdquo;)
+summary(mydata[,&ldquo;b1&rdquo;])
+plot(density(mydata[,&ldquo;b1&rdquo;]))
+{% endhighlight %}</p>
+
+<p>The full .R file for all this is <a href="http://chrismeserole.com/code/HW2.R">here</a>.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Sep 28, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/mle-notes/2013-09-26-homework-2-notes/">Homework 2 Notes</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>For the most part this homework was good.</p>
+
+<p>In the first two questions, some people didn&rsquo;t realize that they had to draw the betas from the normal distribution as well, or did draw them from the normal distribution, but forgot to include them when they generated <code>y</code>.</p>
+
+<p>The Stata code should have been something like:</p>
+
+<pre><code>drawnorm x1 x2 b1 b2 alpha error, n(10000) means(2,5,2,-2,1,0) sds(10,2,10,2,10,20) 
+gen y = alpha + b1*x1 + b2*x2 + error
+</code></pre>
+
+<h3 id="social-processes-observed-variables-vs-unobserved-variables">Social Processes: Observed Variables vs Unobserved Variables</h3>
+
+<p>This question tripped some people up, so I want to walk through it in-depth. Put simply, the social processes underlying your observed variables are very likely different from the social processes underlying your unobserved variables.</p>
+
+<p>To get an intuitive sense of this, consider the effect of violent protest on foreign direct investment. A simple, common sense theory would suggest that the more violent protest events a country experiences, the less likely foreign investers will be to invest in that country. Moreover, it&rsquo;s likely that the effect of violent protest on FDI is fairly constant across countries, enough so anyway that we can reasonably model the effect of violent protest as being normally distributed around some negative mean.</p>
+
+<p>We can thus model this as follows:</p>
+
+<div style="text-align: center;font-family: Georgia">FDI ~ N(&alpha; + &beta;<sub>protest</sub>*X<sub>protest</sub>, &sigma;)</div>
+
+<p>Where:</p>
+
+<div style="text-align: center;font-family: Georgia">&beta;<sub>protest</sub> ~ N(-&mu;, &sigma;<sub>&beta;</sub>)</div>
+
+<p>But what about the violent protests themselves? What are the social processes underlying that data?</p>
+
+<p>We can imagine a lot of reasons for why violent protests happen, from a food shortage to government repression. Theoretically, though, violent protest is costly for everyone, so we generally assume violent protests won&rsquo;t happen very often, but then when they do (since the government is unlikely to immediately give in), they&rsquo;ll probably happen a lot. A better distribution to model such a process is the Poisson.  We&rsquo;ll learn more about the Poisson and its variants later, but the gist here is that such a distribution can result in most countries having relatively low levels of violent protest, while a few have quite a lot.</p>
+
+<p>Formally, we would model this as:</p>
+
+<div style="text-align: center;font-family: Georgia">X<sub>protest</sub> ~ Poisson(&lambda;)</div>
+
+<p>That&rsquo;s clearly a very different distribution than we think our <strong>B<sub><emph>protest</emph></sub></strong> adheres to.</p>
+
+<p>To be clear, the differences between the distributions of our observed and unobserved data won&rsquo;t always be this extreme. For example, both your observed and unobserved variables may belong to the same family of distribution &ndash; which is what we assumed in the homework when we drew both observed and unobserved variables from the normal distribution &ndash; but the key point is that the social processes are generally separate/different, and as a result we ought to model our observed and unobserved variables separately too.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Sep 26, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/mle-notes/2013-09-20-homework-1-notes-multivariate-normal-distributions-and-regression/">Homework 1 Notes</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>Thankfully everyone did pretty well on this. There are a few minor points that came up often though.</p>
+
+<h3 id="coefficient-standard-errors">Coefficient Standard Errors</h3>
+
+<p>So. Fortunately everyone seemed to understand what happens to <code>b1</code>&rsquo;s standard error when you increase the variance of <code>x1</code> on the one hand and of the error term on the other. But no one included the formal explanation, so here it is:</p>
+
+<p><img align="center" src="/assets/regression_coefficient_se.png" /></p>
+
+<p>Note that within the square root you&rsquo;ve really got a fraction, with the model variance in the numerator and the <em>jj</em>-th element of the model&rsquo;s variance-covariance matrix (ie, the <code>(X'X)</code>) in the denominator. Since the model variance is on the top of the fraction, any increase in it will lead to an increase in all standard errors, while since the variance of a particular <code>x(j)</code> will be on the bottom of the fraction, increasing it will lead to a <em>decrease</em> in the standard error of the corresponding coefficient.</p>
+
+<p>Finally, while it may be clear from the equation why a 10x increase in the overall model standard error leads to a correspondng 10x increase in the coefficient standard errors (namely, you&rsquo;ve got a square within a square root, so the exponents cancel out), it&rsquo;s probably less obvious from the equation as shown that the cells along the diagonal of the variance-covariance matrix are themselves squared, which is why you also get a similar 10x decrease in coefficient standard error when you increase the standard deviation of a particular <code>x(j)</code> by exactly 10x.</p>
+
+<p>For more on this, see <a href="http://en.wikipedia.org/wiki/Ordinary_least_squares#CITEREFHayashi2000">Wikipedia</a> or work through the R code in <a href="http://stats.stackexchange.com/a/44842">this answer</a> on <a href="http://stats.stackexchange.com/questions/44838/how-are-the-standard-errors-of-coefficients-calculated-in-a-regression">a question about regression coefficient standard errors</a> on the cross-validation forum.</p>
+
+<h3 id="biased-models-correlated-errors-vs-inefficient-models-heteroskedastic-errors">Biased Models (Correlated Errors) vs Inefficient Models (Heteroskedastic Errors)</h3>
+
+<p>This one gives me a headache every time I think about it. In fact, I even have a vague memory of confusing them in the first lab.</p>
+
+<p>But here&rsquo;s the deal.</p>
+
+<p>Correlating the error term with <code>x1</code> or <code>x2</code> generates biased estimated coefficients. In a word, your betas themselves are going to be off.</p>
+
+<p>By contast, heteroskedasticizing (is that a word?) your error term generates inefficient standard errors for your estimated coefficients. This is different from bias. Your estimates can still be right, but it&rsquo;s going to take more information for you to be as confident that they are right. Put differently, with heteroskedastic errors, with a large enough N you&rsquo;ll end up with the same coefficients, but your standard errors are going to be bigger than they would be if the model was homoskedastic. The only way to get the standard errors down in that case is to keep increasing your N (the need for more data for the same result is why the term &lsquo;inefficient&rsquo; is used.)</p>
+
+<p>One last point about this: OLS can handle some types of heteroskedasticity, provided that you correct for it appropriately in your model. So heteroskedastic errors do not immediately rule out OLS as an option. They only rule it out if there&rsquo;s no way to correct for them fully (as is the case, say, with binary data).</p>
+
+<h3 id="endogeneity">Endogeneity</h3>
+
+<p>A few people said something to the effect of, &ldquo;correlated errors so omitted variable bias so OMG ENDOGENEITY AHHH!&rsquo;</p>
+
+<p>That&rsquo;s true as far as it goes. Endogeneity is in fact present when one variable is informed/determined by another variable in your system.</p>
+
+<p>The issue is that there&rsquo;s two very different kinds of endogeneity. The endogeneity that is really problematic is when your <code>y</code> is influencing your <code>x1</code>. Since the whole point of this social science thing is causal inference, when your IVs are endogenous with your DV, that&rsquo;s a HUGE problem. That&rsquo;s why when a senior prof goes off on endogeneity in someone&rsquo;s model at a job talk and things get super awkward, this is almost always the kind of endogeneity being discussed.</p>
+
+<p>By contrast, when an IV is endogenous with an omitted variable, that&rsquo;s problematic, but it&rsquo;s problematic because it&rsquo;s messing with your estimate of an IV&rsquo;s causal effect, not because it&rsquo;s throwing into doubt the entire direction of the causal relationship between your IV and DV.</p>
+
+<p>I guess what I&rsquo;m saying is: be careful when you throw up your hands and shout &lsquo;endogeneity!&rsquo; It only really merits the shout if the dependent variable might be involved.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Sep 20, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article><article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+    <header class="entry-header">
+
+        <h2 class="entry-title"><a href="http://chrismeserole.com/mle-notes/2013-09-20-r-code-for-simulations-and-ols/">R Code for Class 1</a></h2>
+
+    </header>
+
+    <div class="entry-content">  
+
+<p>Below I&rsquo;m going to walk through some examples for how to do in R the kinds of things we covered in class using Stata.</p>
+
+<p>The whole .R file for this is <a href="http://chrismeserole.com/code/MultivariateNormalDistributions.R">here</a>.</p>
+
+<h3 id="simulate-data-and-run-linear-regression">Simulate Data and Run Linear Regression</h3>
+
+<p>Here&rsquo;s how to simulate some basic data and run a regression:</p>
+
+<pre><code>set.seed(123)
+n &lt;- 100
+x1 &lt;- rnorm(n,0,1)
+x2 &lt;- rnorm(n,3,5)
+error &lt;- rnorm(n,0,10)
+y &lt;- x1 + x2 + error
+
+model &lt;- lm(y~x1+x2)
+summary(model)
+vcov(model)
+</code></pre>
+
+<p>One thing to pay attention to are the last two lines. In the variable <code>model</code>, you&rsquo;re storing in a single object all the data associated with your regression. <code>summary</code> and <code>vcov</code> perform operations on the data in that object, but you can also access those data directly.</p>
+
+<p>Try running the following and see what happens:</p>
+
+<pre><code>model$coefficients
+model$residuals
+</code></pre>
+
+<h3 id="simulate-data-from-a-multivariate-normal-distribution">Simulate Data from a Multivariate Normal Distribution</h3>
+
+<p>In Stata, we learned how to use <code>drawnorm</code>.</p>
+
+<p>To do the same in R, you first need to install the <a href="http://cran.r-project.org/web/packages/mvtnorm/index.html">mtvnorm</a> package. Then run the following:</p>
+
+<pre><code>set.seed(123)
+n&lt;-10000
+require(mvtnorm)
+my.means &lt;- c(x1=0,x2=3,err=0)
+my.varcov &lt;- matrix(c(3^2,0,0,0,5^2,0,0,0,10^2),ncol=3)
+my.data &lt;- rmvnorm(n,my.means,my.varcov)
+my.data &lt;- list(x1=my.data[,1],x2=my.data[,2],err=my.data[,3])
+attach(my.data)
+y &lt;- x1 + x2 + err
+model&lt;-lm(y~x1+x2)
+summary(model)
+vcov(model)
+</code></pre>
+
+<p>You should get fairly similar results compared with what you got above. Note that you&rsquo;re using the variance-covariance matrix though, not the correlation matrix, so you&rsquo;re not bounded -1 to 1.</p>
+
+<h3 id="checking-your-errors">Checking Your Errors</h3>
+
+<p>R actually comes with a residual plotter built in. Run the following:</p>
+
+<pre><code>set.seed(123)
+x1 &lt;- rnorm(1000)
+error &lt;- rnorm(1000)
+y &lt;- x1 + error
+qqnorm(y)
+qqline(y)
+</code></pre>
+
+<p>Now try again with heteroskedastic errors:</p>
+
+<pre><code>y &lt;- 2 + x1 + error*error
+qqnorm(y)
+qqline(y)
+</code></pre>
+
+<p>Needless to say, for linear models, this is a great way to visually verify the homoskedasticity assumption.</p>
+ </div>
+
+    <footer class="entry-footer"> 
+
+    <div class="entry-meta">
+
+    <span class="posted-on">Sep 20, 2013</span>
+
+    </div>
+
+    </footer>
+
+    </article>
+
+    </main>
+  </div>
+</div>
+</div>
+
+
+ 
+
+</div>
+
+
+
+</body>
+</html>
+

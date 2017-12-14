@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Git Workflow with Jekyll : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Git Workflow with Jekyll</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Git Workflow with Jekyll</h2>
+
+		</header>
+
+		<div class="entry-content">  <p>Early in 2013 I switched over to using Jekyll for this site and a couple others.</p>
+
+<p>Here&rsquo;s the workflow I use to edit one of the sites. First, I open terminal or Powershell and start a new branch:</p>
+
+<pre><code>cd ~Dropbox/Sites/mysite
+git checkout -b draft
+</code></pre>
+
+<p>Then I edit relevant files and commit the changes:</p>
+
+<pre><code>git commit -a -m 'Edited such-and-such file'
+</code></pre>
+
+<p>Or I&rsquo;ll add a file and commit the change:</p>
+
+<pre><code>git add path/to/file
+git commit -m 'Added file'
+</code></pre>
+
+<p>To preview the changes, I&rsquo;ll rebuild the site:</p>
+
+<pre><code>jekyll --server
+</code></pre>
+
+<p>And then head to <code>localhost:4000</code> in Chrome.</p>
+
+<p>If satisfied, I&rsquo;ll commit the changes again:</p>
+
+<pre><code>git commit -a -m 'Rebuilt site'
+</code></pre>
+
+<p>If I&rsquo;m done, I&rsquo;ll then merge the changes into the master:</p>
+
+<pre><code>git checkout master
+git merge draft
+git branch -d draft
+</code></pre>
+
+<p>If I created or modified content only and I&rsquo;m done for the day, I&rsquo;ll then tag it by date:</p>
+
+<pre><code>git tag d01-01-13
+</code></pre>
+
+<p>If I modified the structure or style at all, I&rsquo;ll then also tag it using versions:</p>
+
+<pre><code>git tag v0.1
+</code></pre>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">February 13, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>

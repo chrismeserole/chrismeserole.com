@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  
+  <url>
+    <loc>http://chrismeserole.com/about/</loc>
+    <lastmod>2017-12-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/blog/what-went-wrong/2016/</loc>
+    <lastmod>2016-11-09T19:39:59-04:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/software/</loc>
+    <lastmod>2016-04-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/installing-edarf/</loc>
+    <lastmod>2015-10-21T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/blog/where-do-we-go-from-here/2015/</loc>
+    <lastmod>2015-09-19T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/poisson-saturated-log-likelihood/</loc>
+    <lastmod>2015-08-31T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/example-r-and-python-code/</loc>
+    <lastmod>2015-04-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/lark-now-runs-python/</loc>
+    <lastmod>2015-04-17T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/rd2pdf-bug-in-devtoolscheck/</loc>
+    <lastmod>2015-04-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/error/</loc>
+    <lastmod>2015-03-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/installing-valgrind-on-mac-os-x-yosemite/</loc>
+    <lastmod>2014-11-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/signals/part-iv-parsing-gdelt-with-spark-shark-on-ec2/</loc>
+    <lastmod>2013-12-18T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/the-morning-light/</loc>
+    <lastmod>2013-12-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/signals/part-iii-big-data-in-the-cloud/</loc>
+    <lastmod>2013-12-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/signals/big-data-and-social-science-introduction/</loc>
+    <lastmod>2013-12-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/signals/part-i-the-i-o-problem-or-why-big-data-takes-forever-to-process/</loc>
+    <lastmod>2013-12-10T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/loading-octave-graphics-on-mac-os-x-10.8.4/</loc>
+    <lastmod>2013-11-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/signals/part-ii-big-data-on-the-desktop/</loc>
+    <lastmod>2013-10-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/mle-notes/2013-10-01-r-code-for-mle/</loc>
+    <lastmod>2013-10-01T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/mle-notes/2013-09-28-hw3-logit-probit/</loc>
+    <lastmod>2013-09-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/mle-notes/2013-09-28-hw2-r-code/</loc>
+    <lastmod>2013-09-28T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/mle-notes/2013-09-26-homework-2-notes/</loc>
+    <lastmod>2013-09-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/colophon/</loc>
+    <lastmod>2013-09-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/mle-notes/2013-09-20-homework-1-notes-multivariate-normal-distributions-and-regression/</loc>
+    <lastmod>2013-09-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/mle-notes/2013-09-20-r-code-for-simulations-and-ols/</loc>
+    <lastmod>2013-09-20T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/managing-ruby-versions/</loc>
+    <lastmod>2013-07-04T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/pushing-jekyll-to-s3/</loc>
+    <lastmod>2013-02-26T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/contact/</loc>
+    <lastmod>2013-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/installing-jekyll-on-windows/</loc>
+    <lastmod>2013-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/my-jekyll-set-up/</loc>
+    <lastmod>2013-02-16T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/install-octoprress/</loc>
+    <lastmod>2013-02-14T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/git-workflow-with-jekyll/</loc>
+    <lastmod>2013-02-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/linux-install-checklist/</loc>
+    <lastmod>2013-02-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/git-and-github-notes/</loc>
+    <lastmod>2013-02-12T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/teaching/</loc>
+    <lastmod>2013-01-24T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/blog/</loc>
+    <lastmod>2016-11-09T19:39:59-04:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/categories/</loc>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/</loc>
+    <lastmod>2017-12-05T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/coding/</loc>
+    <lastmod>2015-10-21T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/mle-notes/</loc>
+    <lastmod>2013-10-01T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/signals/</loc>
+    <lastmod>2013-12-18T00:00:00+00:00</lastmod>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>http://chrismeserole.com/tags/</loc>
+    <priority>0</priority>
+  </url>
+  
+</urlset>

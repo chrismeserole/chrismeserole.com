@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+
+<meta name="twitter:card" content="summary">
+
+<meta name="twitter:site" content="@chrismeserole">
+<meta name="twitter:title" content="Linux Install Checklist : religional.org">
+<meta name="twitter:creator" content="@chrismeserole">
+<meta name="twitter:description" content="">
+<meta name="twitter:image:src" content="">
+<meta name="twitter:domain" content="religional.org">
+
+	<title>Linux Install Checklist</title>
+	<link rel="profile" href="http://gmpg.org/xfn/11">
+
+    <link href="" rel="alternate" type="application/rss+xml" title="Chris Meserole" />
+
+
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/style-112717a.css' type='text/css' media='all' />
+<link rel='stylesheet' id='isola-style-css'  href='http://chrismeserole.com/css/font.css' type='text/css' media='all' />
+
+
+
+
+<meta name="generator" content="Hugo 0.16" />
+
+<style type="text/css" media="screen">
+	html { margin-top: 0px !important; }
+	* html body { margin-top: 0px !important; }
+	@media screen and ( max-width: 782px ) {
+		html { margin-top: 0px !important; }
+		* html body { margin-top: 0px !important; }
+	}
+</style>
+</head>
+
+<body class="home blog no-customize-support">
+<div id="page" class="hfeed site">
+	<header id="masthead" class="site-header" role="banner">
+			
+			
+				
+			<div class="site-title">	
+				<h1><a href="http://chrismeserole.com/" rel="home">Chris Meserole</a></h1>
+			</div>
+			<div class = "main-navigation">
+				<ul>
+					<li><a href="http://chrismeserole.com/about/" rel="about" >about</a></li> &middot;
+					<li><a href="http://chrismeserole.com/contact/" rel="about" >contact</a></li>
+				</ul>
+			</div>
+
+	</header>
+
+
+<div id="wrap">
+<div id="content" class="site-content">
+	<div id="primary" class="content-area">
+		<main id="main" class="site-main" role="main">
+
+		<article class="post type-post status-publish format-standard hentry category-uncategorized">
+
+		<header class="entry-header">
+
+		<h2 class="entry-title">Linux Install Checklist</h2>
+
+		</header>
+
+		<div class="entry-content">  
+
+<p><em>Last Updated: Feb 16, 2013.</em></p>
+
+<p>Just installed Ubuntu 12.10 for the first time, on my Asus UL30VT from an external DVD.</p>
+
+<p>The following is a checklist I&rsquo;ve been putting together for how to set up a Linux install.</p>
+
+<p>####Get Spotify Working</p>
+
+<p>First, open <code>/etc/apt/sources.list</code>. This will open a dialog box asking for a repository. Type this:</p>
+
+<pre><code>deb http://repository.spotify.com stable non-free
+</code></pre>
+
+<p>Then, open terminal and run:</p>
+
+<pre><code>sudo apt-get update
+sudo apt-get install spotify-client 
+</code></pre>
+
+<p>That should do it. More on Spotify and Linux <a href="https://www.spotify.com/us/download/previews/">here</a> and <a href="https://www.spotify.com/us/blog/archives/2010/07/12/linux/">here</a>.</p>
+
+<p>###Get Flash working</p>
+
+<p>Here&rsquo;s the contents from an <code>install_flash.sh</code> script I put together:</p>
+
+<pre><code>sudo apt-add-repository &quot;deb http://archive.canonical.com/ $(lsb_release -sc) partner&quot;
+sudo apt-get update
+sudo apt-get install flashplugin-installer
+</code></pre>
+
+<p>That said &hellip; unlike the rest of these I&rsquo;m writing about the Flash installation long after the fact. If memory serves, I had to manually move a <code>flashplayer.so</code> file into the <code>chromium/plugin</code> directory, and then manually enable it from the browser.</p>
+
+<p>###Adjust the launchbar</p>
+
+<p>Go to <code>System Settings -&gt; Appearances -&gt; Behaviors</code> and set the launch bar on the left to hide automatically.</p>
+
+<p>###Install git &amp; vim:</p>
+
+<p>This fairly straightforward:</p>
+
+<pre><code>sudo apt-get install git-core
+sudo apt-get install gitk
+</code></pre>
+
+<p>Install vim:</p>
+
+<pre><code>sudo apt-get install vim
+</code></pre>
+
+<h3 id="get-wuala">Get Wuala</h3>
+
+<p>Download <a href="http://www.wuala.com/en/download/linux">Wuala for Linux</a>. Wuala requires Java, but Java 7 comes pre-installed with Ubuntu so there&rsquo;s no need to download it.</p>
+
+<h3 id="setup-rails-and-jekyll">Setup Rails and Jekyll</h3>
+
+<p>Get rails and jekyll going:</p>
+
+<pre><code>sudo apt-get install rubygems
+sudo apt-get install rails
+sudo apt-get install ruby1.9.1-dev
+gem install jekyll
+gem install rdiscount
+</code></pre>
+
+<p>Note: not sure rubygems is needed for install, since we&rsquo;re not running the standard gem install rails</p>
+
+<h3 id="install-r">Install R</h3>
+
+<p>First, open the file <code>/etc/apt/sources.list</code>. Click on the &ldquo;Other Software&rdquo; tab. Then click the &ldquo;Add&rdquo; button and enter the following:</p>
+
+<pre><code>deb http://watson.nci.nih.gov/cran_mirror/bin/linux/ubuntu quantal/
+</code></pre>
+
+<p>At that point you should be prompted to enter your password.</p>
+
+<p>Once the repository has been added, run this in terminal:</p>
+
+<pre><code>sudo apt-get update
+sudo apt-get install r-base
+</code></pre>
+
+<p>That might take a while, but when it&rsquo;s done, you should have R installed on your system.</p>
+
+<p>However, at this point you can only run it via command line. For a GUI, there are two options. The first and probably best is to download and install <a href="http://www.rstudio.com/ide/download/desktop">RStudio</a>.</p>
+
+<p>The other option is install rkward, which can be done as follows:</p>
+
+<pre><code>sudo apt-get install rkward
+</code></pre>
+
+<p>UPDATE: You should probably be able to simply adding the repository as follows:</p>
+
+<pre><code>sudo apt-add-repository &quot;deb http://watson.nci.nih.gov/cran_mirror/bin/linux/ubuntu quantal/&quot;
+</code></pre>
+ </div>
+
+		<footer class="entry-footer"> 
+
+		<div class="entry-meta">
+
+		<span class="posted-on">February 13, 2013</span>
+
+		</div>
+
+		</footer>
+
+		</article>
+		</main>
+	</div>
+</div>
+</div>
+
+ 
+
+</div>
+
+
+
+</body>
+</html>
