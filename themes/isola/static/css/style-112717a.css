@@ -1026,6 +1026,8 @@ a:visited:hover {
 }
 .site-title a {
 	color: #404851;
+	color: #17212D !important;
+	color: #192736 !important;
 	text-decoration: none;
 }
 
@@ -1052,6 +1054,10 @@ a:visited:hover {
 .main-navigation a {
 	font-size: 1em;
 	color: #848D9A;
+	color: #27303B !important;
+		color: #424F5E !important;
+		color: #5C6A7A !important;
+
 	/*font-weight: bold;*/
 	text-decoration: none;
 
@@ -1290,6 +1296,9 @@ a:visited:hover {
 .entry-title a {
 	color: #333333;
 	    color: #404851;
+	    color: #172230 !important;
+	    	color: #192736 !important;
+
 	    text-decoration: none;
 
 
