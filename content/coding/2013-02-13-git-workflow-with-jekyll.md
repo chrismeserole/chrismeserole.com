@@ -1,6 +1,6 @@
 +++
 title = "Git Workflow with Jekyll"
-date = 2013-02-13
+date = "2013-02-13"
 +++
 
 Early in 2013 I switched over to using Jekyll for this site and a couple others. 

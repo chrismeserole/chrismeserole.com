@@ -1,12 +1,13 @@
 +++
-title = "About Chris Meserole"
+title = "About"
 slug = "about"
-date = 2016-12-05
+date = "2017-12-05"
  [menu.main] 
  weight = 111
 +++
 
 
-I think a lot about religion, peace, and conflict, and how American foreign policy can best address religious violence. My research has been featured in the New Yorker, Vox, and other publications.
+I'm a fellow in Foreign Policy at the Brookings Institution, where I research violent extremism and emerging technology. My work has been featured in the New Yorker, Vox, and other publications.
 
-I'm currently a post-doctoral fellow in foreign policy at the Brookings Institution. I have a B.A. from Harvard and an M.Div. from Yale Divinity School.
+I have a B.A. from Harvard, have an M.Div. from Yale Divinity School, and a Ph.D. in computational political science from the University of Maryland.
+

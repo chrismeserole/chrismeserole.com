@@ -1,5 +1,5 @@
 +++
-date = 2013-11-20
+date = "2013-11-20"
 title = "Loading Octave Graphics on Mac OS X 10.8.4"
 +++
 

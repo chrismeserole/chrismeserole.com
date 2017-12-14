@@ -1,6 +1,6 @@
 +++
 title = "Lark Now Runs Python"
-date = 2015-04-17
+date = "2015-04-17"
 +++
 
 One reason I've been writing [Lark](https://github.com/chrismeserole/lark/), the static site generator that now powers this site, was to have the freedom to cook up unique ways of merging writing and data analysis. 

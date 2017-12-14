@@ -1,6 +1,6 @@
 +++
-date = 2013-02-14
 title = "Install Octoprress"
+date = "2013-02-14"
 +++
 
 Install Octopress

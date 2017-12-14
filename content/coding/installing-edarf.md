@@ -1,6 +1,6 @@
 +++
 title = "Installing Edarf"
-date = 2015-10-21
+date = "2015-10-21"
 +++
 
 I've been meaning to check out random forests in general and the [edarf package](https://github.com/zmjones/edarf) in particular for a while now -- at least since [Zach Jones](https://twitter.com/joneszm) and [Fridolin Linder](https://twitter.com/fridolinlinder) posted [their paper on Random Forests and EDA](http://media.wix.com/ugd/13cbcb_b644c0023366475ab6cb640969303a62.pdf) last spring.

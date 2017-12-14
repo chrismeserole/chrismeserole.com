@@ -1,5 +1,5 @@
 +++
-date = 2013-09-28
+date = "2013-09-28"
 title = "Homework 3 Notes"
 +++
 

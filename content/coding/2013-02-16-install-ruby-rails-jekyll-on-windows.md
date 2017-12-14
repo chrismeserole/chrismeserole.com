@@ -1,5 +1,5 @@
 +++
-date = 2013-02-16
+date = "2013-02-16"
 title = "Installing Jekyll on Windows"
 +++
 

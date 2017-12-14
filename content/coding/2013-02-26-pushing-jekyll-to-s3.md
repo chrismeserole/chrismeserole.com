@@ -1,5 +1,5 @@
 +++
-date = 2013-02-26
+date = "2013-02-26"
 title = "Pushing Jekyll to s3"
 +++
 

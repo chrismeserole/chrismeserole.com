@@ -1,5 +1,5 @@
 +++
-date = 2013-12-18
+date = "2013-12-18"
 title = "Part IV: Parsing GDELT with Spark/Shark on EC2"
 url = "signals/part-iv-parsing-gdelt-with-spark-shark-on-ec2"
 +++

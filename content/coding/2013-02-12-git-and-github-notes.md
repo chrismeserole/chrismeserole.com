@@ -1,5 +1,5 @@
 +++
-date = 2013-02-12
+date = "2013-02-12"
 title = "Git and Github Notes"
 +++
 

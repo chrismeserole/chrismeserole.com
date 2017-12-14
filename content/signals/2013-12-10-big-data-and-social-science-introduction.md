@@ -1,5 +1,5 @@
 +++
-date = 2013-12-10
+date = "2013-12-10"
 title = "Big Data and Social Science: Introduction"
 slug = "big-data-and-social-science-introduction"
 +++

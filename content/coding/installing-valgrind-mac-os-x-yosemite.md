@@ -1,6 +1,6 @@
 +++
 title = "Installing Valgrind on Mac OS X Yosemite"
-date = 2014-11-01
+date = "2014-11-01"
 +++
 
 I decided to learn a lower level like like C, in part because I want to learn about memory management, leaks, etc.

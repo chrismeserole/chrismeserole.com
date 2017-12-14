@@ -1,6 +1,6 @@
 +++
-date = 2013-02-16
 title = "My Jekyll Set-Up"
+date = "2013-02-16"
 +++
 
 I was pretty frustrated with how slowly this site was running, so I recently followed the herd and moved over to Jekyll. 

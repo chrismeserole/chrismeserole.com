@@ -1,5 +1,5 @@
 +++
-date = 2015-09-19
+date = "2015-09-19"
 title = "Where Do We Go From Here?"
 draft = false
 +++

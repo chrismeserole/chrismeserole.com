@@ -1,5 +1,5 @@
 +++
-date = 2013-07-04
+date = "2013-07-04"
 title = "Managing Ruby Versions"
 +++
 

@@ -1,6 +1,6 @@
 +++
 title = "Rd2pdf bug in devtools::check()"
-date = 2015-04-13
+date = "2015-04-13"
 +++
 
 I'm currently trying to compile my first package in RStudio. 

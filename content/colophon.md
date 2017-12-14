@@ -1,6 +1,6 @@
 +++
 title = "Colophon"
-date = 2013-09-20
+date = "2013-09-20"
 type = "page"
 +++
 

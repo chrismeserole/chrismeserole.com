@@ -1,6 +1,6 @@
 +++
 title = "The Morning Light"
-date = 2013-12-14
+date = "2013-12-14"
 type = "page"
 slug = "the-morning-light"
 +++

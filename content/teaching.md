@@ -1,6 +1,6 @@
 +++
 title = "Teaching"
-date = 2013-01-24
+date = "2013-01-24"
 type = "page"
 +++
 

@@ -1,5 +1,5 @@
 +++
-date = 2013-12-10
+date = "2013-12-10"
 title = "Part I: The I/O Problem, Or Why Big Data Takes Forever to Process"
 slug = "part-i-the-i-o-problem-or-why-big-data-takes-forever-to-process"
 +++

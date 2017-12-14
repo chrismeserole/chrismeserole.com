@@ -1,6 +1,6 @@
 +++
 title = "Poisson Saturated Log Likelihood"
-date = 2015-08-31
+date = "2015-08-31"
 +++
 
 I was poking around the web earlier for the saturated log-likehood in a poisson model, but couldn't find it. 

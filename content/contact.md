@@ -1,6 +1,6 @@
 +++
 title = "Contact"
-date = 2013-02-16
+date = "2013-02-16"
 type = "page"
  [menu.main] 
  weight = 112

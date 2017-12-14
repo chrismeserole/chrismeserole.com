@@ -1,5 +1,5 @@
 +++
-date = 2013-02-13
+date = "2013-02-13"
 title = "Linux Install Checklist"
 +++
 

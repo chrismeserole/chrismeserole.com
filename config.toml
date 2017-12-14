@@ -4,7 +4,7 @@ disqusshortname = ""
 languagecode = "en-us"
 paginate = 5
 pluralizelisttitles = false
-theme = "sustain"
+theme = "isola"
 title = "Chris Meserole"
 
 [[menu.main]]
