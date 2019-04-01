@@ -1,13 +1,12 @@
 +++
 title = "About"
 slug = "about"
-date = "2017-12-05"
+date = "2018-12-05"
  [menu.main] 
  weight = 111
 +++
 
+I'm a fellow at the Brookings Institution and an expert on A.I., emerging technology, digital governance, and global security. My current research focuses on how governments and civil society can harness A.I. and emerging technology for social good while also preserving democratic norms and values. My prior research leveraged interpretable machine learning to better understand the causes and consequences of political violence. 
 
-I'm a fellow in Foreign Policy at the Brookings Institution, where I research violent extremism and emerging technology. My work has been featured in the New Yorker, Vox, and other publications.
-
-I have a B.A. from Harvard, an M.Div. from Yale Divinity School, and a Ph.D. in comparative politics and political methodology from the University of Maryland.
+I regularly brief technology leaders and government officials in the United States and Europe, and my work has appeared or been featured in numerous publications, including the New Yorker, Foreign Affairs, and Foreign Policy.  
 
